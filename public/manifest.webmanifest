@@ -1,7 +1,7 @@
 {
   "name": "pasteleria-tony",
   "short_name": "pasteleria-tony",
-  "theme_color": "#1976d2",
+  "theme_color": "#f8c8dc",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",
