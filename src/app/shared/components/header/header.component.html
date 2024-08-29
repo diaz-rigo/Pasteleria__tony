@@ -1,0 +1,69 @@
+<header class="header">
+  <div class="container">
+    <button class="menu-btn" (click)="toggleSidebar()">
+      <i class="pi pi-bars"></i>
+    </button>
+    <div class="logo">
+      <img
+        src="https://res.cloudinary.com/dqvwzivqe/image/upload/v1724870335/zfs871eovsja3ctignpf.png"
+        alt="Logo Repostería"
+      />
+    </div>
+    <div class="iconomobil">
+      <div class="search">
+        <i class="pi pi-search"></i>
+      </div>
+      <div class="cart">
+        <i
+          class="pi pi-shopping-cart"
+          severity="warning"
+          pBadge
+
+          value="2"
+        ></i>
+      </div>
+      <div class="profile">
+        <i class="pi pi-user"></i>
+      </div>
+    </div>
+
+    <nav class="navigation">
+      <ul>
+        <li>
+          <a pButton type="button" label="Inicio" routerLink="/" [rounded]="true" [text]="true"></a>
+        </li>
+        <li>
+          <a pButton type="button" label="Productos" routerLink="/productos" [rounded]="true" [text]="true"></a>
+        </li>
+        <li>
+          <a pButton type="button" label="Contacto" routerLink="/contacto" [rounded]="true" [text]="true"></a>
+        </li>
+        <li>
+          <a pButton type="button" label="Iniciar Sesión" routerLink="/login" [rounded]="true" [text]="true"></a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+</header>
+<!-- Sidebar para móviles -->
+<p-sidebar [(visible)]="isSidebarVisible" position="left">
+  <h3>Menú</h3>
+  <ul class="mobile-menu">
+    <li>
+      <a pButton type="button" icon="pi pi-home" routerLink="/" [rounded]="true" [text]="true"></a>
+    </li>
+    <li>
+      <a pButton type="button" icon="pi pi-box" routerLink="/productos" [rounded]="true" [text]="true"></a>
+    </li>
+    <li>
+      <a pButton type="button" icon="pi pi-envelope" routerLink="/contacto" [rounded]="true" [text]="true"></a>
+    </li>
+    <li>
+      <a pButton type="button" icon="pi pi-shopping-cart" routerLink="/carrito" [rounded]="true" [text]="true"></a>
+    </li>
+    <li>
+      <a pButton type="button" icon="pi pi-user" routerLink="/login" [rounded]="true" [text]="true"></a>
+    </li>
+  </ul>
+</p-sidebar>

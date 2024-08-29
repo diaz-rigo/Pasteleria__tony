@@ -1,0 +1,123 @@
+@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600&display=swap");
+
+.hero-section {
+  height: 100vh;
+  background-image: url("https://res.cloudinary.com/dqvwzivqe/image/upload/v1724819037/mhpt9wdqn8vmppidghqz.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-family: "Poppins", sans-serif;
+  padding: 0 20px; /* Margen adecuado para móviles */
+
+  .overlay {
+    background: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .content {
+    text-align: center;
+    color: white;
+    opacity: 1;
+    animation: fadeIn 1.5s forwards ease-in-out;
+
+    .mobile-logo {
+      display: none; /* Oculta en pantallas grandes */
+      width: 100px;
+      height: auto; /* Mantiene la proporción del logo */
+      margin-bottom: 20px;
+      border-radius: 50%; /* Borde redondeado */
+      animation: fadeIn 2s forwards ease-in-out;
+
+      @media (max-width: 768px) {
+        width: 180px; /* Ancho en pantallas pequeñas */
+        height: 180px; /* Alto igual al ancho para mantener la proporción circular */
+        display: block; /* Muestra en pantallas pequeñas */
+        margin: 0 auto 20px auto; /* Centramos el logo y ajustamos el margen inferior */
+        border-radius: 50%; /* Asegura que el borde sea redondeado en móvil */
+        object-fit: cover; /* Asegura que la imagen se ajuste bien al contenedor circular */
+        animation: fadeIn 2s forwards ease-in-out;
+
+      }
+    }
+
+    .bakery-name {
+      font-family: "Great Vibes", cursive;
+      font-size: 5rem;
+      margin-bottom: 30px;
+
+      @media (max-width: 768px) {
+        font-size: 3rem;
+      }
+    }
+
+    .cta-button {
+      background-color: transparent;
+      border: 3px solid #ff6f61;
+      padding: 15px 40px;
+      font-size: 1.4rem;
+      font-family: "Poppins", sans-serif;
+      color: white;
+      cursor: pointer;
+      border-radius: 50px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      animation: borderGlow 2s infinite alternate ease-in-out;
+
+      &:hover {
+        background-color: rgba(255, 111, 97, 0.2);
+        transform: translateY(-5px);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      @media (max-width: 768px) {
+        font-size: 1rem;
+        padding: 10px 25px;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes borderGlow {
+  from {
+    border-color: #ff6f61;
+  }
+  to {
+    border-color: #ff3b2f;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .hero-section {
+    .mobile-logo {
+      display: block; /* Muestra en pantallas pequeñas */
+      margin: 0 auto 20px auto; /* Centramos el logo */
+      border-radius: 50%; /* Asegura que el borde sea redondeado en móvil */
+    }
+
+    .bakery-name {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .cta-button {
+      padding: 10px 25px;
+    }
+  }
+}
