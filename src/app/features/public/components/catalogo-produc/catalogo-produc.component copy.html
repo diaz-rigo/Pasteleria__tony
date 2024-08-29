@@ -1,0 +1,49 @@
+<div class="catalog-container">
+  <div class="category-selection">
+    <button *ngFor="let category of categories"
+            [class.active]="category === selectedCategory"
+            (click)="selectCategory(category)">
+      {{ category }}
+    </button>
+  </div>
+
+  <div *ngIf="selectedProduct" class="product-display">
+
+    <div class="flavors">
+      <h3>{{ selectedProduct.name }} - {{ selectedProduct.brand }}</h3>
+      <ul>
+        <li *ngFor="let variant of selectedProduct.variants"
+            (click)="selectVariant(variant)"
+            [class.selected]="variant === selectedVariant">
+          {{ variant.flavor }} - {{ variant.color }} - {{ variant.texture }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="details">
+      <div class="images">
+        <h4>Imágenes de {{ selectedVariant.flavor }}</h4>
+        <div class="images-gallery">
+          <div *ngFor="let image of selectedVariant.images"
+               class="image-container">
+            <img [src]="image" [alt]="selectedProduct.name + ' - ' + selectedVariant.flavor">
+            <button pButton pRipple type="button" icon="pi pi-expand" class="detail-button" (click)="displayDialog=true"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dialog for image details -->
+  <p-dialog header="Detalles de Imagen" [(visible)]="displayDialog" [modal]="true" [closable]="true" [style]="{'width':'50vw'}">
+    <ng-template pTemplate="content">
+      <div *ngIf="selectedVariant" class="variant-details">
+        <h4>Detalles de {{ selectedVariant.flavor }}</h4>
+        <p><strong>Color:</strong> {{ selectedVariant.color }}</p>
+        <p><strong>Textura:</strong> {{ selectedVariant.texture }}</p>
+        <p><strong>Precio:</strong> {{ selectedVariant.price | currency }}</p>
+        <p><strong>Descripción:</strong> {{ selectedVariant.description }}</p>
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>
