@@ -1,0 +1,68 @@
+.dashboard-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-around;
+  padding: 20px;
+  background-color: #fffdf7;
+}
+
+.stat-box {
+  background-color: #fff4e1; /* Color Crema */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  width: 250px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: box-shadow 0.3s;
+}
+
+.stat-box:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  font-size: 40px;
+  color: #f7a1b7; /* Rosa Pastel */
+}
+
+.stat-info h3 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.stat-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #777;
+}
+
+.action-card {
+  background-color: #c6e5f3; /* Celeste Suave */
+  color: #fff;
+  width: 250px;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.action-card:hover {
+  background-color: #b2d4e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.action-card i {
+  font-size: 40px;
+}
+
+.action-card h4 {
+  margin-top: 15px;
+  font-size: 18px;
+  color: #333;
+}

@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #fafafa; /* Light background for a clean look */
+  background-color: #fef9f9; /* Very light pink */
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   max-width: 1200px;
@@ -20,7 +20,7 @@
 .category-selection button {
   margin: 6px;
   padding: 14px 28px;
-  background-color: #ff6f00; /* Warm orange */
+  background-color: #ff8a80; /* Soft pink */
   border: none;
   border-radius: 8px;
   color: #ffffff;
@@ -31,12 +31,12 @@
 }
 
 .category-selection button.active {
-  background-color: #e65100; /* Darker orange */
+  background-color: #ff5252; /* Brighter pink */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .category-selection button:hover {
-  background-color: #e65100; /* Consistent with active color */
+  background-color: #ff5252; /* Consistent with active color */
   transform: scale(1.05);
 }
 
@@ -58,7 +58,7 @@
 
 .flavors h3 {
   margin-top: 0;
-  font-size: 20px; /* Larger font size for titles */
+  font-size: 20px;
   color: #333;
   font-family: 'Arial', sans-serif;
 }
@@ -70,7 +70,7 @@
 
 .flavors ul li {
   padding: 14px 0;
-  border-bottom: 1px solid #ff6f00; /* Warm orange */
+  border-bottom: 1px solid #ff8a80; /* Soft pink */
   font-weight: 600;
   color: #444;
   cursor: pointer;
@@ -79,7 +79,7 @@
 
 .flavors ul li.selected,
 .flavors ul li:hover {
-  background-color: #ff6f00; /* Warm orange */
+  background-color: #ff8a80; /* Soft pink */
   color: #ffffff;
 }
 
@@ -97,7 +97,7 @@
 
 .images h4 {
   margin-top: 0;
-  font-size: 18px; /* Larger font size for subheadings */
+  font-size: 18px;
   color: #333;
   font-family: 'Arial', sans-serif;
 }
@@ -131,7 +131,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  color: #ff6f00; /* Warm orange */
+  color: #ff8a80; /* Soft pink */
   transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.8);
   border: none;

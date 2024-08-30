@@ -1,69 +1,77 @@
 <div class="catalog-container">
+  <!-- Selección de categorías -->
   <div class="category-selection">
     <button *ngFor="let category of categories"
             [class.active]="category === selectedCategory"
-            (click)="selectCategory(category)">
+            (click)="selectCategory(category)"
+            pButton pRipple type="button" class="p-button-rounded p-button-secondary">
       {{ category }}
     </button>
   </div>
 
+  <!-- Visualización del producto seleccionado -->
   <div *ngIf="selectedProduct" class="product-display">
 
+    <!-- Variantes del producto -->
     <div class="flavors">
       <h3>{{ selectedProduct.name }} - {{ selectedProduct.brand }}</h3>
+      <p><strong>Descripción:</strong> {{ selectedProduct.description }}</p>
+
       <ul>
         <li *ngFor="let variant of selectedProduct.variants"
             (click)="selectVariant(variant)"
-            [class.selected]="variant === selectedVariant">
+            [class.selected]="variant === selectedVariant" data-aos="zoom-out-down">
           {{ variant.flavor }} - {{ variant.color }} - {{ variant.texture }}
         </li>
       </ul>
     </div>
 
-    <div class="details">
+    <!-- Detalles de la variante seleccionada -->
+    <div class="details" >
       <div class="images">
         <h4>Imágenes de {{ selectedVariant.flavor }}</h4>
+
         <div class="images-gallery">
           <div *ngFor="let image of selectedVariant.images"
                class="image-container">
-            <img [src]="image" [alt]="selectedProduct.name + ' - ' + selectedVariant.flavor">
-            <button pButton pRipple type="button" icon="pi pi-expand" class="detail-button" (click)="displayDialog=true"></button>
+            <img [src]="image" [alt]="selectedProduct.name + ' - ' + selectedVariant.flavor" class="product-image">
+            <button pButton pRipple type="button" icon="pi pi-th-large" class="detail-button" (click)="displayDialog=true"></button>
           </div>
         </div>
       </div>
     </div>
   </div>
-<!-- Dialog for image details -->
-<p-dialog header="Detalles del Variante" [(visible)]="displayDialog" [modal]="true" [closable]="true" [style]="{'width':'60vw'}">
-  <ng-template pTemplate="content">
-    <div *ngIf="selectedVariant" class="variant-details">
-      <h4>Detalles del Variante: {{ selectedVariant.flavor }}</h4>
-      <p><strong>Color:</strong> {{ selectedVariant.color }}</p>
-      <p><strong>Textura:</strong> {{ selectedVariant.texture }}</p>
-      <p><strong>Descripción:</strong> {{ selectedProduct.description }}</p>
 
-      <div class="variant-images">
-        <h5>Imágenes:</h5>
-        <div class="variant-images-gallery">
-          <div *ngFor="let image of selectedVariant.images" class="image-thumbnail">
-            <img [src]="image" [alt]="selectedVariant.flavor">
+  <!-- Diálogo para detalles de la variante -->
+  <p-dialog header="Detalles del Variante" [(visible)]="displayDialog" [modal]="true" [closable]="true" [style]="{'width':'60vw'}">
+    <ng-template pTemplate="content">
+      <div *ngIf="selectedVariant" class="variant-details">
+        <h4>Detalles del Variante: {{ selectedVariant.flavor }}</h4>
+        <p><strong>Sabor:</strong> {{ selectedVariant.flavor }}</p>
+        <p><strong>Color:</strong> {{ selectedVariant.color }}</p>
+        <p><strong>Textura:</strong> {{ selectedVariant.texture }}</p>
+        <p><strong>Forma:</strong> {{ selectedVariant.shape }}</p>
+        <p><strong>Descripción:</strong> {{ selectedVariant.description }}</p>
+
+        <div class="variant-images">
+          <h5>Imágenes:</h5>
+          <div class="variant-images-gallery">
+            <div *ngFor="let image of selectedVariant.images" class="image-thumbnail">
+              <img [src]="image" [alt]="selectedVariant.flavor">
+            </div>
           </div>
         </div>
+
+        <div class="size-stock">
+          <h5>Tamaños Disponibles:</h5>
+          <ul>
+            <li *ngFor="let item of selectedVariant.sizeStock">
+              Tamaño: {{ item.size }} kg - Precio: {{ item.price | currency }} - Stock: {{ item.stock }}
+            </li>
+          </ul>
+          <p><small>Nota: Los tamaños están en kilogramos. A mayor cantidad de kilogramos, mayor será el tamaño del producto.</small></p>
+        </div>
       </div>
-
-      <div class="size-stock">
-        <h5>Tamaños Disponibles:</h5>
-        <ul>
-          <li *ngFor="let item of selectedVariant.sizeStock">
-            Tamaño: {{ item.size }} kg - Precio: {{ item.price | currency }} - Stock: {{ item.stock }}
-          </li>
-        </ul>
-        <p><small>Nota: Los tamaños están en kilogramos. A mayor cantidad de kilogramos, mayor será el tamaño del producto.</small></p>
-      </div>
-    </div>
-  </ng-template>
-</p-dialog>
-
-
-
+    </ng-template>
+  </p-dialog>
 </div>

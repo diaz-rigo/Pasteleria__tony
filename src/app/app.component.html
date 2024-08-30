@@ -1,5 +1,37 @@
 <app-header></app-header>
 <router-outlet></router-outlet>  <!-- Aquí se renderizan las rutas cargadas dinámicamente -->
 <app-footer></app-footer>
+<div ngxUiLoaderBlurred [blur]="5">
+</div>
 
 
+<ngx-ui-loader
+  [bgsOpacity]="2"
+  [bgsColor]="'rgba(0, 0, 0.1, 0.2)'"
+  [bgsPosition]="'bottom-right'"
+  [bgsSize]="20"
+  [bgsType]="'wandering-cubes'"
+  blur="10"
+  delay="0"
+  [fgsColor]="'#FF69B4'"
+  [fgsPosition]="'center-center'"
+  [fgsSize]="70"
+  [fgsType]="'wandering-cubes'"
+  [logoPosition]="'center-center'"
+  [logoSize]="230"
+  [gap]="25"
+  logoUrl="https://res.cloudinary.com/dqvwzivqe/image/upload/v1724739887/wgkhiz3y9xrn9mrsrbd5.png"
+  masterLoaderId="master'"
+  [overlayBorderRadius]="'0'"
+  [overlayColor]="'rgba(0, 0, 0, 0.5)'"
+  [pbColor]="'#FF69B4'"
+  [pbDirection]="'ltr'"
+  [pbThickness]="3"
+  [hasProgressBar]="true"
+  [text]="'Espere un Momento ..'"
+  [textColor]="'#FFFFFF'"
+  [textPosition]="'center-center'"
+  maxTime="-1"
+  minTime="300"
+>
+</ngx-ui-loader>

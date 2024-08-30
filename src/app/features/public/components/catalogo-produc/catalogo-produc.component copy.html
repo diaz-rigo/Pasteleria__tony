@@ -33,17 +33,37 @@
       </div>
     </div>
   </div>
+<!-- Dialog for image details -->
+<p-dialog header="Detalles del Variante" [(visible)]="displayDialog" [modal]="true" [closable]="true" [style]="{'width':'60vw'}">
+  <ng-template pTemplate="content">
+    <div *ngIf="selectedVariant" class="variant-details">
+      <h4>Detalles del Variante: {{ selectedVariant.flavor }}</h4>
+      <p><strong>Color:</strong> {{ selectedVariant.color }}</p>
+      <p><strong>Textura:</strong> {{ selectedVariant.texture }}</p>
+      <p><strong>Descripción:</strong> {{ selectedProduct.description }}</p>
 
-  <!-- Dialog for image details -->
-  <p-dialog header="Detalles de Imagen" [(visible)]="displayDialog" [modal]="true" [closable]="true" [style]="{'width':'50vw'}">
-    <ng-template pTemplate="content">
-      <div *ngIf="selectedVariant" class="variant-details">
-        <h4>Detalles de {{ selectedVariant.flavor }}</h4>
-        <p><strong>Color:</strong> {{ selectedVariant.color }}</p>
-        <p><strong>Textura:</strong> {{ selectedVariant.texture }}</p>
-        <p><strong>Precio:</strong> {{ selectedVariant.price | currency }}</p>
-        <p><strong>Descripción:</strong> {{ selectedVariant.description }}</p>
+      <div class="variant-images">
+        <h5>Imágenes:</h5>
+        <div class="variant-images-gallery">
+          <div *ngFor="let image of selectedVariant.images" class="image-thumbnail">
+            <img [src]="image" [alt]="selectedVariant.flavor">
+          </div>
+        </div>
       </div>
-    </ng-template>
-  </p-dialog>
+
+      <div class="size-stock">
+        <h5>Tamaños Disponibles:</h5>
+        <ul>
+          <li *ngFor="let item of selectedVariant.sizeStock">
+            Tamaño: {{ item.size }} kg - Precio: {{ item.price | currency }} - Stock: {{ item.stock }}
+          </li>
+        </ul>
+        <p><small>Nota: Los tamaños están en kilogramos. A mayor cantidad de kilogramos, mayor será el tamaño del producto.</small></p>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+
+
 </div>

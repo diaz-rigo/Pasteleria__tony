@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600&display=swap");
+
+.contact-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.contact-info, .local-photos, .map {
+  background-color: #ffeef2; /* Color rosa claro */
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #fbd5d8; /* Rosa más oscuro para el borde */
+}
+
+.contact-info h2, .local-photos h2, .map h2 {
+  color: #d36b79; /* Rosa intenso para los títulos */
+  font-family: 'Great Vibes', cursive;
+  margin-bottom: 10px;
+}
+
+.contact-info p, .local-photos p {
+  color: #6d6d6d; /* Gris oscuro para el texto */
+  font-size: 16px;
+}
+
+.local-photos .photo-gallery {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.local-photos img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.map iframe {
+  border-radius: 8px;
+}

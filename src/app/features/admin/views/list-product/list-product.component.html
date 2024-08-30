@@ -1,0 +1,40 @@
+<div *ngIf="!isMobile" class="table-container">
+    <p-table [value]="products">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Imagen</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Stock</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>
+            <img *ngIf="product.variants.length > 0" [src]="product.variants[0].images[0]" alt="product image" width="100">
+          </td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.description }}</td>
+          <td>{{ product.variants[0]?.sizeStock[0]?.price }} $</td>
+          <td>{{ product.variants[0]?.sizeStock[0]?.stock }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  
+  <div *ngIf="isMobile" class="list-container">
+    <p-panel *ngFor="let product of products" header="{{ product.name }}">
+      <div class="p-grid">
+        <div class="p-col-12">
+          <img *ngIf="product.variants.length > 0" [src]="product.variants[0].images[0]" alt="product image" width="100%">
+        </div>
+        <div class="p-col-12">
+          <p>{{ product.description }}</p>
+          <p><strong>Precio:</strong> {{ product.variants[0]?.sizeStock[0]?.price }} $</p>
+          <p><strong>Stock:</strong> {{ product.variants[0]?.sizeStock[0]?.stock }}</p>
+        </div>
+      </div>
+    </p-panel>
+  </div>
+  

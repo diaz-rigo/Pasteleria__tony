@@ -172,15 +172,28 @@ $transition-duration: 0.3s;
   }
 }
 
+$primary-color: #f8c8dc;
+$secondary-color: #fff4e3;
+$text-color: #333;
+$hover-color: #e89bbf;
+$background-sidebar-color: #f3f3f3;
+$icon-color: #ff4081;
+$transition-duration: 0.3s;
+
 p-sidebar {
-  background-color: $secondary-color;
+  background-color: $background-sidebar-color;
+  width: 80% !important; // Ajuste del ancho del sidebar en dispositivos móviles
+  max-width: 300px; // Máximo ancho del sidebar en desktop
 
   .sidebar-content {
-    padding: 1rem;
+    padding: 2rem;
 
-    h2 {
+    h3 {
       color: $text-color;
-      margin-bottom: 1rem;
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      font-weight: 600;
     }
 
     .mobile-menu {
@@ -188,24 +201,35 @@ p-sidebar {
       list-style: none;
 
       li {
-        margin: 1rem 0;
+        margin: 1.5rem 0;
 
         a {
-          display: block;
+          display: flex;
+          align-items: center;
           color: $text-color;
-          font-size: 1.5rem;
+          font-size: 1.3rem;
+          font-weight: 500;
           text-decoration: none;
-          transition: color $transition-duration ease-in-out;
+          padding: 0.5rem 1rem;
+          border-radius: 10px;
+          transition: all $transition-duration ease-in-out;
+
+          i {
+            font-size: 1.6rem;
+            color: $icon-color;
+            margin-right: 1rem; // Espacio entre el ícono y el texto
+          }
 
           &:hover {
-            color: $hover-color;
+            background-color: $hover-color;
+            color: #fff;
             transform: translateX(5px);
             transition: all $transition-duration ease-in-out;
-          }
-        }
 
-        .badge {
-          display: none;
+            i {
+              color: #fff;
+            }
+          }
         }
       }
     }

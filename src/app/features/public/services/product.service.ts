@@ -7,8 +7,6 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ProductService {
-  // private apiUrl = `${environment.api}/product`; // Your API URL
-  // return this.http.get<IproductResponse>(`${environment.api}/product/${id}`)
 
   constructor(private http: HttpClient) { }
 

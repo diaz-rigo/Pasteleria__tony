@@ -1,0 +1,158 @@
+/* Estilo para pantallas más grandes (modo web) */
+.footer {
+  background-color: #f8f9fa;
+  padding: 20px;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  .footer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      margin-bottom: 15px;
+
+      img {
+        max-width: 150px;
+        height: auto;
+      }
+    }
+
+    .footer-links {
+      display: flex;
+      margin-bottom: 15px;
+
+      a {
+        color: #343a40;
+        text-decoration: none;
+        margin: 0 10px;
+        font-size: 14px;
+
+        &:hover {
+          color: #d63384;
+        }
+
+        i {
+          display: none;
+        }
+
+        span {
+          display: inline;
+        }
+      }
+    }
+
+    .footer-social {
+      a {
+        color: #343a40;
+        font-size: 20px;
+        margin: 0 10px;
+
+        &:hover {
+          color: #d63384;
+        }
+      }
+    }
+  }
+
+  .footer-bottom {
+    border-top: 1px solid #dee2e6;
+    padding-top: 15px;
+    margin-top: 20px;
+
+    p {
+      font-size: 12px;
+      color: #868e96;
+    }
+  }
+}
+
+/* Estilo para pantallas móviles (modo aplicación de compras) */
+@media (max-width: 767px) {
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+
+    .footer-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-direction: row;
+
+      /* Ocultar el logo en móviles */
+      .footer-logo {
+        display: none;
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        /* Configuración de botones para móvil */
+        a {
+          flex: 1;
+          text-align: center;
+          font-size: 18px;
+          position: relative;
+
+          i {
+            display: block;
+            font-size: 24px;
+          }
+
+          span {
+            display: none;
+          }
+        }
+
+        /* Botón especial en el centro */
+        .special-button {
+          position: relative;
+          top: -20px;
+          background-color: #d63384;
+          color: white;
+          border-radius: 50%;
+          width: 60px;
+          height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          transition: background-color 0.3s ease, transform 0.3s ease;
+
+          i {
+            font-size: 32px;
+          }
+
+          &:hover {
+            background-color: #a61e57;
+            transform: scale(1.1);
+          }
+        }
+      }
+
+      /* Ocultar los íconos de redes sociales en móviles */
+      .footer-social {
+        display: none;
+      }
+    }
+
+    /* Ocultar el texto inferior en móviles */
+    .footer-bottom {
+      display: none;
+    }
+  }
+}
