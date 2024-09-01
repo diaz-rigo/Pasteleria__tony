@@ -28,7 +28,10 @@ const PRIMECOMPONENTS = [ToastModule,DialogModule, BadgeModule, ButtonModule, Si
   ],
   providers: [AuthService, MessageService],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss', './log.scss'],
+  styleUrls: ['./header.component.scss',
+    './log.scss',
+    './sidebar.scss'
+  ],
 })
 export class HeaderComponent {
   isSidebarVisible = false;
@@ -118,6 +121,11 @@ export class HeaderComponent {
       // Una vez completada la navegación, recarga la página
       window.location.reload();
     });
+  }
+
+  redirectTo_adm(route: string): void {
+    // this.sidebarVisible = false;
+    this.router.navigate(['/admin', route]) // Utiliza la navegación de Angular
   }
 
 }

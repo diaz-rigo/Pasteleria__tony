@@ -1,4 +1,4 @@
-/* Estilo para pantallas más grandes (modo web) */
+/* Estilo general para el footer */
 .footer {
   background-color: #f8f9fa;
   padding: 20px;
@@ -16,6 +16,7 @@
       justify-content: space-between;
     }
 
+    /* Estilos del logo */
     .footer-logo {
       margin-bottom: 15px;
 
@@ -25,6 +26,7 @@
       }
     }
 
+    /* Estilos para los enlaces del footer para clientes */
     .footer-links {
       display: flex;
       margin-bottom: 15px;
@@ -49,6 +51,32 @@
       }
     }
 
+    /* Estilos para los enlaces del footer para administradores */
+    .footer-admin-links {
+      display: flex;
+      margin-bottom: 15px;
+
+      a {
+        color: #343a40;
+        text-decoration: none;
+        margin: 0 10px;
+        font-size: 14px;
+
+        &:hover {
+          color: #d63384;
+        }
+
+        i {
+          display: none;
+        }
+
+        span {
+          display: inline;
+        }
+      }
+    }
+
+    /* Estilos para las redes sociales */
     .footer-social {
       a {
         color: #343a40;
@@ -62,6 +90,7 @@
     }
   }
 
+  /* Estilo para la sección inferior del footer */
   .footer-bottom {
     border-top: 1px solid #dee2e6;
     padding-top: 15px;
@@ -74,7 +103,7 @@
   }
 }
 
-/* Estilo para pantallas móviles (modo aplicación de compras) */
+/* Estilo para pantallas móviles */
 @media (max-width: 767px) {
   .footer {
     position: fixed;
@@ -96,12 +125,12 @@
         display: none;
       }
 
-      .footer-links {
+      /* Estilos adaptados para los enlaces en pantallas móviles */
+      .footer-links, .footer-admin-links {
         display: flex;
         justify-content: space-between;
         width: 100%;
 
-        /* Configuración de botones para móvil */
         a {
           flex: 1;
           text-align: center;
@@ -144,7 +173,7 @@
         }
       }
 
-      /* Ocultar los íconos de redes sociales en móviles */
+      /* Ocultar las redes sociales en móviles */
       .footer-social {
         display: none;
       }

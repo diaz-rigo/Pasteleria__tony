@@ -1,0 +1,86 @@
+p-sidebar {
+  background: #fef9fb; /* Fondo blanco */
+  color: #2c3e50;
+  width: 80%;
+  transition: transform 0.3s ease-in-out, background 0.5s ease-in-out;
+
+  box-shadow: 0 0 15px 3px rgba(247, 183, 212, 0.6),
+              inset 0 0 15px 3px rgba(252, 209, 227, 0.6);
+
+  &:hover {
+    background: linear-gradient(135deg, #f7b7d4 10%, #fcd1e3 90%);
+    box-shadow: none;
+  }
+
+  &.ng-animate {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  &.ng-animate-active {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  h3 {
+    color: #e91e63;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+  }
+
+  .mobile-menu {
+    list-style-type: none;
+    padding: 0;
+
+    li {
+      margin: 1rem 0;
+
+      a {
+        display: flex;
+        align-items: center;
+        color: #2c3e50;
+        text-decoration: none;
+        font-size: 1.2rem;
+        padding: 0.5rem;
+        border-radius: 5px;
+        background: #ffffff; /* Fondo blanco por defecto */
+        transition: background 0.5s ease, transform 0.3s ease;
+
+        &:hover {
+          background: linear-gradient(135deg, #f8a5c2, #fae0e4);
+          transform: scale(1.05);
+        }
+
+        span {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+
+  .profile {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+
+    p-button {
+      background-color: transparent;
+      border: 2px solid #f6c3fc;
+      color: #e91e63;
+      transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+
+      &:hover {
+        background-color: #e91e63;
+        color: #fcd1e3;
+        border-color: #fcd1e3;
+        transform: scale(1.05);
+      }
+
+      .pi {
+        font-size: 1.2rem;
+      }
+    }
+  }
+}

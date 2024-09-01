@@ -1,15 +1,64 @@
-.table-container {
-    margin: 20px;
-  }
-  
-  .list-container {
-    margin: 20px;
-    .p-panel {
-      margin-bottom: 15px;
+.product-list-container {
+  padding: 20px;
+
+  .table-container {
+    width: 100%;
+    margin: 0 auto;
+
+    .product-table {
+      width: 100%;
+      table-layout: auto;
+
+      th, td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 8px;
+      }
+
+      .product-image {
+        max-width: 100px;
+        height: auto;
+      }
     }
   }
-  
-  img {
-    border-radius: 8px;
+
+  .list-container {
+    .product-panel {
+      margin-bottom: 20px;
+
+      .p-grid {
+        align-items: center;
+
+        .product-image-mobile {
+          width: 100%;
+          height: auto;
+          max-width: 300px;
+          margin: 0 auto;
+          display: block;
+        }
+
+        .action-buttons {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 10px;
+
+          button {
+            flex: 1;
+            margin: 0 5px;
+          }
+        }
+      }
+    }
   }
-  
+
+  // Barra de progreso global
+  p-progressBar {
+    margin-bottom: 20px;
+    .p-progressbar {
+      background-color: #f0f0f0;
+      .p-progressbar-value {
+        background-color: #007ad9; // Cambia el color de la barra aquí
+      }
+    }
+  }
+}

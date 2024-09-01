@@ -1,7 +1,10 @@
 <footer class="footer">
   <div class="footer-container">
     <div class="footer-logo">
-      <img src="https://res.cloudinary.com/dqvwzivqe/image/upload/v1724740794/crntjuzir4u6pjgjzv0x.png" alt="Logo de la Repostería" />
+      <img
+        src="https://res.cloudinary.com/dqvwzivqe/image/upload/v1724740794/crntjuzir4u6pjgjzv0x.png"
+        alt="Logo de la Repostería"
+      />
     </div>
 
     <!-- Secciones de clientes, visibles solo si no es administrador -->
@@ -13,10 +16,14 @@
     </div>
 
     <!-- Enlaces visibles solo para administradores -->
-    <div class="footer-admin-links" *ngIf="isAdmin">
-      <a href="#"><i class="pi pi-cog"></i><span>Administrar Productos</span></a>
-      <a href="#"><i class="pi pi-users"></i><span>Gestionar Usuarios</span></a>
-      <a href="#"><i class="pi pi-chart-line"></i><span>Estadísticas</span></a>
+    <div class="footer-admin-links" *ngIf="isAdmin" >
+      <a (click)="redirectTo_adm('user')"
+        ><i class="pi pi-users"  ></i><span>Gestionar Usuarios</span></a
+      >
+      <a (click)="redirectTo_adm('dashboard')"
+        ><i class="pi pi-shop"></i><span>Administrar Productos</span></a
+      >
+      <a (click)="redirectTo_adm('product')"><i class="pi pi-list"></i><span>Estadísticas</span></a>
     </div>
 
     <!-- Redes sociales visibles para todos -->

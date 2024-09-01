@@ -4,6 +4,7 @@ import { DashboardComponent } from './features/admin/views/dashboard/dashboard.c
 import { IsAuthenticatedGuard } from './core/guards/is-authenticated.guard';
 import { IsAdminGuard } from './core/guards/is-admin.guard';
 import { ListProductComponent } from './features/admin/views/list-product/list-product.component';
+import { ListUserComponent } from './features/admin/views/list-user/list-user.component';
 
 // Configuración de las rutas
 export const routes: Routes = [
@@ -24,8 +25,8 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'product', component: ListProductComponent },
-      // { path: 'manage-orders', component: ManageOrdersComponent },  // Ejemplo de ruta hija en admin
-      // Puedes agregar más rutas hijas aquí
+      { path: 'user', component: ListUserComponent },
+
     ]
   },
 

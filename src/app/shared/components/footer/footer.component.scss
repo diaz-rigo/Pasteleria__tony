@@ -1,9 +1,10 @@
 /* Estilo general para el footer */
 .footer {
-  background-color: #f8f9fa;
+  background-color: #ffffff; /* Fondo blanco */
   padding: 20px;
   text-align: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 4px 15px rgba(236, 64, 122, 0.2); /* Sombra rosada suave alrededor del componente */
 
   .footer-container {
     display: flex;
@@ -32,22 +33,11 @@
       margin-bottom: 15px;
 
       a {
-        color: #343a40;
+        color: #880e4f; /* Rosado oscuro */
         text-decoration: none;
         margin: 0 10px;
         font-size: 14px;
-
-        &:hover {
-          color: #d63384;
-        }
-
-        i {
-          display: none;
-        }
-
-        span {
-          display: inline;
-        }
+        transition: all 0.3s ease;
       }
     }
 
@@ -57,21 +47,17 @@
       margin-bottom: 15px;
 
       a {
-        color: #343a40;
+        color: #880e4f;
         text-decoration: none;
         margin: 0 10px;
         font-size: 14px;
+        transition: all 0.3s ease;
 
         &:hover {
-          color: #d63384;
-        }
-
-        i {
-          display: none;
-        }
-
-        span {
-          display: inline;
+          color: #f06292;
+          border-radius: 50px; /* Bordes redondeados */
+          box-shadow: 0 4px 10px rgba(240, 98, 146, 0.3);
+          transform: translateY(-2px);
         }
       }
     }
@@ -79,12 +65,15 @@
     /* Estilos para las redes sociales */
     .footer-social {
       a {
-        color: #343a40;
+        color: #880e4f;
         font-size: 20px;
         margin: 0 10px;
+        transition: all 0.3s ease;
 
         &:hover {
-          color: #d63384;
+          color: #f06292;
+          box-shadow: 0 4px 10px rgba(240, 98, 146, 0.3);
+          transform: translateY(-2px);
         }
       }
     }
@@ -92,29 +81,31 @@
 
   /* Estilo para la sección inferior del footer */
   .footer-bottom {
-    border-top: 1px solid #dee2e6;
+    border-top: 1px solid #f48fb1;
     padding-top: 15px;
     margin-top: 20px;
 
     p {
       font-size: 12px;
-      color: #868e96;
+      color: #880e4f;
     }
   }
 }
 
 /* Estilo para pantallas móviles */
 @media (max-width: 767px) {
+
   .footer {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: #f8f9fa;
-    padding: 10px 0;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff; /* Fondo blanco en móviles */
+    padding: 5px 0;
+    box-shadow: 0 -2px 10px rgba(240, 98, 146, 0.2); /* Sombra suave en móvil */
 
     .footer-container {
+      margin-bottom: 0;
       display: flex;
       justify-content: space-around;
       align-items: center;
@@ -136,6 +127,10 @@
           text-align: center;
           font-size: 18px;
           position: relative;
+          color: #880e4f; /* Rosado oscuro */
+          padding: 10px;
+          border-radius: 70%; /* Redondeado */
+          transition: all 0.3s ease;
 
           i {
             display: block;
@@ -145,13 +140,20 @@
           span {
             display: none;
           }
+
+          &:hover, &:active {
+            color: #f06292; /* Rosado claro en hover */
+            background-color: #ffffff; /* Fondo blanco */
+            box-shadow: 0 4px 15px rgba(240, 98, 146, 0.4); /* Sombra rosada luminosa */
+            transform: scale(1); /* Animación de escala */
+          }
         }
 
         /* Botón especial en el centro */
         .special-button {
           position: relative;
           top: -20px;
-          background-color: #d63384;
+          background-color: #ec407a; /* Rosado vibrante */
           color: white;
           border-radius: 50%;
           width: 60px;
@@ -159,7 +161,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 4px 20px rgba(236, 64, 122, 0.6); /* Sombra más prominente */
           transition: background-color 0.3s ease, transform 0.3s ease;
 
           i {
@@ -167,19 +169,18 @@
           }
 
           &:hover {
-            background-color: #a61e57;
+            background-color: #ad1457; /* Rosado oscuro en hover */
             transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(236, 64, 122, 0.8); /* Sombra más fuerte */
           }
         }
       }
 
-      /* Ocultar las redes sociales en móviles */
       .footer-social {
         display: none;
       }
     }
 
-    /* Ocultar el texto inferior en móviles */
     .footer-bottom {
       display: none;
     }

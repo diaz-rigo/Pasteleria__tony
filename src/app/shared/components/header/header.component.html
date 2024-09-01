@@ -1,25 +1,37 @@
 <header class="header">
   <div class="container">
     <button class="menu-btn" (click)="toggleSidebar()">
-      <i class="pi pi-bars"></i>
+      <i class="pi pi-bars"       data-aos="fade-up"
+      data-aos-anchor-placement="bottom-center"
+      data-aos-duration="900"></i>
     </button>
-    <div class="logo">
+    <div class="logo" data-aos="fade-up"
+    data-aos-anchor-placement="bottom-center"
+    data-aos-duration="900">
       <img src="https://res.cloudinary.com/dqvwzivqe/image/upload/v1724870335/zfs871eovsja3ctignpf.png" alt="Logo Repostería" />
     </div>
     <div class="iconomobil">
-      <div class="search">
-        <i class="pi pi-search"></i>
+      <div class="search" >
+        <i class="pi pi-search"       data-aos="fade-up"
+        data-aos-anchor-placement="bottom-center"
+        data-aos-duration="900"></i>
       </div>
       <div class="cart" *ngIf="!isAdmin">
-        <i class="pi pi-shopping-cart" severity="warning" pBadge value="2"></i>
+        <i class="pi pi-shopping-cart" severity="warning" pBadge value="2"       data-aos="fade-up"
+        data-aos-anchor-placement="bottom-center"
+        data-aos-duration="900"></i>
       </div>
-      <div class="profile">
+      <div class="profile" >
         <!-- Cambiar el botón dependiendo del estado de autenticación -->
-        <ng-container *ngIf="!sessionService.isAuthenticated(); else loggedInHeader">
-          <p-button icon="pi pi-user" [rounded]="true" [text]="true" severity="contrast" (onClick)="showDialog()"></p-button>
+        <ng-container *ngIf="!sessionService.isAuthenticated(); else loggedInHeader" data-aos="fade-up"
+        data-aos-anchor-placement="bottom-center"
+        data-aos-duration="900">
+          <p-button icon="pi pi-user" [rounded]="true" [text]="true" severity="contrast" (onClick)="showDialog()"       ></p-button>
         </ng-container>
-        <ng-template #loggedInHeader>
-          <p-button icon="pi pi-sign-out" [rounded]="true" [text]="true" (onClick)="logout()"></p-button>
+        <ng-template #loggedInHeader data-aos="fade-up"
+        data-aos-anchor-placement="bottom-center"
+        data-aos-duration="900">
+          <p-button icon="pi pi-sign-out" [rounded]="true" [text]="true" (onClick)="logout()"       ></p-button>
         </ng-template>
       </div>
     </div>
@@ -92,7 +104,7 @@
     <div class="profile">
       <!-- Cambiar el botón dependiendo del estado de autenticación -->
       <ng-container *ngIf="!sessionService.isAuthenticated(); else loggedInHeader">
-        <p-button icon="pi pi-user" [rounded]="true" [text]="true" severity="contrast" (onClick)="showDialog()"></p-button>
+        <p-button icon="pi pi-sign-in" [rounded]="true" [text]="true" severity="contrast" (onClick)="showDialog()"></p-button>
       </ng-container>
       <ng-template #loggedInHeader>
         <p-button icon="pi pi-sign-out" [rounded]="true" [text]="true" (onClick)="logout()"></p-button>
@@ -102,27 +114,63 @@
 </p-sidebar>
 
 
-
 <div class="card flex justify-content-center">
-  <p-dialog header="Iniciar sesión" [modal]="true" [(visible)]="visible" [style]="{ width: '30rem' }">
+  <p-dialog
+    header="Iniciar sesión"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '30rem', borderRadius: '10px' }"
+    contentStyle="padding: 2rem; background-color: #fdf2f8; border-radius: 10px;"
+  >
     <div class="login-dialog">
+      <div class="logo-container" data-aos="fade-up" data-aos-duration="1500">
+        <img src="https://res.cloudinary.com/dqvwzivqe/image/upload/v1724739865/fmuhhj1k1jxzwixichyu.png" alt="Logo de la empresa" class="company-logo" />
+      </div>
+
       <p class="dialog-description">Ingrese sus credenciales para acceder a su cuenta.</p>
 
       <div class="form-group">
         <label for="username" class="form-label">Nombre de usuario o correo</label>
-        <input class="form-input" id="username" [(ngModel)]="email" placeholder="Ingrese su nombre de usuario" />
+        <input
+          class="form-input"
+          id="username"
+          [(ngModel)]="email"
+          placeholder="Ingrese su nombre de usuario"
+        />
       </div>
 
       <div class="form-group">
         <label for="password" class="form-label">Contraseña</label>
-        <input class="form-input" id="password" type="password" [(ngModel)]="password" placeholder="Ingrese su contraseña" />
+        <input
+          class="form-input"
+          id="password"
+          type="password"
+          [(ngModel)]="password"
+          placeholder="Ingrese su contraseña"
+        />
       </div>
 
       <div class="dialog-footer">
-        <p-button label="Cancelar" icon="pi pi-times" [rounded]="true" [text]="true" (click)="closeDialog()"></p-button>
-        <p-button label="Iniciar sesión" icon="pi pi-check" [rounded]="true" [text]="true" (click)="handleLogin()"></p-button>
+        <p-button
+          label="Cancelar"
+          icon="pi pi-times"
+          [rounded]="true"
+          [text]="true"
+          (click)="closeDialog()"
+          styleClass="p-button-text p-button-danger"
+        ></p-button>
+        <p-button
+          label="Iniciar sesión"
+          icon="pi pi-check"
+          [rounded]="true"
+          [text]="true"
+          (click)="handleLogin()"
+          styleClass="p-button-text p-button-success"
+        ></p-button>
       </div>
     </div>
   </p-dialog>
 </div>
+
+
 <p-toast />

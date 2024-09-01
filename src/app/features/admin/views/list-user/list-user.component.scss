@@ -1,0 +1,32 @@
+.card {
+  padding: 2rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+}
+
+h2 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+p-table {
+  margin-bottom: 1rem;
+}
+
+.p-dialog .p-fluid .p-field label {
+  font-weight: bold;
+}
+
+.p-button-text {
+  color: #fff;
+}
+
+.p-button-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.p-button-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}

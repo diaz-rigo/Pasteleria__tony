@@ -1,0 +1,23 @@
+/* product-form.component.scss */
+.form-container {
+  padding: 1em;
+  max-width: 600px;
+  margin: auto;
+}
+
+.p-field {
+  margin-bottom: 1em;
+}
+
+.p-field label {
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+.p-field input, .p-field textarea {
+  width: 100%;
+}
+
+button {
+  margin-top: 1em;
+}

@@ -1,0 +1,45 @@
+<div class="card">
+  <h2>User Management</h2>
+
+  <p-table [value]="users" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editUser(user)"></button>
+          <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteUser(user)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <button pButton label="Add User" icon="pi pi-plus" class="p-button-success mt-3" (click)="openNew()"></button>
+
+  <p-dialog header="User Details" [(visible)]="userDialog" [modal]="true" [style]="{width: '400px'}" [closable]="false">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="name">Name</label>
+        <input pInputText id="name" [(ngModel)]="user.name" required autofocus />
+      </div>
+      <div class="p-field">
+        <label for="email">Email</label>
+        <input pInputText id="email" [(ngModel)]="user.email" required />
+      </div>
+    </div>
+
+    <div class="p-dialog-footer">
+      <button pButton label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+      <button pButton label="Save" icon="pi pi-check" class="p-button-text" (click)="saveUser()" [disabled]="!user.name || !user.email"></button>
+    </div>
+  </p-dialog>
+</div>

@@ -1,40 +1,61 @@
-<div *ngIf="!isMobile" class="table-container">
-    <p-table [value]="products">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Imagen</th>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Precio</th>
-          <th>Stock</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-product>
-        <tr>
-          <td>
-            <img *ngIf="product.variants.length > 0" [src]="product.variants[0].images[0]" alt="product image" width="100">
-          </td>
-          <td>{{ product.name }}</td>
-          <td>{{ product.description }}</td>
-          <td>{{ product.variants[0]?.sizeStock[0]?.price }} $</td>
-          <td>{{ product.variants[0]?.sizeStock[0]?.stock }}</td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </div>
-  
-  <div *ngIf="isMobile" class="list-container">
-    <p-panel *ngFor="let product of products" header="{{ product.name }}">
-      <div class="p-grid">
-        <div class="p-col-12">
-          <img *ngIf="product.variants.length > 0" [src]="product.variants[0].images[0]" alt="product image" width="100%">
+<div class="product-list-container">
+
+  <!-- Mostrar el ProgressBar cuando los productos están cargando -->
+  <p-progressBar *ngIf="loading" mode="indeterminate" [style]="{ height: '6px', width: '100%' }"></p-progressBar>
+
+  <!-- Mostrar los productos cuando la carga ha terminado -->
+  <div *ngIf="!loading">
+
+    <!-- Diseño de tabla para pantallas más grandes -->
+    <div *ngIf="!isMobile" class="table-container">
+      <p-table [value]="products" class="product-table">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Variantes</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td>
+              <img *ngIf="product.variants.length > 0" [src]="product.variants[0].images[0]" alt="product image" class="product-image">
+            </td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.variants.length }}</td>
+            <td>{{ product.variants[0]?.sizeStock[0]?.price }} $</td>
+            <td>{{ product.variants[0]?.sizeStock[0]?.stock }}</td>
+            <td>
+              <button pButton type="button" icon="pi pi-pencil" (click)="editProduct(product.id)"></button>
+              <button pButton type="button" icon="pi pi-trash" (click)="deleteProduct(product.id)"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Diseño de lista para pantallas móviles -->
+    <div *ngIf="isMobile" class="list-container">
+      <p-panel *ngFor="let product of products" header="{{ product.name }}" class="product-panel">
+        <div class="p-grid">
+          <div class="p-col-12">
+            <img *ngIf="product.variants.length > 0" [src]="product.variants[0].images[0]" alt="product image" class="product-image-mobile">
+          </div>
+          <div class="p-col-12">
+            <p><strong>Variantes:</strong> {{ product.variants.length }}</p>
+            <p><strong>Precio:</strong> {{ product.variants[0]?.sizeStock[0]?.price }} $</p>
+            <p><strong>Stock:</strong> {{ product.variants[0]?.sizeStock[0]?.stock }}</p>
+            <div class="action-buttons">
+              <p-button  type="button" icon="pi pi-pencil" (click)="editProduct(product.id)" [rounded]="true" [text]="true" [raised]="true" severity="help"/>
+              <p-button  type="button" icon="pi pi-trash" (click)="deleteProduct(product.id)" [rounded]="true" [text]="true" [raised]="true" severity="danger"/>
+            </div>
+          </div>
         </div>
-        <div class="p-col-12">
-          <p>{{ product.description }}</p>
-          <p><strong>Precio:</strong> {{ product.variants[0]?.sizeStock[0]?.price }} $</p>
-          <p><strong>Stock:</strong> {{ product.variants[0]?.sizeStock[0]?.stock }}</p>
-        </div>
-      </div>
-    </p-panel>
+      </p-panel>
+    </div>
+
   </div>
-  
+</div>

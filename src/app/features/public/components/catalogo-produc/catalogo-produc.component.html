@@ -20,7 +20,7 @@
       <ul>
         <li *ngFor="let variant of selectedProduct.variants"
             (click)="selectVariant(variant)"
-            [class.selected]="variant === selectedVariant" data-aos="zoom-out-down">
+            [class.selected]="variant === selectedVariant" data-aos="flip-right">
           {{ variant.flavor }} - {{ variant.color }} - {{ variant.texture }}
         </li>
       </ul>
@@ -34,7 +34,7 @@
         <div class="images-gallery">
           <div *ngFor="let image of selectedVariant.images"
                class="image-container">
-            <img [src]="image" [alt]="selectedProduct.name + ' - ' + selectedVariant.flavor" class="product-image">
+            <img [src]="image" [alt]="selectedProduct.name + ' - ' + selectedVariant.flavor" class="product-image" data-aos="flip-down">
             <button pButton pRipple type="button" icon="pi pi-th-large" class="detail-button" (click)="displayDialog=true"></button>
           </div>
         </div>
