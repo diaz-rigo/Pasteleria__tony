@@ -1,4 +1,4 @@
-<!-- <div class="product-list-container">
+<div class="product-list-container">
 
   <!-- Mostrar el ProgressBar cuando los productos están cargando -->
   <p-progressBar *ngIf="loading" mode="indeterminate" [style]="{ height: '6px', width: '100%' }"></p-progressBar>
@@ -102,87 +102,80 @@
 
 
 
+
+
     <p-dialog [(visible)]="displayCreateDialog" header="Crear Producto" [modal]="true" [responsive]="true" [style]="{width: '60vw'}">
       <form [formGroup]="createForm" (ngSubmit)="createProduct()">
-    
-        <!-- Información General -->
         <div class="p-fluid grid">
-          <div class="col-12 md:col-6 p-field">
-            <label for="name">Nombre</label>
-            <input id="name" type="text" pInputText formControlName="name" required>
+          <div class="col-12 md:col-6">
+            <label>Nombre</label>
+            <input type="text" pInputText formControlName="name">
           </div>
-          <div class="col-12 md:col-6 p-field">
-            <label for="brand">Marca</label>
-            <input id="brand" type="text" pInputText formControlName="brand" required>
+          <div class="col-12 md:col-6">
+            <label>Marca</label>
+            <input type="text" pInputText formControlName="brand">
           </div>
-          <div class="col-12 md:col-6 p-field">
-            <label for="category">Categoría</label>
-            <p-dropdown id="category" formControlName="category"  optionLabel="name" required></p-dropdown>
+          <div class="col-12 md:col-6">
+            <label>Categoría</label>
+            <input type="text" pInputText formControlName="category">
           </div>
-          <div class="col-12 md:col-6 p-field">
-            <label for="ingredientes">Ingredientes</label>
-            <input id="ingredientes" type="text" pInputText formControlName="ingredientes" required>
+          <div class="col-12 md:col-6">
+            <label>Material</label>
+            <input type="text" pInputText formControlName="material">
           </div>
-          <div class="col-12 p-field">
-            <label for="description">Descripción</label>
-            <textarea id="description" pInputTextarea formControlName="description" rows="3"></textarea>
-          </div>
-          <div class="col-12 md:col-6 p-field">
-            <label for="availabilityStatus">Estado de Disponibilidad</label>
-            <p-dropdown id="availabilityStatus" formControlName="availabilityStatus" [options]="availabilityOptions" optionLabel="name"></p-dropdown>
+          <div class="col-12">
+            <label>Descripción</label>
+            <textarea pInputTextarea formControlName="description"></textarea>
           </div>
         </div>
     
-        <p-divider></p-divider>
-    
         <!-- Sección de Variantes -->
-        <div class="p-fieldset">
-          <legend>Variantes</legend>
-          <button pButton type="button" label="Añadir Variante" icon="pi pi-plus" (click)="addVariant()" class="p-button-sm p-button-outlined"></button>
+        <div class="p-fieldset" legend="Variantes">
+          <button pButton type="button" label="Añadir Variante" icon="pi pi-plus" (click)="addVariant()"></button>
     
-          <div *ngFor="let variant of variants.controls; let i = index" class="p-mt-2">
-            <div class="p-card p-p-2">
-              <div class="p-grid">
-                <div class="col-12 md:col-3 p-field">
+          <div *ngFor="let variant of variants.controls; let i = index">
+            <div class="p-fieldset">
+              <legend>Variante {{ i + 1 }}</legend>
+              <div class="grid">
+                <div class="col-12 md:col-3">
                   <label>Sabor</label>
-                  <input type="text" pInputText formControlName="flavor" required>
+                  <input type="text" pInputText formControlName="flavor">
                 </div>
-                <div class="col-12 md:col-3 p-field">
+                <div class="col-12 md:col-3">
                   <label>Color</label>
-                  <input type="text" pInputText formControlName="color" required>
+                  <input type="text" pInputText formControlName="color">
                 </div>
-                <div class="col-12 md:col-3 p-field">
+                <div class="col-12 md:col-3">
                   <label>Textura</label>
-                  <input type="text" pInputText formControlName="texture" required>
+                  <input type="text" pInputText formControlName="texture">
                 </div>
-                <div class="col-12 md:col-3 p-field">
+                <div class="col-12 md:col-3">
                   <label>Forma</label>
-                  <input type="text" pInputText formControlName="shape" required>
+                  <input type="text" pInputText formControlName="shape">
                 </div>
               </div>
-              <button pButton type="button" label="Eliminar Variante" class="p-button-danger p-button-sm" (click)="removeVariant(i)"></button>
+              <button pButton type="button" label="Eliminar Variante" class="p-button-danger" (click)="removeVariant(i)"></button>
     
               <!-- Sección de Tamaños -->
-              <div class="p-fieldset p-mt-3">
-                <legend>Tamaños</legend>
-                <button pButton type="button" label="Añadir Tamaño" icon="pi pi-plus" (click)="addSizeStock(i)" class="p-button-sm p-button-outlined"></button>
+              <div class="p-fieldset" legend="Tamaños">
+                <button pButton type="button" label="Añadir Tamaño" icon="pi pi-plus" (click)="addSizeStock(i)"></button>
     
                 <div *ngFor="let sizeStock of getSizeStockControls(i).controls; let j = index">
-                  <div class="p-grid">
-                    <div class="col-12 md:col-3 p-field">
+                  <div class="grid">
+                    <div class="col-12 md:col-3">
                       <label>Tamaño</label>
-                      <input type="number" pInputText formControlName="size" required>
+                      <input type="number" pInputText formControlName="size">
                     </div>
-                    <div class="col-12 md:col-3 p-field">
+                    <div class="col-12 md:col-3">
                       <label>Stock</label>
-                      <input type="number" pInputText formControlName="stock" required>
+                      <input type="number" pInputText formControlName="stock">
                     </div>
-                    <div class="col-12 md:col-3 p-field">
+                    <div class="col-12 md:col-3">
                       <label>Precio</label>
-                      <input type="number" pInputText formControlName="price" required>
+                      <input type="number" pInputText formControlName="price">
                     </div>
-                    <div class="col-12 md:col-3 p-field p-text-right">
-                      <button pButton type="button" label="Eliminar" class="p-button-danger p-button-sm" (click)="removeSizeStock(i, j)"></button>
+                    <div class="col-12 md:col-3">
+                      <button pButton type="button" label="Eliminar" class="p-button-danger" (click)="removeSizeStock(i, j)"></button>
                     </div>
                   </div>
                 </div>
@@ -191,18 +184,12 @@
           </div>
         </div>
     
-        <p-divider></p-divider>
-    
-        <!-- Botones de Acción -->
         <div class="p-dialog-footer">
-          <button pButton type="button" label="Cancelar" icon="pi pi-times" class="p-button-text p-button-secondary" (click)="displayCreateDialog = false"></button>
-          <button pButton type="submit" label="Crear" icon="pi pi-check" class="p-button-primary" [disabled]="createForm.invalid"></button>
+          <button pButton type="button" label="Cancelar" icon="pi pi-times" (click)="displayCreateDialog = false"></button>
+          <button pButton type="submit" label="Crear" icon="pi pi-check" [disabled]="createForm.invalid"></button>
         </div>
-    
       </form>
     </p-dialog>
-    
-    
     
 
 
@@ -213,4 +200,4 @@
   
     <p-toast></p-toast>
   </div>
-</div> -->
+</div>

@@ -4,24 +4,32 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../../services/user.service';
+import { DropdownModule } from 'primeng/dropdown'; // ✅ Importa PrimeNG Dropdown
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-list-user',
   standalone: true,
-  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, FormsModule],
+    providers: [UserService],
+  
+  imports: [CommonModule,TableModule, ButtonModule, DialogModule, InputTextModule, FormsModule,DropdownModule,HttpClientModule],
   templateUrl: './list-user.component.html',
   styleUrls: ['./list-user.component.scss']
 })
 export class ListUserComponent {
-  users = [
-    { id: 1, name: 'John Doe', email: 'john@example.com' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
-    { id: 3, name: 'Michael Brown', email: 'michael@example.com' },
+  users : any = [
+    
   ];
 
   userDialog: boolean = false;
   submitted: boolean = false;
   user: any = {};
+  ngOnInit() {
+    this.loadUsers();
+  }
+  constructor(private userService: UserService) {}
 
   openNew() {
     this.user = {};
@@ -29,15 +37,22 @@ export class ListUserComponent {
     this.userDialog = true;
   }
 
+
+  loadUsers() {
+    this.userService.getUsers().subscribe(users => {
+      this.users = users;
+    });
+  }
   editUser(user: any) {
     this.user = { ...user };
     this.userDialog = true;
   }
 
   deleteUser(user: any) {
-    this.users = this.users.filter(u => u.id !== user.id);
+    this.userService.deleteUser(user.id).subscribe(() => {
+      this.users = this.users.filter((u: { id: any; }) => u.id !== user.id);
+    });
   }
-
   hideDialog() {
     this.userDialog = false;
     this.submitted = false;
@@ -48,7 +63,7 @@ export class ListUserComponent {
 
     if (this.user.name && this.user.email) {
       if (this.user.id) {
-        this.users = this.users.map(u => u.id === this.user.id ? this.user : u);
+        this.users = this.users.map((u: { id: any; }) => u.id === this.user.id ? this.user : u);
       } else {
         this.user.id = this.users.length + 1;
         this.users.push(this.user);

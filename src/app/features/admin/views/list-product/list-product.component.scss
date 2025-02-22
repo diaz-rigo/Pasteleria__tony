@@ -1,64 +1,256 @@
-.product-list-container {
-  padding: 20px;
+// // .product-list-container {
+// //   padding: 20px;
 
-  .table-container {
-    width: 100%;
-    margin: 0 auto;
+// //   .table-container {
+// //     width: 100%;
+// //     margin: 0 auto;
 
-    .product-table {
-      width: 100%;
-      table-layout: auto;
+// //     .product-table {
+// //       width: 100%;
+// //       table-layout: auto;
 
-      th, td {
-        text-align: center;
-        vertical-align: middle;
-        padding: 8px;
-      }
+// //       th, td {
+// //         text-align: center;
+// //         vertical-align: middle;
+// //         padding: 8px;
+// //       }
 
-      .product-image {
-        max-width: 100px;
-        height: auto;
-      }
-    }
-  }
+// //       .product-image {
+// //         max-width: 100px;
+// //         height: auto;
+// //       }
+// //     }
+// //   }
 
-  .list-container {
-    .product-panel {
-      margin-bottom: 20px;
+// //   .list-container {
+// //     .product-panel {
+// //       margin-bottom: 20px;
 
-      .p-grid {
-        align-items: center;
+// //       .p-grid {
+// //         align-items: center;
 
-        .product-image-mobile {
-          width: 100%;
-          height: auto;
-          max-width: 300px;
-          margin: 0 auto;
-          display: block;
-        }
+// //         .product-image-mobile {
+// //           width: 100%;
+// //           height: auto;
+// //           max-width: 300px;
+// //           margin: 0 auto;
+// //           display: block;
+// //         }
 
-        .action-buttons {
-          display: flex;
-          justify-content: space-between;
-          margin-top: 10px;
+// //         .action-buttons {
+// //           display: flex;
+// //           justify-content: space-between;
+// //           margin-top: 10px;
 
-          button {
-            flex: 1;
-            margin: 0 5px;
-          }
-        }
-      }
-    }
-  }
+// //           button {
+// //             flex: 1;
+// //             margin: 0 5px;
+// //           }
+// //         }
+// //       }
+// //     }
+// //   }
 
-  // Barra de progreso global
-  p-progressBar {
-    margin-bottom: 20px;
-    .p-progressbar {
-      background-color: #f0f0f0;
-      .p-progressbar-value {
-        background-color: #007ad9; // Cambia el color de la barra aquí
-      }
-    }
-  }
-}
+// //   // Barra de progreso global
+// //   p-progressBar {
+// //     margin-bottom: 20px;
+// //     .p-progressbar {
+// //       background-color: #f0f0f0;
+// //       .p-progressbar-value {
+// //         background-color: #007ad9; // Cambia el color de la barra aquí
+// //       }
+// //     }
+// //   }
+// // }
+
+
+// // .product-list-container {
+// //   padding: 1rem;
+
+// //   .table-container {
+// //     .product-table {
+// //       width: 100%;
+// //       th, td {
+// //         text-align: center;
+// //         padding: 0.75rem;
+// //       }
+// //       .product-image {
+// //         width: 50px;
+// //         height: 50px;
+// //         border-radius: 5px;
+// //       }
+// //     }
+// //   }
+
+// //   .list-container {
+// //     .product-panel {
+// //       margin-bottom: 1rem;
+// //       .product-image-mobile {
+// //         width: 100%;
+// //         max-height: 150px;
+// //         object-fit: cover;
+// //         border-radius: 5px;
+// //       }
+// //       .action-buttons {
+// //         display: flex;
+// //         justify-content: space-around;
+// //       }
+// //     }
+// //   }
+// // }
+
+// // ::ng-deep .p-dialog {
+// //   .p-dialog-header {
+// //     background-color: #673AB7;
+// //     color: white;
+// //   }
+// //   .p-dialog-footer {
+// //     display: flex;
+// //     justify-content: flex-end;
+// //   }
+// // }
+// // .form-grid {
+// //   display: grid;
+// //   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+// //   gap: 15px;
+// //   padding: 10px;
+// // }
+
+// // .form-group {
+// //   display: flex;
+// //   flex-direction: column;
+// //   gap: 5px;
+
+// //   label {
+// //     font-weight: bold;
+// //   }
+
+// //   input, p-dropdown {
+// //     width: 100%;
+// //     padding: 8px;
+// //     border: 1px solid #ccc;
+// //     border-radius: 5px;
+// //     font-size: 14px;
+// //   }
+
+// //   .error-message {
+// //     color: #e53935;
+// //     font-size: 12px;
+// //   }
+
+// //   .preview-img {
+// //     max-width: 100%;
+// //     max-height: 100px;
+// //     margin-top: 5px;
+// //     border-radius: 5px;
+// //   }
+// // }
+
+// // .dialog-footer {
+// //   display: flex;
+// //   justify-content: flex-end;
+// //   gap: 10px;
+// //   padding: 15px;
+// // }
+
+
+
+
+// .product-list-container {
+//   padding: 20px;
+//   background-color: #f9f9f9; /* Fondo suave */
+//   border-radius: 8px; /* Esquinas redondeadas */
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
+// }
+
+// .new-product-btn {
+//   margin-bottom: 20px;
+//   background-color: #007ad9; /* Color del botón */
+//   color: #fff; /* Color del texto */
+// }
+
+// .table-container {
+//   width: 100%;
+//   margin: 0 auto;
+
+//   .product-table {
+//     width: 100%;
+//     table-layout: auto;
+//     border-radius: 8px; /* Esquinas redondeadas en la tabla */
+//     overflow: hidden; /* Para que las esquinas redondeadas funcionen */
+
+//     th, td {
+//       text-align: center;
+//       vertical-align: middle;
+//       padding: 12px; /* Padding aumentado para mejor espaciado */
+//       background-color: #fff; /* Fondo blanco para las celdas */
+//     }
+
+//     th {
+//       background-color: #007ad9; /* Color del encabezado */
+//       color: #fff; /* Color del texto en el encabezado */
+//     }
+
+//     .product-image {
+//       max-width: 70px; /* Imagen más pequeña */
+//       height: auto;
+//       border-radius: 4px; /* Esquinas redondeadas para las imágenes */
+//     }
+//   }
+// }
+
+// .list-container {
+//   .product-panel {
+//     margin-bottom: 20px;
+//     border: 1px solid #ccc; /* Borde del panel */
+//     border-radius: 8px; /* Esquinas redondeadas */
+//     background-color: #fff; /* Fondo blanco para el panel */
+//     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra del panel */
+
+//     .p-grid {
+//       align-items: center;
+
+//       .product-image-mobile {
+//         width: 100%;
+//         height: auto;
+//         max-width: 300px;
+//         margin: 0 auto;
+//         display: block;
+//         border-radius: 4px; /* Esquinas redondeadas para imágenes móviles */
+//       }
+
+//       .action-buttons {
+//         display: flex;
+//         justify-content: space-between;
+//         margin-top: 10px;
+
+//         .mobile-action-button {
+//           flex: 1;
+//           margin: 0 5px;
+//           transition: background-color 0.3s; /* Efecto de transición */
+//         }
+//       }
+//     }
+//   }
+// }
+
+// /* Barra de progreso global */
+// p-progressBar {
+//   margin-bottom: 20px;
+//   .p-progressbar {
+//     background-color: #e0e0e0; /* Color de fondo de la barra */
+//     .p-progressbar-value {
+//       background-color: #007ad9; /* Color de la barra de progreso */
+//     }
+//   }
+// }
+
+// /* Efecto de hover para botones */
+// .action-button {
+//   transition: background-color 0.3s, transform 0.2s; /* Transición suave */
+// }
+
+// .action-button:hover {
+//   background-color: #f0f0f0; /* Color de fondo al pasar el mouse */
+//   transform: scale(1.05); /* Efecto de escalado */
+// }
