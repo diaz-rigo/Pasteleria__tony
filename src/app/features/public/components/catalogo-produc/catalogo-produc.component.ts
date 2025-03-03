@@ -50,6 +50,7 @@ export class CatalogoProducComponent implements OnInit {
     );
   }
 
+
   selectCategory(category: string): void {
     this.selectedCategory = category;
     this.filterProducts();

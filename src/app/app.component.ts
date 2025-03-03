@@ -5,6 +5,8 @@ import { NgxUiLoaderModule } from 'ngx-ui-loader';
 
 import { FooterComponent } from './shared/components/footer/footer.component';
 import * as AOS from 'aos'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { BrowserModule } from '@angular/platform-browser';
 @Component({
   selector: 'app-root',
   standalone: true,

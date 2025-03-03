@@ -8,13 +8,19 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ButtonModule } from 'primeng/button';
-import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { DividerModule } from 'primeng/divider';
-const PRIMECOMPONENTS = [
+import { InputTextModule } from 'primeng/inputtext';
+import { Product } from '../../../../shared/models/producto.model';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { ProductFormComponent } from './product-form/product-form.component';
+const PRIMECOMPONENTS = [InputIconModule,IconFieldModule,InputTextModule,
   DialogModule, ButtonModule, ProgressBarModule, ProgressSpinnerModule,
   PanelModule, TableModule, ToastModule,DropdownModule,DividerModule
 ];
@@ -25,179 +31,112 @@ const PRIMECOMPONENTS = [
   imports: [
     ...PRIMECOMPONENTS,
     CommonModule,
-    HttpClientModule,ReactiveFormsModule
+    HttpClientModule,ReactiveFormsModule,FormsModule,ProductFormComponent
   ],
-  providers: [ProductService, MessageService],
+  providers: [ProductService, MessageService,DialogService],
   templateUrl: './list-product.component.html',
   styleUrls: ['./list-product.component.scss']
 })
 export class ListProductComponent implements OnInit {
-  products: any[] = [];
-  isMobile: boolean = false;
-  loading: boolean = true;
-  displayEditDialog = false;
-  displayCreateDialog = false;
-  selectedProduct: any = null;
-
-  editForm!: FormGroup;
-  createForm!: FormGroup;
+  agregar: boolean = false
+  productos: Product[] = []
+  searchForm: FormGroup;
+  isWebMode: boolean = window.innerWidth >= 768 // Define la condición inicial para el modo web
+  // ref: DynamicDialogRef | undefined
+  isMobile: boolean = window.innerWidth < 768; // Inicializar basado en el tamaño de la ventana
+  pageSizeOptions: number[] = [3, 10, 25];
+  pageIndex: number = 0;
+  pageSize: number = 3;
+  totalProducts: number = 0;
+  // // New properties
+  displayVariantModal: boolean = false;
+  selectedVariants: any[] = [];
+  // filters: any = {}; // Agregar una propiedad para los filtros
+  ref: DynamicDialogRef | undefined
 
   constructor(
+    private messageService: MessageService,
     private productService: ProductService,
+    private dialogService: DialogService,
     private router: Router,
     private fb: FormBuilder,
-    private messageService: MessageService
-  ) {}
-  availabilityOptions: any[] = [
-    { name: 'Available', value: 'available' },
-    { name: 'Out of Stock', value: 'out_of_stock' },
-    { name: 'Pre-Order', value: 'pre_order' }
-  ];
+  ) {
+    this.searchForm = this.fb.group({
+      query: [''],
+    });
+
+    // this.searchForm.valueChanges
+    //   .pipe(debounceTime(300), distinctUntilChanged())
+    //   .subscribe(() => {
+    //     this.pageIndex = 0;
+    //     this.searchProducts();
+    //   });
+  }
+
   ngOnInit(): void {
-    this.initForms();
-    this.fetchProducts();
-    this.updateDeviceType();
-    window.addEventListener('resize', this.updateDeviceType.bind(this));
+    this.loadProducts();
+  }
+  createprod() {
+    this.openProductDialog(false, null);
+  }
+  editprod(product: Product) {
+    this.openProductDialog(true, product);
+  }
+  onPageChange(event: any): void {
+    this.pageIndex = event.first / event.rows;  // Calcula pageIndex
+    this.pageSize = event.rows;  // Asigna pageSize
+    this.loadProducts();
   }
 
-  private initForms(): void {
-    this.editForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      price: [0, [Validators.required, Validators.min(0)]],
-      stock: [0, [Validators.required, Validators.min(0)]],
-      image: ['', [Validators.required, Validators.pattern(/(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/)]]
-    });
+  
+  private openProductDialog(isEditing: boolean, product: Product | null) {
+    const isMobile = window.innerWidth < 480;
 
-    this.createForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      brand: ['', Validators.required],
-      category: ['', Validators.required],
-      material: ['', Validators.required],
-      description: ['', Validators.maxLength(500)],
-      availabilityStatus: ['available', Validators.required],
-      variants: this.fb.array([])
-    });
-  }
-
-  private fetchProducts(): void {
-    this.loading = true;
-    this.productService.getProducts().subscribe({
-      next: (data: any) => {
-        this.products = data;
-        this.loading = false;
+    this.ref = this.dialogService.open(ProductFormComponent, {
+      header: isEditing ? 'Editar Producto' : 'Nuevo Producto',
+      height: isMobile ? 'auto' : 'auto',
+      style: {
+        'max-width': isMobile ? '110vw' : 'auto',
+        'max-height': isMobile ? 'auto' : '100vh',
+        padding: '0', // Aquí estableces el padding a 0
       },
-      error: () => {
-        this.loading = false;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los productos.' });
-      }
+      modal: true,
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '100vw',
+      },
+      data: { product: product }, // Pasando el objeto product dentro de un objeto con la propiedad 'product'
     });
   }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(): void {
-    this.updateDeviceType();
+  searchProducts(): void {
+    // this.pageIndex = 0;
+    this.loadProducts();
+  }
+  loadProducts(): void {
+    const skip = this.pageIndex * this.pageSize;
+    const limit = this.pageSize;
+  
+    const filters = {
+      name: this.searchForm.value.query,
+      // Otros campos de filtrado que recolectes de la vista
+      priceMin: this.searchForm.value.priceMin,
+      priceMax: this.searchForm.value.priceMax,
+      category: this.searchForm.value.category,
+      maker: this.searchForm.value.maker,
+    };
+  
+    this.productService
+      .getProducts()
+      .subscribe((data: Product[]) => {
+        this.productos = data;
+      });
   }
 
-  private updateDeviceType(): void {
-    this.isMobile = window.innerWidth < 768;
+  
+  showVariantDetails(variants: any[]) {
+    console.log("Variant Details:", variants);
+    this.selectedVariants = variants;
+    this.displayVariantModal = true; // Assuming you have a modal bound to this variable.
   }
 
-  editProduct(product: any): void {
-    this.selectedProduct = product;
-    this.editForm.patchValue({
-      name: product.name,
-      price: product.variants[0]?.sizeStock[0]?.price || 0,
-      stock: product.variants[0]?.sizeStock[0]?.stock || 0,
-      image: product.variants[0]?.images[0] || ''
-    });
-    this.displayEditDialog = true;
-  }
-
-  saveProduct(): void {
-    if (this.editForm.valid) {
-      const updatedProduct = { ...this.selectedProduct, ...this.editForm.value };
-      // this.productService.updateProduct(updatedProduct).subscribe({
-      //   next: () => {
-      //     this.fetchProducts();
-          this.messageService.add({ severity: 'success', summary: 'Producto actualizado', detail: 'El producto se ha actualizado correctamente.' });
-      //   },
-      //   error: () => {
-      //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar el producto.' });
-      //   }
-      // });
-      this.displayEditDialog = false;
-    }
-  }
-
-  openCreateDialog(): void {
-    this.createForm.reset();
-    this.displayCreateDialog = true;
-  }
-
-  createProduct(): void {
-    if (this.createForm.valid) {
-      const newProduct = this.createForm.value;
-      // this.productService.createProduct(newProduct).subscribe({
-      //   next: () => {
-      //     this.fetchProducts();
-          this.messageService.add({ severity: 'success', summary: 'Producto Creado', detail: 'El producto se ha agregado correctamente.' });
-      //     this.displayCreateDialog = false;
-      //   },
-      //   error: () => {
-      //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo crear el producto.' });
-      //   }
-      // });
-    }
-  }
-
-  deleteProduct(productId: string): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
-      // this.productService.deleteProduct(productId).subscribe({
-      //   next: () => {
-      //     this.products = this.products.filter(product => product.id !== productId);
-          this.messageService.add({ severity: 'info', summary: 'Producto Eliminado', detail: 'El producto se ha eliminado correctamente.' });
-      //   },
-      //   error: () => {
-      //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el producto.' });
-      //   }
-      // });
-    }
-  }
-
-  // Obtener variantes como FormArray
-  get variants(): FormArray {
-    return this.createForm.get('variants') as FormArray;
-  }
-
-  addVariant(): void {
-    this.variants.push(this.fb.group({
-      sizeStock: this.fb.array([]),
-      images: this.fb.array([], Validators.required)
-    }));
-  }
-
-  removeVariant(index: number): void {
-    this.variants.removeAt(index);
-  }
-
-  getSizeStockControls(variantIndex: number): FormArray {
-    return this.variants.at(variantIndex).get('sizeStock') as FormArray;
-  }
-    closeDialog() {
-    this.displayEditDialog = false;
-  }
-
-  addSizeStock(variantIndex: number): void {
-    const sizeStockGroup = this.fb.group({
-      size: [null, [Validators.required, Validators.min(1)]],
-      stock: [null, [Validators.required, Validators.min(0)]],
-      price: [null, [Validators.required, Validators.min(0)]],
-      availabilityStatus: ['available', Validators.required]
-    });
-    this.getSizeStockControls(variantIndex).push(sizeStockGroup);
-  }
-
-  removeSizeStock(variantIndex: number, sizeIndex: number): void {
-    this.getSizeStockControls(variantIndex).removeAt(sizeIndex);
-  }
 }

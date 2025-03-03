@@ -9,6 +9,7 @@ export interface SizeStock {
     flavor: string;
     color: string;
     texture: string;
+    description: string;
     shape: string;
     availabilityStatus: "available" | "on_demand" | "out_of_stock";
     sizeStock: SizeStock[];
@@ -16,10 +17,10 @@ export interface SizeStock {
   }
   
   export interface Product {
+    _id: string;
     name: string;
-    brand: string;
     category: string;
-    material: string;
+    ingredientes: string;
     description?: string;
     availabilityStatus: "available" | "on_demand" | "out_of_stock";
     variants: Variant[];

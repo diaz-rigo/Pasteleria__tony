@@ -1,216 +1,166 @@
-<!-- <div class="product-list-container">
-
-  <!-- Mostrar el ProgressBar cuando los productos están cargando -->
-  <p-progressBar *ngIf="loading" mode="indeterminate" [style]="{ height: '6px', width: '100%' }"></p-progressBar>
-  <button pButton type="button" label="Nuevo Producto" icon="pi pi-plus" (click)="openCreateDialog()"></button>
-
-  <!-- Mostrar los productos cuando la carga ha terminado -->
-  <div *ngIf="!loading">
-
-    <!-- Diseño de tabla para pantallas más grandes -->
-    <div *ngIf="!isMobile" class="table-container">
-      <p-table [value]="products" class="product-table">
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Imagen</th>
-            <th>Nombre</th>
-            <th>Variantes</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Acciones</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-product>
-          <tr>
-            <td>
-              <img *ngIf="product.variants.length > 0" [src]="product.variants[0].images[0]" alt="product image" class="product-image">
-            </td>
-            <td>{{ product.name }}</td>
-            <td>{{ product.variants.length }}</td>
-            <td>{{ product.variants[0]?.sizeStock[0]?.price }} $</td>
-            <td>{{ product.variants[0]?.sizeStock[0]?.stock }}</td>
-            <td>
-              <button pButton type="button" icon="pi pi-pencil" (click)="editProduct(product)"></button>
-              <button pButton type="button" icon="pi pi-trash" (click)="deleteProduct(product.id)"></button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
-
-    <!-- Diseño de lista para pantallas móviles -->
-    <div *ngIf="isMobile" class="list-container">
-      <p-panel *ngFor="let product of products" header="{{ product.name }}" class="product-panel">
-        <div class="p-grid">
-          <div class="p-col-12">
-            <img *ngIf="product.variants.length > 0" [src]="product.variants[0].images[0]" alt="product image" class="product-image-mobile">
-          </div>
-          <div class="p-col-12">
-            <p><strong>Variantes:</strong> {{ product.variants.length }}</p>
-            <p><strong>Precio:</strong> {{ product.variants[0]?.sizeStock[0]?.price }} $</p>
-            <p><strong>Stock:</strong> {{ product.variants[0]?.sizeStock[0]?.stock }}</p>
-            <div class="action-buttons">
-              <p-button  type="button" icon="pi pi-pencil" (click)="editProduct(product)" [rounded]="true" [text]="true" [raised]="true" severity="help"/>
-              <p-button  type="button" icon="pi pi-trash" (click)="deleteProduct(product.id)" [rounded]="true" [text]="true" [raised]="true" severity="danger"/>
-            </div>
-          </div>
-        </div>
-      </p-panel>
-    </div>
-
-
-
-
-    <!-- :::::::::MODALES -->
-    <!-- :::::::::MODALES -->
-    <!-- :::::::::MODALES -->
-    <!-- :::::::::MODALES -->
-
-
-
-    <p-dialog [(visible)]="displayEditDialog" [modal]="true" [header]="'Editar Producto'" [style]="{width: '50vw'}">
-      <form [formGroup]="editForm">
-        <div class="p-fluid">
-          <div class="p-field">
-            <label for="name">Nombre</label>
-            <input id="name" pInputText formControlName="name">
-          </div>
-          
-          <div class="p-field">
-            <label for="price">Precio</label>
-            <input id="price" pInputText type="number" formControlName="price">
-          </div>
-    
-          <div class="p-field">
-            <label for="stock">Stock</label>
-            <input id="stock" pInputText type="number" formControlName="stock">
-          </div>
-    
-          <div class="p-field">
-            <label for="image">Imagen</label>
-            <input id="image" pInputText formControlName="image">
-          </div>
-        </div>
-      </form>
-    
-      <ng-template pTemplate="footer">
-        <button pButton label="Cancelar" icon="pi pi-times" (click)="closeDialog()" class="p-button-text"></button>
-        <button pButton label="Guardar" icon="pi pi-check" (click)="saveProduct()" [disabled]="editForm.invalid"></button>
-      </ng-template>
-    </p-dialog>
-    
-
-
-
-    <p-dialog [(visible)]="displayCreateDialog" header="Crear Producto" [modal]="true" [responsive]="true" [style]="{width: '60vw'}">
-      <form [formGroup]="createForm" (ngSubmit)="createProduct()">
-    
-        <!-- Información General -->
-        <div class="p-fluid grid">
-          <div class="col-12 md:col-6 p-field">
-            <label for="name">Nombre</label>
-            <input id="name" type="text" pInputText formControlName="name" required>
-          </div>
-          <div class="col-12 md:col-6 p-field">
-            <label for="brand">Marca</label>
-            <input id="brand" type="text" pInputText formControlName="brand" required>
-          </div>
-          <div class="col-12 md:col-6 p-field">
-            <label for="category">Categoría</label>
-            <p-dropdown id="category" formControlName="category"  optionLabel="name" required></p-dropdown>
-          </div>
-          <div class="col-12 md:col-6 p-field">
-            <label for="ingredientes">Ingredientes</label>
-            <input id="ingredientes" type="text" pInputText formControlName="ingredientes" required>
-          </div>
-          <div class="col-12 p-field">
-            <label for="description">Descripción</label>
-            <textarea id="description" pInputTextarea formControlName="description" rows="3"></textarea>
-          </div>
-          <div class="col-12 md:col-6 p-field">
-            <label for="availabilityStatus">Estado de Disponibilidad</label>
-            <p-dropdown id="availabilityStatus" formControlName="availabilityStatus" [options]="availabilityOptions" optionLabel="name"></p-dropdown>
-          </div>
-        </div>
-    
-        <p-divider></p-divider>
-    
-        <!-- Sección de Variantes -->
-        <div class="p-fieldset">
-          <legend>Variantes</legend>
-          <button pButton type="button" label="Añadir Variante" icon="pi pi-plus" (click)="addVariant()" class="p-button-sm p-button-outlined"></button>
-    
-          <div *ngFor="let variant of variants.controls; let i = index" class="p-mt-2">
-            <div class="p-card p-p-2">
-              <div class="p-grid">
-                <div class="col-12 md:col-3 p-field">
-                  <label>Sabor</label>
-                  <input type="text" pInputText formControlName="flavor" required>
-                </div>
-                <div class="col-12 md:col-3 p-field">
-                  <label>Color</label>
-                  <input type="text" pInputText formControlName="color" required>
-                </div>
-                <div class="col-12 md:col-3 p-field">
-                  <label>Textura</label>
-                  <input type="text" pInputText formControlName="texture" required>
-                </div>
-                <div class="col-12 md:col-3 p-field">
-                  <label>Forma</label>
-                  <input type="text" pInputText formControlName="shape" required>
-                </div>
-              </div>
-              <button pButton type="button" label="Eliminar Variante" class="p-button-danger p-button-sm" (click)="removeVariant(i)"></button>
-    
-              <!-- Sección de Tamaños -->
-              <div class="p-fieldset p-mt-3">
-                <legend>Tamaños</legend>
-                <button pButton type="button" label="Añadir Tamaño" icon="pi pi-plus" (click)="addSizeStock(i)" class="p-button-sm p-button-outlined"></button>
-    
-                <div *ngFor="let sizeStock of getSizeStockControls(i).controls; let j = index">
-                  <div class="p-grid">
-                    <div class="col-12 md:col-3 p-field">
-                      <label>Tamaño</label>
-                      <input type="number" pInputText formControlName="size" required>
-                    </div>
-                    <div class="col-12 md:col-3 p-field">
-                      <label>Stock</label>
-                      <input type="number" pInputText formControlName="stock" required>
-                    </div>
-                    <div class="col-12 md:col-3 p-field">
-                      <label>Precio</label>
-                      <input type="number" pInputText formControlName="price" required>
-                    </div>
-                    <div class="col-12 md:col-3 p-field p-text-right">
-                      <button pButton type="button" label="Eliminar" class="p-button-danger p-button-sm" (click)="removeSizeStock(i, j)"></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-    
-        <p-divider></p-divider>
-    
-        <!-- Botones de Acción -->
-        <div class="p-dialog-footer">
-          <button pButton type="button" label="Cancelar" icon="pi pi-times" class="p-button-text p-button-secondary" (click)="displayCreateDialog = false"></button>
-          <button pButton type="submit" label="Crear" icon="pi pi-check" class="p-button-primary" [disabled]="createForm.invalid"></button>
-        </div>
-    
-      </form>
-    </p-dialog>
-    
-    
-    
-
-
-
-
-
-
+<div class="container">
+    <div class="subcontenido">
+      <h1 class="view-title">Productos</h1>
   
-    <p-toast></p-toast>
+      <form [formGroup]="searchForm" class="form">
+        <!-- <input pInputText placeholder="Buscar" formControlName="query" /> -->
+        <p-iconField iconPosition="left">
+          <p-inputIcon styleClass="pi pi-search" />
+          <input
+            type="text"
+            pInputText
+            placeholder="Buscar"
+            formControlName="query"
+          />
+        </p-iconField>
+        <p-button
+          [outlined]="true"
+          type="button"
+          label="Crear Nuevo Producto"
+          icon="pi pi-plus"
+          (click)="createprod()"
+          severity="success"
+        ></p-button>
+      </form>
+  
+      <!-- Table for larger screens -->
+      <div class="table-container" *ngIf="!isMobile">
+  
+      <p-table [value]="productos" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 50]" [totalRecords]="totalProducts" (onPage)="onPageChange($event)" class="p-table"  styleClass="p-datatable-gridlines"  severity="warning">
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="image">
+                <i class="pi pi-image"></i> Imagen
+                <p-sortIcon field="image"></p-sortIcon>
+              </th>
+              <th pSortableColumn="name">
+                <i class="pi pi-tag"></i> Nombre
+                <p-sortIcon field="name"></p-sortIcon>
+              </th>
+              <th pSortableColumn="variants">
+                <i class="pi pi-palette"></i> Variantes
+                <p-sortIcon field="variants"></p-sortIcon>
+              </th>
+  
+              <th pSortableColumn="price">
+                <i class="pi pi-dollar"></i> Precio <p-sortIcon field="price"></p-sortIcon>
+              </th>
+              <th>Acciones</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-producto>
+            <tr>
+              <td>
+                <img
+                  [src]="producto.variants[0].images[0] ? producto.variants[0].images[0] : 'defaultImg'"
+                  alt="Imagen del producto"
+                  class="product-image"
+                />
+              </td>
+              <td>{{ producto.name }}</td>
+              <td>
+
+                <p-button
+                  icon="pi pi-eye"
+                  label="Variantes"
+                  badge="{{producto.variants.length}}"
+                  badgeClass="p-badge-contrast"
+                  outlined="true"
+                  (click)="showVariantDetails(producto.variants)"
+                />
+              </td>
+              <td>{{ producto.variants[0].sizeStock[0].price}}</td>
+              <td>
+                <p-button
+                  (click)="editprod(producto)"
+                  icon="pi pi-pencil"
+                  [rounded]="true"
+                  [text]="true"
+                  severity="info"
+                />
+                <!-- <p-button
+                  (click)="eliminar($event, producto._id)"
+                  icon="pi pi-trash"
+                  [rounded]="true"
+                  [text]="true"
+                  severity="danger"
+                /> -->
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+  
+      <!-- Card list for smaller screens -->
+      <!-- <div class="card-container" *ngIf="isMobile">
+        <div class="product-card" *ngFor="let product of productos">
+          <img
+            [src]="product.variants[0].images[0] ? product.variants[0].images[0] : 'defaultImg'"
+            alt="Imagen del producto"
+            class="product-image"
+          />
+          <div class="product-details">
+            <h3>{{ product.name }}</h3>
+            <p><b>Categoría:</b> {{ product.category }}</p>
+            <p><b>Marca:</b> {{ product.brand }}</p>
+            <p><b>Descripción:</b> {{ product.description }}</p>
+            <p>
+              <b>Precio:</b> {{ product.variants[0].sizeStock[0].price | currency
+              }}
+            </p>
+            <div class="actions">
+              <p-button
+                (click)="editprod(product)"
+                icon="pi pi-pencil"
+                [rounded]="true"
+                [text]="true"
+                severity="info"
+              />
+              <p-button
+                (click)="eliminar($event, product._id)"
+                icon="pi pi-trash"
+                [rounded]="true"
+                [text]="true"
+                severity="danger"
+              />
+            </div>
+          </div>
+        </div>
+
+      </div> -->
+
+    </div>
   </div>
-</div> -->
+  
+  <!-- <p-dialog
+    header="Detalles de Variantes"
+    [(visible)]="displayVariantModal"
+    [modal]="true"
+    [style]="{width: '50vw'}"
+  >
+    <div *ngFor="let variant of selectedVariants">
+      <p><b>Color:</b> {{ variant.color }}</p>
+      <p><b>Textura:</b></p>
+      <img
+        [src]="variant.texture"
+        alt="Textura del producto"
+        class="variant-texture"
+      />
+      <ul>
+        <li *ngFor="let sizeStock of variant.sizeStock">
+          <b>Talla:</b> {{ sizeStock.size }}, <b>Stock:</b> {{ sizeStock.stock }},
+          <b>Precio:</b> {{ sizeStock.price | currency }}
+        </li>
+      </ul>
+    </div>
+    <p-footer>
+      <p-button
+        label="Cerrar"
+        icon="pi pi-times"
+        (click)="displayVariantModal=false"
+      ></p-button>
+    </p-footer>
+  </p-dialog>
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+   -->
