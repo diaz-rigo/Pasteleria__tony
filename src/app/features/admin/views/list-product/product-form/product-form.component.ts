@@ -246,47 +246,54 @@ export class ProductFormComponent {
 
 
   agregarProducto() {
-    console.log(this.productForm.value)
-    // if (this.productForm.valid) {
-      const imageFiles: File[] = []
-      this.ngxService.start()
-      // Recopilar archivos de imágenes y texturas para cada variante
-      this.variants.controls.forEach((variantControl) => {
-        const imagesControl = variantControl.get('images')
-        // const textureControl = variantControl.get('texture')
-
-        if (imagesControl && imagesControl.value) {
-          imageFiles.push(...imagesControl.value)
-        }
-      })
-
-      if (imageFiles.length > 0) {
-        this.uploadService.uploadImages(imageFiles).subscribe(
-          (imageData: string[] | { images: string[] }) => {
-            imageData = Array.isArray(imageData) ? imageData : imageData.images
-            this.assignUrlsToVariants(imageData, 'images')
-            console.log(imageData)
-
-
-              const productData = this.getFilteredProductData()
-              console.log(productData)
-              this.ngxService.stop()
-
-              this.createProductWithUrls(productData)
-            // }
-          },
-          (error) => {
-            console.error('Error al subir imágenes:', error)
-          },
-        )
-      } else {
-        console.error('No se encontraron imágenes para subir.')
+    console.log(this.productForm.value);
+    this.ngxService.start();
+  
+    const imageFiles: File[] = [];
+  
+    // Recopilar archivos de imágenes de cada variante
+    this.variants.controls.forEach((variantControl) => {
+      const imagesControl = variantControl.get('images');
+      if (imagesControl && imagesControl.value) {
+        imageFiles.push(...imagesControl.value);
       }
-    // } else {
-    //   this.ngxService.stop()
-    //   console.error('Formulario no válido.')
-    // }
+    });
+  
+    // Si hay imágenes, subirlas antes de crear el producto
+    if (imageFiles.length > 0) {
+      this.uploadService.uploadImages(imageFiles).subscribe(
+        (imageData: string[] | { images: string[] }) => {
+          imageData = Array.isArray(imageData) ? imageData : imageData.images;
+          this.assignUrlsToVariants(imageData, 'images');
+          console.log('Imágenes subidas:', imageData);
+          const productData = this.getFilteredProductData();
+        console.log('Producto a crear:', productData);
+
+        this.createProductWithUrls(productData); // Crear el producto
+        this.ngxService.stop();
+        },
+        (error) => {
+          console.error('Error al subir imágenes:', error);
+  
+          // Si hay un error, aun así crear el producto sin imágenes
+          this.createProduct();
+        }
+      );
+    } else {
+      console.warn('No se encontraron imágenes para subir.');
+      this.createProduct(); // Crear el producto sin imágenes
+    }
   }
+  
+  // Función separada para crear el producto sin importar si hay imágenes o no
+  createProduct() {
+    const productData = this.getFilteredProductData();
+    console.log('Producto a crear:', productData);
+  
+    this.createProductWithUrls(productData); // Crear el producto
+    this.ngxService.stop();
+  }
+  
   EDITARProducto() {
     console.log('🚀 Iniciando edición del producto...');
     console.log('📋 Datos del formulario:', this.productForm.value);
