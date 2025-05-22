@@ -31,7 +31,7 @@ const PRIMECOMPONENTS = [InputIconModule, IconFieldModule, InputTextModule,
   imports: [
     ...PRIMECOMPONENTS,
     CommonModule,
-    HttpClientModule, ReactiveFormsModule, FormsModule, ProductFormComponent
+    HttpClientModule, ReactiveFormsModule, FormsModule,
   ],
   templateUrl: './product-form.component.html',
   // styleUrl: './product-form.component.scss'

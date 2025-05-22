@@ -42,7 +42,7 @@
           <a pButton type="button" label="Inicio_" routerLink="/" [rounded]="true" [text]="true"></a>
         </li>
         <li *ngIf="!isAdmin">
-          <a pButton type="button" label="Productos" routerLink="/productos" [rounded]="true" [text]="true"></a>
+          <a pButton type="button" label="Productos. -" routerLink="/product" [rounded]="true" [text]="true"></a>
         </li>
         <li *ngIf="!isAdmin">
           <a pButton type="button" label="Contacto" routerLink="/contacto" [rounded]="true" [text]="true"></a>
@@ -76,8 +76,8 @@
       </a>
     </li>
     <li *ngIf="!isAdmin">
-      <a pButton type="button" icon="pi pi-box" routerLink="/productos" [rounded]="true" [text]="true">
-        <span>Productos</span>
+      <a pButton type="button" icon="pi pi-box" routerLink="/admin/product" [rounded]="true" [text]="true">
+        <span>Productos . </span>
       </a>
     </li>
     <li *ngIf="!isAdmin">
@@ -91,13 +91,13 @@
       </a>
     </li>
     <li *ngIf="isAdmin">
-      <a pButton type="button" icon="pi pi-chart-line" routerLink="/admin/dashboard" [rounded]="true" [text]="true">
+      <a pButton type="button" icon="pi pi-chart-line" routerLink="admin/dashboard" [rounded]="true" [text]="true">
         <span>Admin</span>
       </a>
     </li>
     <li *ngIf="isAdmin">
-      <a pButton type="button" icon="pi pi-tag" routerLink="/admin/product" [rounded]="true" [text]="true">
-        <span>Productos</span>
+      <a pButton type="button" icon="pi pi-tag" (click)="navegar('admin/product')" [rounded]="true" [text]="true">
+        <span>Productos:::</span>
       </a>
     </li>
     <!-- Botón de iniciar/cerrar sesión en el sidebar móvil -->

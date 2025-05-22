@@ -63,6 +63,10 @@ export class HeaderComponent {
   closeDialog() {
     this.visible = false;
   }
+  navegar(ruta : string) {
+    this.router.navigate([ruta]) 
+   }
+
 
   handleLogin() {
     this.ngxService.start();

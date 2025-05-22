@@ -92,7 +92,7 @@
       </div>
   
       <!-- Card list for smaller screens -->
-      <!-- <div class="card-container" *ngIf="isMobile">
+      <div class="card-container" *ngIf="isMobile">
         <div class="product-card" *ngFor="let product of productos">
           <img
             [src]="product.variants[0].images[0] ? product.variants[0].images[0] : 'defaultImg'"
@@ -102,7 +102,7 @@
           <div class="product-details">
             <h3>{{ product.name }}</h3>
             <p><b>Categoría:</b> {{ product.category }}</p>
-            <p><b>Marca:</b> {{ product.brand }}</p>
+            <!-- <p><b>Marca:</b> {{ product.brand }}</p> -->
             <p><b>Descripción:</b> {{ product.description }}</p>
             <p>
               <b>Precio:</b> {{ product.variants[0].sizeStock[0].price | currency
@@ -117,7 +117,6 @@
                 severity="info"
               />
               <p-button
-                (click)="eliminar($event, product._id)"
                 icon="pi pi-trash"
                 [rounded]="true"
                 [text]="true"
@@ -127,7 +126,7 @@
           </div>
         </div>
 
-      </div> -->
+      </div>
 
     </div>
   </div>

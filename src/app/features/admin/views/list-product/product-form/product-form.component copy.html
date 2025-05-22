@@ -24,7 +24,18 @@
     <div class="form-field">
       <label for="category">Categoría:</label>
 
+      <!-- <select pInputText id="category" formControlName="category" required>
+        <option value="" disabled selected>Seleccione la categoría</option>
+        <option value="Zapatos deportivos">Zapatos deportivos</option>
+        <option value="Zapatos casuales">Zapatos casuales</option>
+        <option value="Zapatos formales">Zapatos formales</option>
+        <option value="Botas">Botas</option>
+        <option value="Sandalias">Sandalias</option>
+        <option value="Zapatillas">Zapatillas</option>
+        <option value="Mocasines">Mocasines</option>
+        <option value="Zapatos de vestir">Zapatos de vestir</option>
 
+      </select> -->
       <p-dropdown id="category" formControlName="category" optionLabel="name" [options]="categorys"
         required></p-dropdown>
 
@@ -35,7 +46,34 @@
         Categoría es requerida
       </div>
     </div>
-
+    <!-- <div class="form-field">
+      <label for="brand">Marca:</label>
+      <select pInputText id="brand" formControlName="brand" required>
+        <option value="" disabled selected>Seleccione la marca</option>
+        <option value="Nike">Nike</option>
+        <option value="Adidas">Adidas</option>
+        <option value="Puma">Puma</option>
+        <option value="Reebok">Reebok</option>
+        <option value="Under Armour">Under Armour</option>
+        <option value="New Balance">New Balance</option>
+        <option value="Converse">Converse</option>
+        <option value="Vans">Vans</option>
+        <option value="Clarks">Clarks</option>
+        <option value="Skechers">Skechers</option>
+        <option value="Flexi">Flexi</option>
+        <option value="Pirma">Pirma</option>
+        <option value="Reyme">Reyme</option>
+        <option value="Coqueta">Coqueta</option>
+      </select>
+      <div
+        *ngIf="
+          productForm.get('brand')?.invalid && productForm.get('brand')?.touched
+        "
+        class="error-message"
+      >
+        Marca es requerida
+      </div>
+    </div> -->
 
   </div>
   <div class="row">
@@ -71,7 +109,126 @@
   <!-- Variantes -->
   <div formArrayName="variants">
     <div *ngFor="let variant of variants.controls; let i = index" [formGroupName]="i">
-  
+      <!-- <div class="row">
+        <div class="form-field2">
+          <label for="images">Imágenes:</label>
+          <input
+            type="file"
+            id="images"
+            formControlName="images"
+            accept="image/*"
+            multiple
+            (change)="onFileSelected($event, i, 'images')"
+          />
+          <div class="image-preview-container">
+            <div class="image-preview" *ngFor="let image of fileNames[i]?.images; let j = index">
+              <img [src]="image.src" alt="Preview" />
+              <button class="remove-button" (click)="removeImage(i, j, 'images')">X</button>
+            </div>
+          </div>
+          <div *ngIf="variant.get('images')?.invalid && variant.get('images')?.touched" class="error-message">
+            Imágenes son requeridas
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="flavor">Sabor:</label>
+          <input
+            pInputText
+            type="text"
+            id="flavor"
+            formControlName="flavor"
+            placeholder="Sabor de la variante"
+            required
+          />
+          <div
+            *ngIf="
+              variant.get('flavor')?.invalid && variant.get('flavor')?.touched
+            "
+            class="error-message"
+          >
+            Color es requerido
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="shape">Forma/ Presentacion:</label>
+          <input
+            pInputText
+            type="text"
+            id="shape"
+            formControlName="shape"
+            placeholder="Sabor de la variante"
+            required
+          />
+          <div
+            *ngIf="
+              variant.get('shape')?.invalid && variant.get('shape')?.touched
+            "
+            class="error-message"
+          >
+            Color es requerido
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="description">Descripción:</label>
+          <input
+            pInputText
+            type="text"
+            id="description"
+            formControlName="description"
+            placeholder="Sabor de la variante"
+            required
+          />
+          <div
+            *ngIf="
+              variant.get('description')?.invalid && variant.get('description')?.touched
+            "
+            class="error-message"
+          >
+            Color es requerido
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="color">Color:</label>
+          <input
+            pInputText
+            type="text"
+            id="color"
+            formControlName="color"
+            placeholder="Color de la variante"
+            required
+          />
+          <div
+            *ngIf="
+              variant.get('color')?.invalid && variant.get('color')?.touched
+            "
+            class="error-message"
+          >
+            Color es requerido
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="texture">Textura:</label>
+          <input
+            pInputText
+            type="text"
+            id="texture"
+            formControlName="texture"
+            placeholder="texture de la variante"
+            required
+          />
+          <div
+            *ngIf="
+              variant.get('texture')?.invalid && variant.get('texture')?.touched
+            "
+            class="error-message"
+          >
+            Color es requerido
+          </div>
+        </div>
+
+      </div> -->
       <div class="form-container">
         <!-- <div class="form-container"> -->
           <div class="row">
