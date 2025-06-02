@@ -1,0 +1,30 @@
+<div class="flex flex-col min-h-screen bg-gray-100">
+  <!-- Mobile overlay -->
+  <div *ngIf="sidebarOpen()" 
+       class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+       (click)="sidebarOpen.set(false)">
+  </div>
+
+  <!-- Sidebar (fuera del flujo normal en móvil) -->
+  <app-admin-sidebar
+    class="fixed md:static inset-y-0 left-0 z-50 w-64 transform md:transform-none transition-transform duration-200 ease-in-out"
+    [class.translate-x-0]="sidebarOpen() || isDesktop()"
+    [class.-translate-x-full]="!sidebarOpen() && !isDesktop()"
+    [open]="sidebarOpen() || isDesktop()"
+    (close)="sidebarOpen.set(false)">
+  </app-admin-sidebar>
+
+  <!-- Layout principal -->
+  <div class="flex-1 flex flex-col md:pl-64"> <!-- Padding para el sidebar en desktop -->
+    <!-- Toolbar (siempre visible) -->
+    <app-admin-toolbar 
+      (menuToggled)="toggleSidebar()"
+      class="sticky top-0 z-30">
+    </app-admin-toolbar>
+
+    <!-- Contenido principal con scroll -->
+    <main class="flex-1 overflow-y-auto p-4 md:p-6">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

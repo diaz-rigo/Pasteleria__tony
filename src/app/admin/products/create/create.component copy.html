@@ -1,0 +1,283 @@
+<div class="w-full min-h-screen p-4 ">
+  <div class="max-w-6xl mx-auto space-y-6">
+    <!-- Botón Regresar con mejor jerarquía visual -->
+    <button type="button" routerLink="../productos"
+      class="flex items-center px-6 py-3 bg-white border border-pink-300 rounded-lg shadow-md text-base font-semibold text-pink-700 hover:bg-pink-50 hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Regresar
+    </button>
+  
+  </div>
+
+  <div class="w-full max-w-6xl mx-auto bg-white rounded-xl  overflow-hidden">
+    <!-- Header del formulario -->
+    <div class="bg-gradient-to-r from-pink-100 to-yellow-100 p-6 rounded-lg shadow-sm border border-pink-200">
+      <h2 class="text-2xl font-bold text-pink-800">Crear Nuevo Producto</h2>
+      <p class="text-pink-600 mt-1 text-sm">Complete todos los campos requeridos (<span class="text-red-500">*</span>)
+      </p>
+    </div>
+
+
+    <!-- Contenido del formulario -->
+    <form #form="ngForm" (ngSubmit)="onSubmit()" class="p-6 space-y-8" enctype="multipart/form-data">
+      <!-- Sección de información básica -->
+      <div class="space-y-6">
+        <h3 class="text-xl font-semibold text-gray-800 border-b pb-2">Información Básica</h3>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Nombre -->
+          <div class="col-span-1">
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre del Producto*</label>
+            <input type="text" id="name" [(ngModel)]="product().name" name="name"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              required>
+          </div>
+
+          <!-- Categoría -->
+          <div class="col-span-1">
+            <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Categoría*</label>
+            <select id="category" [(ngModel)]="product().category" name="category"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              required>
+              <option value="">Seleccione una categoría</option>
+              <option value="Pasteles">Pasteles</option>
+              <option value="Galletas">Galletas</option>
+              <option value="Postres">Postres</option>
+              <option value="Panadería">Panadería</option>
+            </select>
+          </div>
+
+          <!-- Descripción -->
+          <div class="col-span-full">
+            <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Descripción*</label>
+            <textarea id="description" [(ngModel)]="product().description" name="description" rows="3"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              required></textarea>
+          </div>
+
+          <!-- Ingredientes -->
+          <div class="col-span-full">
+            <label for="ingredients" class="block text-sm font-medium text-gray-700 mb-1">Ingredientes*</label>
+            <textarea id="ingredients" [(ngModel)]="product().ingredientes" name="ingredients" rows="2"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              required></textarea>
+            <p class="text-xs text-gray-500 mt-1">Separe los ingredientes con comas</p>
+          </div>
+
+          <!-- Destacado -->
+          <div class="col-span-full">
+            <label class="inline-flex items-center space-x-3 cursor-pointer">
+              <input type="checkbox" [(ngModel)]="product().isFeatured" name="isFeatured"
+                class="rounded h-5 w-5 border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500 transition">
+              <span class="text-sm font-medium text-gray-700">Marcar como producto destacado</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de variantes -->
+      <div class="space-y-6">
+        <div class="flex justify-between items-center border-b pb-2">
+          <h3 class="text-xl font-semibold text-gray-800">Variantes del Producto</h3>
+          <button type="button" (click)="addVariant()"
+            class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            + Añadir variante
+          </button>
+        </div>
+
+        <div *ngIf="product()?.variants?.length === 0" class="text-center py-8 bg-gray-50 rounded-lg">
+          <p class="text-gray-500">No hay variantes añadidas</p>
+        </div>
+
+        <div *ngFor="let variant of product()?.variants; let i = index"
+          class="border border-gray-200 rounded-lg overflow-hidden" [style.border-color]="variant.color || '#e5e7eb'"
+          [style.box-shadow]="'0 1px 3px 0 ' + (variant.color ? variant.color + '40' : 'rgb(0 0 0 / 0.1)')">
+          <!-- Encabezado de la variante -->
+          <div class="flex justify-between items-center bg-gray-50 px-4 py-3 border-b border-gray-200"
+            [style.background]="variant.color || '#f9fafb'"
+            [style.border-color]="variant.color ? darkenColor(variant.color, 20) : '#e5e7eb'">
+
+
+            <h4 class="text-md font-medium" [style.color]="getContrastColor(variant.color || '#f9fafb')">Variante #{{i +
+              1}}</h4>
+            <button type="button" (click)="removeVariant(i)"
+              class="text-red-600 hover:text-red-800 text-sm font-medium flex items-center"
+              [style.color]="getContrastColor(variant.color || '#f9fafb') === '#000000' ? '#dc2626' : '#fecaca'">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              Eliminar
+            </button>
+          </div>
+
+          <!-- Contenido de la variante -->
+          <div class="p-4 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Sabor -->
+              <div>
+                <label [for]="'flavor'+i" class="block text-sm font-medium text-gray-700 mb-1">Sabor*</label>
+                <input type="text" [id]="'flavor'+i" [(ngModel)]="variant.flavor" [name]="'flavor'+i"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  required>
+              </div>
+
+
+              <div class="p-4 space-y-6">
+                <label [for]="'color'+i" class="block text-sm font-medium text-gray-700 mb-2">Color*</label>
+                <div class="flex items-center gap-4">
+                  <input type="color" [id]="'color'+i" [(ngModel)]="variant.color" [name]="'color'+i"
+                    class="p-1 h-16 w-16 block bg-white border-2 border-gray-300 cursor-pointer rounded-lg shadow hover:shadow-md transition-all"
+                    required title="Choose your color">
+                  <div class="h-12 w-24 rounded-lg border border-gray-200"
+                    [style.background]="variant.color || '#f3f4f6'"></div>
+                </div>
+              </div>
+
+
+              <!-- Textura -->
+              <div>
+                <label [for]="'texture'+i" class="block text-sm font-medium text-gray-700 mb-1">Textura*</label>
+                <input type="text" [id]="'texture'+i" [(ngModel)]="variant.texture" [name]="'texture'+i"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  required>
+              </div>
+
+              <!-- Forma -->
+              <div>
+                <label [for]="'shape'+i" class="block text-sm font-medium text-gray-700 mb-1">Forma*</label>
+                <input type="text" [id]="'shape'+i" [(ngModel)]="variant.shape" [name]="'shape'+i"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  required>
+              </div>
+
+              <!-- Descripción de la variante -->
+              <div class="md:col-span-2">
+                <label [for]="'variantDesc'+i" class="block text-sm font-medium text-gray-700 mb-1">Descripción de la
+                  variante*</label>
+                <textarea [id]="'variantDesc'+i" [(ngModel)]="variant.description" [name]="'variantDesc'+i" rows="2"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  required></textarea>
+              </div>
+            </div>
+
+            <!-- Tamaños y Stock -->
+            <div class="space-y-4">
+              <div class="flex justify-between items-center">
+                <label class="block text-sm font-medium text-gray-700">Tamaños y Stock</label>
+                <button type="button" (click)="addSize(i)"
+                  class="inline-flex items-center px-2.5 py-1 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                  + Añadir tamaño
+                </button>
+              </div>
+
+              <div *ngIf="variant?.sizeStock?.length === 0" class="text-center py-4 bg-gray-50 rounded-lg">
+                <p class="text-gray-500 text-sm">No hay tamaños configurados</p>
+              </div>
+
+              <div *ngFor="let size of variant.sizeStock; let j = index"
+                class="p-3 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label [for]="'size'+i+j" class="block text-xs font-medium text-gray-500 mb-1">Tamaño (kg)*</label>
+                    <div class="relative rounded-md shadow-sm">
+                      <input type="number" [id]="'size'+i+j" [(ngModel)]="size.size" [name]="'size'+i+j" step="0.5"
+                        min="0.5"
+                        class="block w-full pl-3 pr-8 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                      <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <span class="text-gray-500 text-sm">kg</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label [for]="'stock'+i+j" class="block text-xs font-medium text-gray-500 mb-1">Stock*</label>
+                    <input type="number" [id]="'stock'+i+j" [(ngModel)]="size.stock" [name]="'stock'+i+j" min="0"
+                      class="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                  <div>
+                    <label [for]="'price'+i+j" class="block text-xs font-medium text-gray-500 mb-1">Precio ($)*</label>
+                    <div class="relative rounded-md shadow-sm">
+                      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span class="text-gray-500 text-sm">$</span>
+                      </div>
+                      <input type="number" [id]="'price'+i+j" [(ngModel)]="size.price" [name]="'price'+i+j" min="0"
+                        step="0.01"
+                        class="block w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                  </div>
+                </div>
+                <button type="button" (click)="removeSize(i, j)"
+                  class="text-xs text-red-600 hover:text-red-800 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  Eliminar tamaño
+                </button>
+              </div>
+            </div>
+
+            <!-- Imágenes -->
+            <!-- Imágenes -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Imágenes de la variante</label>
+
+              <ng-container *ngIf="variant?.images as images">
+                <div *ngIf="images.length === 0" class="text-center py-4 bg-gray-50 rounded-lg mb-3">
+                  <p class="text-gray-500 text-sm">No hay imágenes añadidas</p>
+                </div>
+
+                <div *ngIf="images.length > 0" class="flex flex-wrap gap-3 mb-3">
+                  <div *ngFor="let image of images; let k = index" class="relative group">
+                    <img [src]="image" class="h-24 w-24 object-cover rounded-lg border border-gray-200">
+                    <button type="button" (click)="removeImage(i, k)"
+                      class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
+                      ×
+                    </button>
+                  </div>
+                </div>
+              </ng-container>
+
+              <div class="flex items-center">
+                <label for="file-upload-{{i}}" class="cursor-pointer">
+                  <span
+                    class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Seleccionar imágenes
+                  </span>
+                  <input id="file-upload-{{i}}" type="file" (change)="onFileSelected($event, i)" accept="image/*"
+                    multiple class="sr-only">
+                </label>
+                <span class="ml-3 text-xs text-gray-500">Formatos: JPG, PNG (Máx. 5MB)</span>
+              </div>
+            </div>
+
+
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div
+        class="flex flex-col-reverse sm:flex-row justify-end space-y-4 space-y-reverse sm:space-y-0 sm:space-x-4 pt-6 border-t border-gray-200">
+        <button type="button" (click)="cancelar()"
+          class="px-6 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          Cancelar
+        </button>
+        <button type="submit" [disabled]="!form.valid"
+          class="px-6 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-70 disabled:cursor-not-allowed transition">
+          Guardar Producto
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-light text-center text-[#3E2723] mb-12">Nuestros Productos Destacados</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Producto destacado - iteramos sobre featuredProducts -->
+      <div *ngFor="let product of featuredProducts" class="bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+        <!-- Usamos la primera imagen de la primera variante -->
+        <img [src]="product.variants?.[0]?.images?.[0] || 'https://via.placeholder.com/300'" 
+             [alt]="product.name" 
+             class="w-full h-64 object-cover rounded-xl shadow-sm">
+
+        <div class="p-6">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="text-xl font-medium text-[#3E2723]">{{ product.name }}</h3>
+            <span class="text-[#3E2723] font-medium">
+              {{ product.variants?.[0]?.sizeStock?.[0]?.price | currency:'USD':'symbol':'1.2-2' }}
+            </span>
+          </div>
+          
+          <p class="text-gray-600 mb-4">{{ product.description }}</p>
+          
+          <div class="flex items-center mb-4">
+            <app-rating-stars [rating]="product.ratings?.average || 0"></app-rating-stars>
+            <span class="text-gray-500 text-sm ml-2">({{ product.ratings?.reviews?.length || 0 }})</span>
+          </div>
+
+          <a [routerLink]="['/productos', product._id]" 
+             class="text-[#3E2723] border-b border-[#3E2723] pb-1 hover:text-[#5D4037] hover:border-[#5D4037] transition duration-300">
+            Ver detalles
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="featuredProducts.length > 0" class="text-center mt-12">
+      <a routerLink="/productos" class="inline-block border border-[#3E2723] text-[#3E2723] px-6 py-2 hover:bg-[#3E2723] hover:text-white transition duration-300">
+        Ver todos los productos
+      </a>
+    </div>
+
+    <!-- Mensaje si no hay productos destacados -->
+    <div *ngIf="featuredProducts.length === 0" class="text-center py-12">
+      <p class="text-gray-600">Actualmente no tenemos productos destacados</p>
+    </div>
+  </div>
+</section>

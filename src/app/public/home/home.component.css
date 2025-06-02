@@ -1,0 +1,53 @@
+/* Main container styles */
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Typography */
+h1, h2, h3 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+}
+
+/* Responsive image styles */
+img {
+  transition: transform 0.3s ease;
+}
+
+/* Hover effects */
+.shadow-md:hover {
+  transform: translateY(-5px);
+}
+
+/* Button transitions */
+a, button {
+  transition: all 0.3s ease;
+}
+
+/* Testimonial card hover effect */
+.bg-gray-50:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .flex-col {
+    flex-direction: column;
+  }
+  
+  .md\:w-1\/2 {
+    width: 100%;
+  }
+  
+  .md\:pr-10 {
+    padding-right: 0;
+  }
+  
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

@@ -1,30 +1,15 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './shared/components/header/header.component';
-import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { Component, computed, effect, signal } from '@angular/core';
+import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
+import { HomeComponent } from './public/home/home.component';
 
-import { FooterComponent } from './shared/components/footer/footer.component';
-import * as AOS from 'aos'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { BrowserModule } from '@angular/platform-browser';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,HeaderComponent,FooterComponent,NgxUiLoaderModule],
+  imports: [RouterOutlet,CommonModule,HomeComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'pasteleria-tony';
 
-  ngOnInit(): void {
-    AOS.init()
-    window.addEventListener('load', AOS.refresh)
-
-    // Realizar la primera recarga solo si no se ha hecho antes
-    // if (!this.initialReloadDone) {
-    //   this.reloadPage();
-    //   this.initialReloadDone = true;
-    // }
-  }
 }

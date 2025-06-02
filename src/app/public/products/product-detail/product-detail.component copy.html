@@ -1,0 +1,143 @@
+<div *ngIf="product()" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <!-- Breadcrumb -->
+  <nav class="flex mb-8" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+      <li class="inline-flex items-center">
+        <a routerLink="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900">
+          <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+          Inicio
+        </a>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+          <a routerLink="/productos" class="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ml-2">{{product()?.category}}</a>
+        </div>
+      </li>
+      <li aria-current="page">
+        <div class="flex items-center">
+          <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+          <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">{{product()?.name}}</span>
+        </div>
+      </li>
+    </ol>
+  </nav>
+
+  <div class="lg:grid lg:grid-cols-2 lg:gap-x-12">
+
+    <ng-container *ngIf="getSelectedVariant() as variant">
+      <div class="mb-8 lg:mb-0">
+        <!-- Imagen principal con efecto zoom -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-4 group relative">
+          <img [src]="selectedImage() || variant.images[0]" 
+               [alt]="product()?.name + ' - ' + variant.flavor"
+               class="w-full h-96 object-cover transform transition-transform duration-300 group-hover:scale-105 cursor-zoom-in">
+        </div>
+
+        <!-- Miniaturas si hay más de una -->
+        <div *ngIf="variant.images.length > 1" class="flex gap-2 overflow-x-auto">
+          <div *ngFor="let image of variant.images"
+               (click)="onSelectImage(image)"
+               class="min-w-[6rem] rounded-md overflow-hidden cursor-pointer border-2 transition-all duration-200"
+               [ngClass]="{ 'border-blue-500': image === selectedImage(), 'border-transparent': image !== selectedImage() }">
+            <img [src]="image" 
+                 [alt]="product()?.name + ' - ' + variant.flavor"
+                 class="w-full h-24 object-cover hover:opacity-80">
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Product Info -->
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">{{product()?.name}}</h1>
+      <p class="text-gray-600 mb-4">{{getSelectedVariant()?.flavor}}</p>
+      
+      <!-- Rating -->
+      <div class="flex items-center mb-4">
+        <app-rating-stars [rating]="product()?.ratings?.average || 0"></app-rating-stars>
+        <span class="text-gray-500 text-sm ml-2">({{product()?.ratings?.reviews?.length || 0}} reseñas)</span>
+      </div>
+
+      <!-- Price -->
+      <div class="mb-6">
+        <p class="text-2xl font-semibold text-gray-900">
+          {{getSelectedSize()?.price | currency}}
+        </p>
+        <p *ngIf="getSelectedSize()?.stock !== undefined" class="text-sm text-gray-500">
+          Disponible: {{getSelectedSize()?.stock}} unidades
+        </p>
+        <p *ngIf="getSelectedSize()?.stock === undefined || getSelectedSize()?.stock === 0" class="text-sm text-red-500">
+          Agotado
+        </p>
+      </div>
+
+      <!-- Variants -->
+    <div class="mb-6" *ngIf="variants().length > 0">
+      <h3 class="text-sm font-medium text-gray-900 mb-2">Sabores:</h3>
+      <div class="flex flex-wrap gap-2">
+        <button *ngFor="let variant of variants(); let i = index"
+                (click)="selectVariant(i)"
+                [style.backgroundColor]="variant.color"
+                [class.border-2]="selectedVariantIndex() === i"
+                [class.border-gray-900]="selectedVariantIndex() === i"
+                class="px-4 py-2 rounded-full text-white font-medium text-sm shadow-sm hover:opacity-90 transition-opacity">
+          {{variant.flavor}}
+        </button>
+      </div>
+    </div>
+
+  
+<!-- Cambia el *ngIf en el template -->
+<div class="mb-6" *ngIf="showSizesSection()">
+  <h3 class="text-sm font-medium text-gray-900 mb-2">Tamaños:</h3>
+  <div class="flex flex-wrap gap-2">
+    <button *ngFor="let size of getSelectedVariant()?.sizeStock; let i = index"
+            (click)="selectSize(i)"
+            [class.bg-gray-900]="selectedSizeIndex() === i"
+            [class.text-white]="selectedSizeIndex() === i"
+            class="px-4 py-2 rounded-md border border-gray-300 font-medium text-sm shadow-sm hover:bg-gray-100 transition-colors">
+      {{size.size}} kg
+    </button>
+  </div>
+</div>
+      <!-- Description -->
+      <div class="mb-6" *ngIf="getSelectedVariant()?.description">
+        <h3 class="text-sm font-medium text-gray-900 mb-2">Descripción:</h3>
+        <p class="text-gray-600">{{getSelectedVariant()?.description}}</p>
+      </div>
+
+      <!-- Ingredients -->
+      <div class="mb-6" *ngIf="product()?.ingredientes">
+        <h3 class="text-sm font-medium text-gray-900 mb-2">Ingredientes:</h3>
+        <p class="text-gray-600">{{product()?.ingredientes}}</p>
+      </div>
+
+      <!-- Quantity Selector -->
+      <div class="mb-6" *ngIf="getSelectedSize()">
+        <h3 class="text-sm font-medium text-gray-900 mb-2">Cantidad:</h3>
+        <div class="flex items-center">
+          <button (click)="decrementQuantity()" 
+                  class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-l">
+            -
+          </button>
+          <span class="bg-gray-100 text-gray-800 py-2 px-6">{{quantity()}}</span>
+          <button (click)="incrementQuantity()" 
+                  class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-r">
+            +
+          </button>
+        </div>
+      </div>
+
+      <!-- Add to Cart -->
+      <div class="flex flex-col sm:flex-row gap-4" *ngIf="getSelectedSize()">
+        <button class="bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-md font-medium flex-1 transition-colors">
+          Añadir al carrito
+        </button>
+        <button class="border-2 border-gray-900 hover:bg-gray-100 text-gray-900 px-6 py-3 rounded-md font-medium flex-1 transition-colors">
+          Comprar ahora
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

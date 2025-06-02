@@ -1,0 +1,42 @@
+<aside
+  class="bg-white shadow-lg w-64 h-full fixed inset-y-0 left-0 transform transition-transform duration-200 ease-in-out z-30 md:translate-x-0"
+  [class.-translate-x-full]="!open && isMobile"
+>
+  <div class="p-4 flex items-center justify-between md:justify-center border-b">
+    <h1 class="text-xl font-bold text-blue-600">Admin<span class="text-gray-800">Panel</span></h1>
+    <button 
+      (click)="close.emit()" 
+      class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none"
+      aria-label="Cerrar menú"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+  <nav class="p-4 h-[calc(100%-65px)] overflow-y-auto">
+    <ul class="space-y-2">
+      <li>
+        <a 
+        routerLink="dashboard" 
+          routerLinkActive="bg-blue-100 text-blue-600"
+          (click)="onLinkClick()"
+          class="flex items-center p-2 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors"
+        >
+          <span class="mr-2">📊</span> Dashboard
+        </a>
+      </li>
+      <li>
+        <a 
+          routerLink="productos" 
+
+          routerLinkActive="bg-blue-100 text-blue-600"
+
+          class="flex items-center p-2 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors"
+        >
+          <span class="mr-2">🛒</span> Productos
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>

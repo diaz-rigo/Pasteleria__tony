@@ -1,0 +1,264 @@
+<!-- Sección de productos -->
+<div class="p-6" *ngIf="!iscrear()">
+  <!-- Encabezado con título y acciones -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+    <h1 class="text-2xl font-bold text-gray-800">Gestión de Productos</h1>
+    <div class="flex gap-3">
+      <a routerLink="../crear-producto"
+        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2">
+
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd"
+            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+            clip-rule="evenodd" />
+        </svg>
+        Nuevo Producto
+      </a>
+      <button (click)="loadProducts()"
+        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd"
+            d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+            clip-rule="evenodd" />
+        </svg>
+        Refrescar
+      </button>
+    </div>
+  </div>
+
+  <!-- Estado de carga -->
+  @if (loading()) {
+  <div class="bg-white rounded-lg shadow p-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      @for (_ of [1,2,3,4,5,6]; track $index) {
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="h-48 bg-gray-200 animate-pulse"></div>
+        <div class="p-4 space-y-3">
+          <div class="h-6 bg-gray-200 rounded animate-pulse w-3/4"></div>
+          <div class="h-4 bg-gray-200 rounded animate-pulse w-full"></div>
+          <div class="h-4 bg-gray-200 rounded animate-pulse w-2/3"></div>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- Mensaje de error -->
+  @if (error()) {
+  <div class="bg-white rounded-lg shadow p-4">
+    <div class="bg-red-50 border-l-4 border-red-500 p-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm text-red-700">{{ error() }}</p>
+        </div>
+      </div>
+      <div class="mt-4">
+        <button (click)="loadProducts()" class="text-sm font-medium text-red-700 hover:text-red-600 transition-colors">
+          Reintentar
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Lista de productos -->
+  @if (!loading() && !error()) {
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <!-- Filtros y búsqueda -->
+    <div class="p-4 border-b border-gray-200">
+      <div class="flex flex-col md:flex-row gap-4">
+        <input type="text" placeholder="Buscar productos..." [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()"
+          class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 flex-grow">
+
+        <select [(ngModel)]="selectedCategory" (ngModelChange)="applyFilters()"
+          class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          <option value="">Todas las categorías</option>
+          @for (category of categories(); track category) {
+          <option [value]="category">{{category}}</option>
+          }
+        </select>
+
+        <select [(ngModel)]="sortOption" (ngModelChange)="applyFilters()"
+          class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          <option value="name_asc">Nombre (A-Z)</option>
+          <option value="name_desc">Nombre (Z-A)</option>
+          <option value="price_asc">Precio (Menor a mayor)</option>
+          <option value="price_desc">Precio (Mayor a menor)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tarjetas de productos -->
+    @if (filteredProducts().length > 0) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+      @for (product of paginatedProducts; track product._id) {
+      <div
+        class="border border-gray-200 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
+        <!-- Encabezado de la tarjeta con acciones -->
+        <div class="bg-gray-50 px-4 py-3 border-b border-gray-200 flex justify-between items-center">
+          @if (product.category) {
+          <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+            {{ product.category }}
+          </span>
+          }
+          <div class="flex gap-2">
+
+            <button [routerLink]="['../editar-producto/', product._id]" [state]="{ product: product }"
+              class="text-gray-500 hover:text-blue-600 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+              </svg>
+            </button>
+
+            <button (click)="confirmDelete(product)" class="text-gray-500 hover:text-red-600 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Contenido del producto -->
+        <div class="p-4">
+          <div class="flex justify-between items-start mb-3">
+            <h2 class="text-lg font-semibold text-gray-800">{{ product.name }}</h2>
+            <!-- <span class="text-sm text-gray-500">ID: {{ product._id }}</span> -->
+            <span class="text-sm text-gray-500">ID: {{ shortenId(product._id!) }}</span>
+          </div>
+
+          @if (product.description) {
+          <p class="text-sm text-gray-600 mb-4">{{ product.description }}</p>
+          }
+
+          <!-- Galería de imágenes -->
+          @if (getAllProductImages(product).length > 0) {
+          <div class="flex space-x-2 mb-4 overflow-x-auto py-2">
+            @for (image of getAllProductImages(product); track $index) {
+            <img [src]="image" [alt]="product.name"
+              class="h-16 w-16 object-cover rounded-md border border-gray-200 cursor-pointer hover:border-blue-300 transition-colors">
+            }
+          </div>
+          }
+
+          <!-- Variantes del producto -->
+          @if (product.variants && product.variants.length > 0) {
+          <div class="border-t border-gray-100 pt-4">
+            <h3 class="text-md font-medium text-gray-700 mb-3">Variantes</h3>
+
+            @for (variant of product.variants; track variant.flavor) {
+            <div class="mb-4 last:mb-0 rounded-lg overflow-hidden border border-gray-200">
+              <!-- Encabezado con color de la variante -->
+              <div class="px-4 py-3 flex justify-between items-center" [style.background]="variant.color + '20'"
+                [style.border-bottom]="'1px solid ' + variant.color + '30'">
+                <div class="flex items-center">
+                  <!-- Círculo de color más grande -->
+                  <div class="w-5 h-5 rounded-full mr-3 border border-white shadow-sm"
+                    [style.background]="variant.color || '#cccccc'">
+                  </div>
+                  <h4 class="text-sm font-medium text-gray-800">Sabor: {{ variant.flavor }}</h4>
+                </div>
+                <span class="text-xs px-2 py-1 rounded-full bg-white/80 text-gray-800 shadow-sm">
+                  {{ variant.sizeStock?.length ?? 0 }} tamaños
+                </span>
+              </div>
+
+              <!-- Contenido con fondo más claro -->
+              <div class="px-4 py-3 bg-white/50">
+                <h5 class="text-xs font-medium text-gray-700 mb-2">Tamaños disponibles:</h5>
+                <ul class="space-y-3">
+                  @for (size of variant.sizeStock; track size.size) {
+                  <li
+                    class="flex justify-between items-center bg-white px-4 py-3 rounded-md text-sm shadow-sm border border-gray-100">
+                    <span class="font-medium text-gray-800">{{ size.size }}</span>
+                    <div class="flex items-center space-x-4">
+                      <span class="text-green-600 font-medium">${{ size.price }}</span>
+                      <span class="text-xs px-2 py-1 rounded-full bg-white border"
+                        [class.border-green-200]="(size?.stock ?? 0) > 5"
+                        [class.text-green-800]="(size?.stock ?? 0) > 5"
+                        [class.border-yellow-200]="(size?.stock ?? 0) <= 5 && (size?.stock ?? 0) > 0"
+                        [class.text-yellow-800]="(size?.stock ?? 0) <= 5 && (size?.stock ?? 0) > 0"
+                        [class.border-red-200]="(size?.stock ?? 0) === 0"
+                        [class.text-red-800]="(size?.stock ?? 0) === 0">
+                        {{ size?.stock }} unidades
+                      </span>
+                    </div>
+                  </li>
+                  }
+                </ul>
+              </div>
+            </div>
+            }
+
+          </div>
+          }
+        </div>
+      </div>
+      }
+    </div>
+    } @else {
+    <div class="p-6 text-center">
+      <p class="text-gray-500">No se encontraron productos que coincidan con los filtros</p>
+    </div>
+    }
+
+    <!-- Paginación -->
+    @if (filteredProducts().length > 0) {
+    <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+      <div class="text-sm text-gray-700">
+        Mostrando <span class="font-medium">{{ (currentPage() - 1) * itemsPerPage + 1 }}</span> a
+        <span class="font-medium">{{ Math.min(currentPage() * itemsPerPage, totalItems) }}</span> de
+        <span class="font-medium">{{ totalItems }}</span> productos
+      </div>
+      <div class="flex space-x-2">
+        <button (click)="changePage(currentPage() - 1)" [disabled]="currentPage() === 1"
+          class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+          Anterior
+        </button>
+        <button (click)="changePage(currentPage() + 1)" [disabled]="currentPage() * itemsPerPage >= totalItems"
+          class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+          Siguiente
+        </button>
+      </div>
+    </div>
+    }
+  </div>
+  }
+
+  <!-- Modal de confirmación de eliminación -->
+  @if (showDeleteModal()) {
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+      <div class="p-6">
+        <h3 class="text-lg font-medium text-gray-900">Confirmar eliminación</h3>
+        <div class="mt-2">
+          <p class="text-sm text-gray-500">
+            ¿Estás seguro que deseas eliminar el producto "{{ productToDelete()?.name }}"?
+            Esta acción no se puede deshacer.
+          </p>
+        </div>
+      </div>
+      <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-lg">
+        <button (click)="onDeleteConfirmed()" type="button"
+          class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+          Eliminar
+        </button>
+        <button (click)="onDeleteCancelled()" type="button"
+          class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+</div>

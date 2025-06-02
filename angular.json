@@ -3,13 +3,9 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "pasteleria-tony": {
+    "admin": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -17,14 +13,13 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/pasteleria-tony",
+            "outputPath": "dist/admin",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
@@ -32,31 +27,25 @@
               }
             ],
             "styles": [
-              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
-              "node_modules/primeng/resources/primeng.min.css",
-              "node_modules/aos/dist/aos.css",
-              "src/styles.scss"
+              "src/styles.css"
             ],
-            "scripts": [
-							"node_modules/aos/dist/aos.js"
-						]
+            "scripts": []
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
-									"type": "initial",
-									"maximumWarning": "8mb",
-									"maximumError": "9mb"
-								},
-								{
-									"type": "anyComponentStyle",
-									"maximumWarning": "2mb",
-									"maximumError": "4mb"
-								}
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kB",
+                  "maximumError": "4kB"
+                }
               ],
-              "outputHashing": "all",
-              "serviceWorker": "ngsw-config.json"
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,
@@ -70,10 +59,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "pasteleria-tony:build:production"
+              "buildTarget": "admin:build:production"
             },
             "development": {
-              "buildTarget": "pasteleria-tony:build:development"
+              "buildTarget": "admin:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -89,7 +78,6 @@
               "zone.js/testing"
             ],
             "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
@@ -97,20 +85,15 @@
               }
             ],
             "styles": [
-              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
-              "node_modules/primeng/resources/primeng.min.css",
-              "./node_modules/aos/dist/aos.css",
-
-              "src/styles.scss"
+              "src/styles.css"
             ],
-            "scripts": [
-							"./node_modules/aos/dist/aos.js"
-						]          }
+            "scripts": []
+          }
         }
       }
     }
   },
   "cli": {
-    "analytics": "ef96a47f-f5a5-47d4-8fea-93f25f2071de"
+    "analytics": false
   }
 }

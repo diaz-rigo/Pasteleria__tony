@@ -1,0 +1,146 @@
+<main class="min-h-screen">
+  <!-- Hero Section -->
+  <section class="relative bg-amber-50">
+    <div class="container mx-auto px-4 py-20 md:py-32 flex flex-col md:flex-row items-center">
+      <div class="md:w-1/2 mb-10 md:mb-0">
+        <h1 class="text-4xl md:text-5xl font-light text-amber-900 mb-6">Repostería Artesanal</h1>
+        <p class="text-lg text-amber-800 mb-8 max-w-lg">Delicias horneadas con ingredientes premium y dedicación
+          tradicional. Cada producto es una obra de arte comestible.</p>
+        <a routerLink="/productos"
+          class="bg-amber-800 text-white px-8 py-3 inline-block hover:bg-amber-700 transition duration-300">Ver
+          Productos</a>
+      </div>
+      <div class="md:w-1/2">
+        <img src="https://res.cloudinary.com/dfpdb2cdl/image/upload/v1741150217/productos/zp2jzaewfrrx5jwsw1me.jpg"
+          alt="Pastel Tres Leches" class="rounded-lg shadow-lg w-full max-w-md mx-auto">
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-light text-center text-amber-900 mb-12">Productos Destacados</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div *ngFor="let product of featuredProducts"
+          class="bg-amber-50 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+          <img [src]="product.variants?.[0]?.images?.[0] || 'assets/img/default-image.jpg'"
+            [alt]="product.name || 'Imagen del producto'" class="w-full h-64 object-cover rounded-xl shadow-sm">
+
+
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-xl font-medium text-amber-900">{{ product.name }}</h3>
+              <span class="text-amber-900 font-medium">
+                {{ product.variants?.[0]?.sizeStock?.[0]?.price | currency:'USD':'symbol':'1.2-2' || '$0.00' }}
+              </span>
+            </div>
+
+            <p class="text-amber-800 mb-4">{{ product.description }}</p>
+
+            <div class="flex items-center mb-4">
+              <app-rating-stars [rating]="product.ratings?.average || 0"></app-rating-stars>
+              <span class="text-amber-600 text-sm ml-2">({{ product.ratings?.reviews?.length || 0 }})</span>
+            </div>
+
+
+            <a [routerLink]="['/productos', product._id]"
+              class="text-amber-800 border-b border-amber-800 pb-1 hover:text-amber-700 hover:border-amber-700 transition duration-300">
+              Ver detalles
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-12">
+        <a routerLink="/productos"
+          class="inline-block border border-amber-800 text-amber-800 px-6 py-2 hover:bg-amber-800 hover:text-white transition duration-300">
+          Ver todos los productos
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="py-16 bg-amber-50">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+          <h2 class="text-3xl font-light text-amber-900 mb-6">Nuestra Filosofía</h2>
+          <p class="text-amber-800 mb-4">En nuestra pastelería, combinamos técnicas tradicionales con ingredientes de la
+            más alta calidad para crear productos que deleitan los sentidos.</p>
+          <p class="text-amber-800 mb-6">Cada creación es elaborada artesanalmente, con atención al detalle y pasión por
+            la repostería.</p>
+          <ul class="space-y-2">
+            <li class="flex items-center text-amber-800">
+              <svg class="w-5 h-5 mr-2 text-amber-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Ingredientes naturales y frescos
+            </li>
+            <li class="flex items-center text-amber-800">
+              <svg class="w-5 h-5 mr-2 text-amber-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Sin conservantes artificiales
+            </li>
+            <li class="flex items-center text-amber-800">
+              <svg class="w-5 h-5 mr-2 text-amber-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Opciones para dietas especiales
+            </li>
+          </ul>
+        </div>
+        <div class="md:w-1/2 grid grid-cols-2 gap-4">
+          <img
+            src="https://images.unsplash.com/photo-1558317374-88f497a6a9d1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+            alt="Preparación artesanal" class="rounded-lg shadow-md h-48 w-full object-cover">
+          <img
+            src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+            alt="Ingredientes naturales" class="rounded-lg shadow-md h-48 w-full object-cover">
+          <img
+            src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+            alt="Decoración cuidadosa" class="rounded-lg shadow-md h-48 w-full object-cover">
+          <img
+            src="https://images.unsplash.com/photo-1562440499-64c9a111f713?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+            alt="Producto final" class="rounded-lg shadow-md h-48 w-full object-cover">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-light text-center text-amber-900 mb-12">Lo que dicen nuestros clientes</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div *ngFor="let testimonial of testimonials" class="bg-amber-50 p-6 rounded-lg shadow-sm">
+          <div class="flex items-center mb-4">
+            <app-rating-stars [rating]="testimonial.rating"></app-rating-stars>
+          </div>
+          <p class="text-amber-800 italic mb-4">"{{ testimonial.comment }}"</p>
+          <p class="text-amber-900 font-medium">{{ testimonial.name }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="py-16 bg-amber-800 text-white">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-light mb-6">¿Listo para endulzar tu día?</h2>
+      <p class="text-amber-100 max-w-2xl mx-auto mb-8">Explora nuestro catálogo completo o contáctanos para pedidos
+        personalizados y eventos especiales.</p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a routerLink="/productos"
+          class="bg-amber-50 text-amber-900 px-8 py-3 inline-block hover:bg-amber-100 transition duration-300">Ver
+          Menú</a>
+        <a routerLink="/contacto"
+          class="border border-amber-50 text-amber-50 px-8 py-3 inline-block hover:bg-amber-700 transition duration-300">Contactar</a>
+      </div>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,11 @@
+/* You can add custom styles here if needed */
+/* The Tailwind classes in the template should handle most styling */
+
+/* Optional: Add some custom animation for the hover effect */
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}

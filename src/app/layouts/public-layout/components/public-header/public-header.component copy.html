@@ -1,0 +1,136 @@
+<!-- Header principal - Versión Elegante -->
+<header class="bg-white border-b border-gold-300 shadow-sm sticky top-0 z-50">
+  <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+    <!-- Botón hamburguesa (solo móvil) -->
+    <button 
+      aria-label="Menú" 
+      class="md:hidden p-2 rounded-full hover:bg-gold-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold-300 focus:ring-opacity-50"
+      (click)="toggleMobileMenu()"
+    >
+      <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <!-- Logo - Versión mejorada -->
+<!-- Logo - Versión mejorada -->
+      <a routerLink="/" class="flex items-center md:ml-0 mx-auto md:mx-0 group">
+        <span class="text-xl md:text-2xl font-serif font-bold ml-3 text-gray-800 tracking-wide">
+          <span class="text-gold-600">PASTELERÍA</span> TONY
+        </span>
+      </a>
+          
+    <!-- Navegación principal (desktop) - Versión mejorada -->
+    <div class="hidden md:flex space-x-1">
+      <a 
+        routerLink="/" 
+        class="relative px-4 py-2 text-gray-700 hover:text-gold-600 transition-colors duration-300 group"
+        [class.text-gold-600]="isActive('/')"
+      >
+        Inicio
+        <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gold-500 transition-all duration-300 group-hover:w-3/4"></span>
+        <span *ngIf="isActive('/')" class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gold-500"></span>
+      </a>
+      <a 
+        routerLink="/productos" 
+        class="relative px-4 py-2 text-gray-700 hover:text-gold-600 transition-colors duration-300 group"
+        [class.text-gold-600]="isActive('/productos')"
+      >
+        Productos
+        <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gold-500 transition-all duration-300 group-hover:w-3/4"></span>
+        <span *ngIf="isActive('/productos')" class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gold-500"></span>
+      </a>
+      <a 
+        routerLink="/contacto" 
+        class="relative px-4 py-2 text-gray-700 hover:text-gold-600 transition-colors duration-300 group"
+        [class.text-gold-600]="isActive('/contacto')"
+      >
+        Contacto
+        <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gold-500 transition-all duration-300 group-hover:w-3/4"></span>
+        <span *ngIf="isActive('/contacto')" class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gold-500"></span>
+      </a>
+    </div>
+    
+    <!-- Iconos de acción - Versión mejorada -->
+    <div class="flex items-center space-x-2">
+      <button aria-label="Buscar" class="hidden md:block p-2 rounded-full hover:bg-gold-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold-300 focus:ring-opacity-50">
+        <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </button>
+      
+      <button aria-label="Carrito" class="relative p-2 rounded-full hover:bg-gold-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold-300 focus:ring-opacity-50" (click)="openCart()">
+        <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+        </svg>
+        @if (cartItems > 0) {
+<span class="absolute -top-1 -right-1 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center transform hover:scale-110 transition-transform" style="background-color: #212121;">{{cartItems}}</span>
+        }
+      </button>
+
+      <button aria-label="Iniciar sesión" class="hidden md:flex items-center space-x-1 px-3 py-1.5 rounded-full bg-gold-600 text-white hover:bg-gold-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-gold-300">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+        </svg>
+        <span class="text-sm">Ingresar</span>
+      </button>
+
+      <button aria-label="Iniciar sesión" class="md:hidden p-2 rounded-full hover:bg-gold-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold-300 focus:ring-opacity-50" (click)="openLogin()">
+        <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+        </svg>
+      </button>
+    </div>
+  </nav>
+  
+  <!-- Menú móvil desplegable - Versión mejorada -->
+  @if (mobileMenuOpen) {
+  <div class="md:hidden bg-white shadow-xl border-t border-gold-200 animate-fadeIn">
+    <div class="container mx-auto px-4 py-3 flex flex-col space-y-2">
+      <a 
+        routerLink="/" 
+        class="flex items-center py-3 px-3 rounded-lg hover:bg-gold-50 text-gray-700 hover:text-gold-600 transition-colors duration-300"
+        (click)="mobileMenuOpen = false"
+      >
+        <svg class="w-5 h-5 mr-3 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+        </svg>
+        Inicio
+      </a>
+      <a 
+        routerLink="/productos" 
+        class="flex items-center py-3 px-3 rounded-lg hover:bg-gold-50 text-gray-700 hover:text-gold-600 transition-colors duration-300"
+        (click)="mobileMenuOpen = false"
+      >
+        <svg class="w-5 h-5 mr-3 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 7.337h-3.93l.372-4.272a.751.751 0 00-.682-.812.752.752 0 00-.812.683l-.383 4.4h-6.32l.37-4.27a.75.75 0 00-.68-.813.751.751 0 00-.813.683l-.382 4.4H3.782a.75.75 0 000 1.5H7.61l-.55 6.327H3a.75.75 0 000 1.5h3.93l-.372 4.272a.751.751 0 00.682.812l.066.003a.75.75 0 00.746-.686l.383-4.4h6.32l-.37 4.27a.751.751 0 00.682.813l.066.003a.75.75 0 00.746-.686l.382-4.4h3.957c.413 0 .75-.337.75-.75a.752.752 0 00-.75-.75H16.39l.55-6.327H21a.75.75 0 000-1.5zm-6.115 7.826h-6.32l.55-6.326h6.32l-.55 6.326z"></path>
+        </svg>
+        Productos
+      </a>
+      <a 
+        routerLink="/contacto" 
+        class="flex items-center py-3 px-3 rounded-lg hover:bg-gold-50 text-gray-700 hover:text-gold-600 transition-colors duration-300"
+        (click)="mobileMenuOpen = false"
+      >
+        <svg class="w-5 h-5 mr-3 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+        </svg>
+        Contacto
+      </a>
+      
+      <div class="border-t border-gold-100 my-1"></div>
+      
+      <a 
+        routerLink="/login" 
+        class="flex items-center py-3 px-3 rounded-lg bg-gold-50 text-gold-700 hover:bg-gold-100 transition-colors duration-300"
+        (click)="mobileMenuOpen = false"
+      >
+        <svg class="w-5 h-5 mr-3 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+        </svg>
+        Iniciar sesión
+      </a>
+    </div>
+  </div>
+  }
+</header>

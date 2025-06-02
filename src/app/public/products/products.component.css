@@ -1,0 +1,23 @@
+/* Custom styles for the products component
+input[type="checkbox"]:checked {
+  background-color: #ec4899;
+  border-color: #ec4899;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #ec4899;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #ec4899;
+  cursor: pointer;
+  border-radius: 50%;
+} */
