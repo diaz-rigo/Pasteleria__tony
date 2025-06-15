@@ -2,3 +2,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.titulo {
+  font-family: 'Bethany', cursive;
+}
+@font-face {
+  font-family: 'Bethany';
+  src: url('./assets/fonts/BethanyRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}

@@ -1,64 +1,67 @@
 <main class="min-h-screen">
   <!-- Hero Section -->
-
-<app-hero></app-hero>
-
+  <app-hero></app-hero>
 
   <!-- Featured Products -->
-<app-featured-products></app-featured-products>
+  <app-featured-products></app-featured-products>
 
   <!-- About Section -->
-  <section class="py-16 bg-gray-100">
-    <div class="container mx-auto px-4">
-      <div class="flex flex-col md:flex-row items-center">
-        <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
-          <h2 class="text-3xl font-light text-[#3E2723] mb-6">Nuestra Filosofía</h2>
-          <p class="text-gray-700 mb-4">En nuestra pastelería, combinamos técnicas tradicionales con ingredientes de la más alta calidad para crear productos que deleitan los sentidos.</p>
-          <p class="text-gray-700 mb-6">Cada creación es elaborada artesanalmente, con atención al detalle y pasión por la repostería.</p>
-          <ul class="space-y-2">
-            <li class="flex items-center text-gray-700">
-              <svg class="w-5 h-5 mr-2 text-[#3E2723]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-              Ingredientes naturales y frescos
-            </li>
-            <li class="flex items-center text-gray-700">
-              <svg class="w-5 h-5 mr-2 text-[#3E2723]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-              Sin conservantes artificiales
-            </li>
-            <li class="flex items-center text-gray-700">
-              <svg class="w-5 h-5 mr-2 text-[#3E2723]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-              Opciones para dietas especiales
-            </li>
-          </ul>
-        </div>
-        <div class="md:w-1/2 grid grid-cols-2 gap-4">
-          <img src="https://images.unsplash.com/photo-1558317374-88f497a6a9d1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
-               alt="Preparación artesanal" 
-               class="rounded-lg shadow-md h-48 w-full object-cover">
-          <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
-               alt="Ingredientes naturales" 
-               class="rounded-lg shadow-md h-48 w-full object-cover">
-          <img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
-               alt="Decoración cuidadosa" 
-               class="rounded-lg shadow-md h-48 w-full object-cover">
-          <img src="https://images.unsplash.com/photo-1562440499-64c9a111f713?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
-               alt="Producto final" 
-               class="rounded-lg shadow-md h-48 w-full object-cover">
-        </div>
+  <section class="relative py-16 bg-[#fbeded] overflow-hidden">
+    <!-- Imagen de fondo -->
+    <img
+      src="https://res.cloudinary.com/dvvhnrvav/image/upload/v1749932555/pasteleria-tony/pngs/u0deprenq16afe9c4msn.png"
+      alt="Fondo Pastelería"
+      class="absolute inset-0  w-50 h-50 object-cover opacity-10 z-0"
+    />
+
+
+  
+
+  <!-- Contenido -->
+  <div class="relative z-10 container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+      <!-- Columna 1: Título y texto -->
+      <div>
+        <h2 class="text-3xl font-light text-[#3E2723] mb-6">Nuestra Filosofía</h2>
+        <p class="text-gray-700 mb-4">
+          En nuestra pastelería, combinamos técnicas tradicionales con ingredientes de la más alta calidad para crear productos que deleitan los sentidos.
+        </p>
+        <p class="text-gray-700">
+          Cada creación es elaborada artesanalmente, con atención al detalle y pasión por la repostería.
+        </p>
+      </div>
+
+      <!-- Columna 2: Lista -->
+      <div>
+        <ul class="space-y-4">
+          <li class="flex items-start text-gray-700">
+            <svg class="w-5 h-5 mr-2 text-[#3E2723]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Ingredientes naturales y frescos
+          </li>
+          <li class="flex items-start text-gray-700">
+            <svg class="w-5 h-5 mr-2 text-[#3E2723]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Sin conservantes artificiales
+          </li>
+          <li class="flex items-start text-gray-700">
+            <svg class="w-5 h-5 mr-2 text-[#3E2723]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Opciones para dietas especiales
+          </li>
+        </ul>
       </div>
     </div>
+  </div>
   </section>
 
   <!-- Testimonials -->
   <section class="py-16 bg-white">
     <div class="container mx-auto px-4">
       <h2 class="text-3xl font-light text-center text-[#3E2723] mb-12">Lo que dicen nuestros clientes</h2>
-      
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div *ngFor="let testimonial of testimonials" class="bg-gray-50 p-6 rounded-lg shadow-sm">
           <div class="flex items-center mb-4">
@@ -72,10 +75,12 @@
   </section>
 
   <!-- Call to Action -->
-  <section class="py-16 bg-[#3E2723] text-white">
+  <section class="py-16 bg-[#d8bbbd] text-white">
     <div class="container mx-auto px-4 text-center">
       <h2 class="text-3xl font-light mb-6">¿Listo para endulzar tu día?</h2>
-      <p class="text-amber-100 max-w-2xl mx-auto mb-8">Explora nuestro catálogo completo o contáctanos para pedidos personalizados y eventos especiales.</p>
+      <p class="text-amber-100 max-w-2xl mx-auto mb-8">
+        Explora nuestro catálogo completo o contáctanos para pedidos personalizados y eventos especiales.
+      </p>
       <div class="flex flex-col sm:flex-row justify-center gap-4">
         <a routerLink="/productos" class="bg-white text-[#3E2723] px-8 py-3 inline-block hover:bg-gray-200 transition duration-300">Ver Menú</a>
         <a routerLink="/contacto" class="border border-white text-white px-8 py-3 inline-block hover:bg-[#2E1B17] transition duration-300">Contactar</a>

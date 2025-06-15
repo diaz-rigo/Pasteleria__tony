@@ -1,15 +1,38 @@
-  <section class="relative bg-gray-100">
-    <div class="container mx-auto px-4 py-20 md:py-32 flex flex-col md:flex-row items-center">
-      <div class="md:w-1/2 mb-10 md:mb-0">
-        <h1 class="text-4xl md:text-5xl font-light text-[#3E2723] mb-6">Repostería Artesanal</h1>
-        <p class="text-lg text-gray-700 mb-8 max-w-lg">Delicias horneadas con ingredientes premium y dedicación tradicional. Cada producto es una obra de arte comestible.</p>
-        <a routerLink="/productos" class="bg-[#3E2723] text-white px-8 py-3 inline-block hover:bg-[#2E1B17] transition duration-300">Ver Productos</a>
-      </div>
-      <div class="md:w-1/2">
-        <img src="https://res.cloudinary.com/dfpdb2cdl/image/upload/v1741150217/productos/zp2jzaewfrrx5jwsw1me.jpg" 
-             alt="Pastel Tres Leches" 
-             class="rounded-lg shadow-lg w-full max-w-md mx-auto">
-      </div>
-    </div>
-  </section>
+<section class="relative bg-gradient-to-br from-[#fbeded] to-[#f7d4d4]">
 
+  <div class="container mx-auto px-4 py-20 md:py-28 flex flex-col md:flex-row items-center md:gap-12">
+
+    <!-- Texto con mucho más espacio a la izquierda -->
+    <div class="md:w-1/2 text-center md:text-left md:pl-40">
+   <span
+  class="titulo text-7xl font-bold text-[#d86894] leading-tight mb-6 tracking-tighter
+         drop-shadow-xl transform transition-transform duration-300 ease-in-out hover:scale-110">
+  Repostería Artesanal
+</span>
+
+      <p class="text-lg text-gray-600 mb-6 max-w-md">
+        Elaboramos pasteles y postres con ingredientes de alta calidad y pasión por la tradición. Cada creación está pensada para deleitar los sentidos.
+      </p>
+      <a
+        routerLink="/productos"
+        class="bg-[#be2541] text-white px-6 py-3 rounded-full shadow-sm hover:bg-[#be2541] cursor-pointer transition duration-300"
+      >
+        Ver Productos
+      </a>
+    </div>
+
+    <!-- Imagen sin cambios -->
+    <div class="relative w-64 h-64 mt-10 md:mt-0">
+      <div
+        class="absolute inset-0 rounded-full blur-xl opacity-70 z-0"
+        style="background: linear-gradient(135deg, #eeceb2, #d38890);"
+      ></div>
+      <img
+        src="https://res.cloudinary.com/dvvhnrvav/image/upload/v1749934243/pasteleria-tony/pngs/wmqfdo93tutrk6f5so6n.png"
+        alt="Logo Pastelería Tony"
+        class="relative rounded-full w-[140%] h-[140%] object-cover z-10 transform rotate-[-25deg] -translate-x-[20%] -translate-y-[10%]"
+      />
+    </div>
+
+  </div>
+</section>
