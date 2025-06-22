@@ -122,6 +122,12 @@ export const routes: Routes = [
       
         loadComponent: () => import('./admin/products/product-detail/product-detail.component').then(m => m.ProductDetailComponent) 
       },
+      { 
+      path: 'configuracion',  // Nota el parámetro :id
+      title: 'configuracion del Sistema', // Añadido prefijo "Admin" para consistencia
+      
+        loadComponent: () => import('./admin/settings/settings.component').then(m => m.SettingsComponent) 
+      },
       // { 
       //   path: 'usuarios', 
       //   title: 'Admin - Usuarios',

@@ -1,4 +1,5 @@
 <main class="min-h-screen">
+
   <!-- Hero Section -->
   <app-hero></app-hero>
 
@@ -6,85 +7,96 @@
   <app-featured-products></app-featured-products>
 
   <!-- About Section -->
-  <section class="relative py-16 bg-[#fbeded] overflow-hidden">
-    <!-- Imagen de fondo -->
+  <section class="relative py-16 overflow-hidden"
+    [ngStyle]="{ 'background-color': config()?.headerBackgroundColor || '#fbeded', 'color': getTextColor(config()?.headerBackgroundColor || '#fbeded') }">
+    
+    <!-- Imagen de fondo decorativa -->
     <img
       src="https://res.cloudinary.com/dvvhnrvav/image/upload/v1749932555/pasteleria-tony/pngs/u0deprenq16afe9c4msn.png"
       alt="Fondo Pastelería"
-      class="absolute inset-0  w-50 h-50 object-cover opacity-10 z-0"
+      class="absolute inset-0 w-50 h-50 object-cover opacity-10 z-0"
     />
 
+    <!-- Contenido -->
+    <div class="relative z-10 container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
 
-  
+        <!-- Columna 1: Título y texto -->
+        <div>
+          <h2 class="text-3xl font-light mb-6">Nuestra Filosofía</h2>
+          <p class="mb-4">
+            En nuestra pastelería, combinamos técnicas tradicionales con ingredientes de la más alta calidad para crear productos que deleitan los sentidos.
+          </p>
+          <p>
+            Cada creación es elaborada artesanalmente, con atención al detalle y pasión por la repostería.
+          </p>
+        </div>
 
-  <!-- Contenido -->
-  <div class="relative z-10 container mx-auto px-4">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-      <!-- Columna 1: Título y texto -->
-      <div>
-        <h2 class="text-3xl font-light text-[#3E2723] mb-6">Nuestra Filosofía</h2>
-        <p class="text-gray-700 mb-4">
-          En nuestra pastelería, combinamos técnicas tradicionales con ingredientes de la más alta calidad para crear productos que deleitan los sentidos.
-        </p>
-        <p class="text-gray-700">
-          Cada creación es elaborada artesanalmente, con atención al detalle y pasión por la repostería.
-        </p>
-      </div>
+        <!-- Columna 2: Lista -->
+        <div>
+          <ul class="space-y-4">
+            <li class="flex items-start" *ngFor="let item of ['Ingredientes naturales y frescos', 'Sin conservantes artificiales', 'Opciones para dietas especiales']">
+              <svg class="w-5 h-5 mr-2" [ngStyle]="{ 'color': getTextColor(config()?.headerBackgroundColor || '#fbeded') }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span>{{ item }}</span>
+            </li>
+          </ul>
+        </div>
 
-      <!-- Columna 2: Lista -->
-      <div>
-        <ul class="space-y-4">
-          <li class="flex items-start text-gray-700">
-            <svg class="w-5 h-5 mr-2 text-[#3E2723]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            Ingredientes naturales y frescos
-          </li>
-          <li class="flex items-start text-gray-700">
-            <svg class="w-5 h-5 mr-2 text-[#3E2723]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            Sin conservantes artificiales
-          </li>
-          <li class="flex items-start text-gray-700">
-            <svg class="w-5 h-5 mr-2 text-[#3E2723]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            Opciones para dietas especiales
-          </li>
-        </ul>
       </div>
     </div>
-  </div>
   </section>
 
   <!-- Testimonials -->
-  <section class="py-16 bg-white">
+  <section class="py-16" [ngStyle]="{ 'background-color': '#ffffff', 'color': '#3E2723' }">
     <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-light text-center text-[#3E2723] mb-12">Lo que dicen nuestros clientes</h2>
+      <h2 class="text-3xl font-light text-center mb-12">Lo que dicen nuestros clientes</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div *ngFor="let testimonial of testimonials" class="bg-gray-50 p-6 rounded-lg shadow-sm">
           <div class="flex items-center mb-4">
             <app-rating-stars [rating]="testimonial.rating"></app-rating-stars>
           </div>
-          <p class="text-gray-700 italic mb-4">"{{ testimonial.comment }}"</p>
-          <p class="text-[#3E2723] font-medium">{{ testimonial.name }}</p>
+          <p class="italic mb-4">"{{ testimonial.comment }}"</p>
+          <p class="font-medium">{{ testimonial.name }}</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Call to Action -->
-  <section class="py-16 bg-[#d8bbbd] text-white">
+  <section class="py-16 text-white"
+    [ngStyle]="{
+      'background-color': config()?.headerBackgroundColor || '#d8bbbd',
+      'color': getTextColor(config()?.headerBackgroundColor || '#d8bbbd')
+    }">
     <div class="container mx-auto px-4 text-center">
       <h2 class="text-3xl font-light mb-6">¿Listo para endulzar tu día?</h2>
-      <p class="text-amber-100 max-w-2xl mx-auto mb-8">
+      <p class="max-w-2xl mx-auto mb-8">
         Explora nuestro catálogo completo o contáctanos para pedidos personalizados y eventos especiales.
       </p>
       <div class="flex flex-col sm:flex-row justify-center gap-4">
-        <a routerLink="/productos" class="bg-white text-[#3E2723] px-8 py-3 inline-block hover:bg-gray-200 transition duration-300">Ver Menú</a>
-        <a routerLink="/contacto" class="border border-white text-white px-8 py-3 inline-block hover:bg-[#2E1B17] transition duration-300">Contactar</a>
+        <a routerLink="/productos"
+          class="px-8 py-3 inline-block transition duration-300 font-semibold rounded"
+          [ngStyle]="{
+            'background-color': getTextColor(config()?.headerBackgroundColor || '#d8bbbd'),
+            'color': config()?.headerBackgroundColor || '#3E2723'
+          }">
+          Ver Menú
+        </a>
+        <a routerLink="/contacto"
+          class="border px-8 py-3 inline-block transition duration-300 font-semibold rounded"
+          [ngStyle]="{
+            'border-color': getTextColor(config()?.headerBackgroundColor || '#d8bbbd'),
+            'color': getTextColor(config()?.headerBackgroundColor || '#d8bbbd'),
+            'background-color': 'transparent'
+          }"
+          (mouseover)="hoverCTA = true"
+          (mouseout)="hoverCTA = false">
+          Contactar
+        </a>
       </div>
     </div>
   </section>
+
 </main>

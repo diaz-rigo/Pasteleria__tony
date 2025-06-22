@@ -1,38 +1,43 @@
-<section class="relative bg-gradient-to-br from-[#fbeded] to-[#f7d4d4]">
 
+<section
+  class="relative"
+  [ngStyle]="{
+    'background-image': getDynamicGradient(),
+    'background-size': 'cover',
+    'background-repeat': 'no-repeat',
+    'background-position': 'center'
+  }"
+>
   <div class="container mx-auto px-4 py-20 md:py-28 flex flex-col md:flex-row items-center md:gap-12">
 
-    <!-- Texto con mucho más espacio a la izquierda -->
     <div class="md:w-1/2 text-center md:text-left md:pl-40">
-   <span
-  class="titulo text-7xl font-bold text-[#d86894] leading-tight mb-6 tracking-tighter
-         drop-shadow-xl transform transition-transform duration-300 ease-in-out hover:scale-110">
-  Repostería Artesanal
-</span>
 
-      <p class="text-lg text-gray-600 mb-6 max-w-md">
-        Elaboramos pasteles y postres con ingredientes de alta calidad y pasión por la tradición. Cada creación está pensada para deleitar los sentidos.
+      <span
+        class="titulo text-7xl font-bold leading-tight mb-6 tracking-tighter drop-shadow-xl transform transition-transform duration-300 ease-in-out hover:scale-110"
+        [style.color]="getTextColorwelcom(config()?.headerBackgroundColor || '#fbeded')">
+        {{config()?.heroTitle}}
+      </span>
+
+      <p class="text-lg mb-6 max-w-md" [style.color]="getTextColor(config()?.headerBackgroundColor || '#fbeded')">
+        Elaboramos pasteles y postres con ingredientes de alta calidad y pasión por la tradición. Cada creación está
+        pensada para deleitar los sentidos.
       </p>
-      <a
-        routerLink="/productos"
-        class="bg-[#be2541] text-white px-6 py-3 rounded-full shadow-sm hover:bg-[#be2541] cursor-pointer transition duration-300"
-      >
+      <a routerLink="/productos" class="px-6 py-3 rounded-full shadow-sm cursor-pointer transition duration-300"
+        [style.backgroundColor]="getButtonColor(config()?.headerBackgroundColor || '#be2541')"
+        [style.color]="getTextColor(getButtonColor(config()?.headerBackgroundColor || '#be2541'))">
         Ver Productos
       </a>
+
     </div>
 
-    <!-- Imagen sin cambios -->
+    <!-- Imagen igual -->
     <div class="relative w-64 h-64 mt-10 md:mt-0">
-      <div
-        class="absolute inset-0 rounded-full blur-xl opacity-70 z-0"
-        style="background: linear-gradient(135deg, #eeceb2, #d38890);"
-      ></div>
+      <div class="absolute inset-0 rounded-full blur-xl opacity-70 z-0"
+        style="background: linear-gradient(135deg, #eeceb2, #d38890);"></div>
       <img
         src="https://res.cloudinary.com/dvvhnrvav/image/upload/v1749934243/pasteleria-tony/pngs/wmqfdo93tutrk6f5so6n.png"
         alt="Logo Pastelería Tony"
-        class="relative rounded-full w-[140%] h-[140%] object-cover z-10 transform rotate-[-25deg] -translate-x-[20%] -translate-y-[10%]"
-      />
+        class="relative rounded-full w-[140%] h-[140%] object-cover z-10 transform rotate-[-25deg] -translate-x-[20%] -translate-y-[10%]" />
     </div>
-
   </div>
 </section>
