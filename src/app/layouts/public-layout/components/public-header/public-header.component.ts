@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Signal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Route, Router, RouterModule } from '@angular/router';
 import { ConfigService, SystemConfig } from '../../../../shared/services/config.service';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -19,7 +19,7 @@ export class PublicHeaderComponent implements OnInit {
 
   config = signal<SystemConfig | null>(null);
 
-  constructor(private configService: ConfigService) {}
+  constructor(private configService: ConfigService,private router:Router) {}
 
   ngOnInit(): void {
     this.configService.getConfig().subscribe({
@@ -33,6 +33,7 @@ export class PublicHeaderComponent implements OnInit {
   }
 
   openLogin() {
+    this.router.navigate(['/login']);
     // lógica para login
   }
 

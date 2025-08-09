@@ -1,0 +1,96 @@
+<main class="min-h-screen flex items-center justify-center px-4 py-10" [ngStyle]="{ 'background-color': brandBg, 'color': brandText }">
+
+    <!-- Contenedor -->
+    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+
+        <!-- Panel Izquierdo: Branding -->
+        <section class="relative hidden md:flex flex-col justify-between rounded-2xl overflow-hidden shadow-sm">
+            <img src="https://res.cloudinary.com/dvvhnrvav/image/upload/v1749932555/pasteleria-tony/pngs/u0deprenq16afe9c4msn.png" alt="Pastelería Tony" class="absolute inset-0 w-full h-full object-cover opacity-15 pointer-events-none" />
+            <div class="relative z-10 p-8">
+                <h1 class="text-3xl font-light mb-3">Bienvenido a Pastelería Tony</h1>
+                <p class="opacity-90">
+                    Inicia sesión para gestionar pedidos, productos y promociones.
+                </p>
+            </div>
+            <div class="relative z-10 p-8 text-sm opacity-80">
+                <ul class="space-y-2">
+                    <li class="flex items-center gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full" [ngStyle]="{backgroundColor: brandText}"></span> Control de inventario y catálogo
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full" [ngStyle]="{backgroundColor: brandText}"></span> Gestión de pedidos y clientes
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full" [ngStyle]="{backgroundColor: brandText}"></span> Reportes y promociones
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Panel Derecho: Formulario -->
+        <section class="bg-white/90 backdrop-blur rounded-2xl shadow p-6 md:p-8">
+            <div class="mb-6 text-center">
+                <h2 class="text-2xl font-light text-[#3E2723]">Iniciar sesión</h2>
+                <p class="text-sm text-gray-500">Usa tu correo y contraseña</p>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+                <!-- Email -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Correo</label>
+                    <input type="email" formControlName="email" class="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-rose-300" placeholder="tucorreo@ejemplo.com" [class.border-red-400]="invalid('email')" [attr.aria-invalid]="invalid('email')" />
+                    <p *ngIf="invalid('email')" class="text-xs text-red-500 mt-1">
+                        Ingresa un correo válido.
+                    </p>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+                    <div class="relative">
+                        <input [type]="showPass ? 'text' : 'password'" formControlName="password" class="w-full rounded-lg border px-3 py-2 pr-10 outline-none focus:ring-2 focus:ring-rose-300" placeholder="********" [class.border-red-400]="invalid('password')" [attr.aria-invalid]="invalid('password')"
+                        />
+                        <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700" (click)="showPass = !showPass" [attr.aria-label]="showPass ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+              <span *ngIf="!showPass">👁️</span>
+              <span *ngIf="showPass">🙈</span>
+            </button>
+                    </div>
+                    <p *ngIf="invalid('password')" class="text-xs text-red-500 mt-1">
+                        La contraseña es requerida (mínimo 6 caracteres).
+                    </p>
+                </div>
+
+                <!-- Remember + Forgot -->
+                <div class="flex items-center justify-between text-sm">
+                    <label class="inline-flex items-center gap-2">
+            <input type="checkbox" formControlName="remember" class="rounded border-gray-300"/>
+            <span>Recordarme</span>
+          </label>
+                    <a routerLink="/recuperar" class="text-rose-700 hover:underline">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <!-- Error general -->
+                <div *ngIf="errorMsg" class="rounded-lg bg-red-50 text-red-700 px-3 py-2 text-sm">
+                    {{ errorMsg }}
+                </div>
+
+                <!-- Botón -->
+                <button type="submit" class="w-full rounded-lg px-4 py-2 font-semibold transition disabled:opacity-50" [ngStyle]="{ backgroundColor: brandText, color: brandBg }" [disabled]="form.invalid || loading">
+          <span *ngIf="!loading">Entrar</span>
+          <span *ngIf="loading">Validando…</span>
+        </button>
+
+                <!-- CTA alternas -->
+                <div class="text-center text-xs text-gray-500">
+                    ¿No tienes cuenta? <a routerLink="/registro" class="text-rose-700 hover:underline">Crear una</a>
+                </div>
+            </form>
+
+            <!-- Accesos rápidos (opcional, quitar si no aplica) -->
+            <div class="mt-6 grid grid-cols-2 gap-3 text-sm">
+                <button type="button" (click)="quick('admin')" class="border rounded-lg py-2 hover:bg-gray-50">Entrar como Admin (demo)</button>
+                <button type="button" (click)="quick('customer')" class="border rounded-lg py-2 hover:bg-gray-50">Entrar como Cliente (demo)</button>
+            </div>
+        </section>
+    </div>
+</main>

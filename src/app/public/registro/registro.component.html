@@ -1,0 +1,92 @@
+<main class="min-h-screen flex items-center justify-center px-4 py-10" [ngStyle]="{ 'background-color': brandBg, 'color': brandText }">
+
+    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+
+        <!-- Branding -->
+        <section class="relative hidden md:flex flex-col justify-between rounded-2xl overflow-hidden shadow-sm">
+            <img src="https://res.cloudinary.com/dvvhnrvav/image/upload/v1749932555/pasteleria-tony/pngs/u0deprenq16afe9c4msn.png" alt="Pastelería Tony" class="absolute inset-0 w-full h-full object-cover opacity-15 pointer-events-none" />
+            <div class="relative z-10 p-8">
+                <h1 class="text-3xl font-light mb-3">Crea tu cuenta</h1>
+                <p class="opacity-90">Regístrate en menos de 1 minuto y haz tu pedido.</p>
+            </div>
+
+            <div class="relative z-10 p-8 text-sm opacity-90">
+                <h3 class="font-medium mb-2">Ventajas</h3>
+                <ul class="space-y-2">
+                    <li class="flex items-center gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full" [ngStyle]="{backgroundColor: brandText}"></span> Pedidos rápidos y seguimiento
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full" [ngStyle]="{backgroundColor: brandText}"></span> Promos y descuentos
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Formulario -->
+        <section class="bg-white/90 backdrop-blur rounded-2xl shadow p-6 md:p-8">
+            <div class="mb-6 text-center">
+                <h2 class="text-2xl font-light text-[#3E2723]">Registro rápido</h2>
+                <p class="text-sm text-gray-500">Solo lo esencial para empezar.</p>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-5">
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                    <input type="text" formControlName="nombre" class="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-rose-300" placeholder="Tu nombre" [class.border-red-400]="invalid('nombre')" />
+                    <p *ngIf="invalid('nombre')" class="text-xs text-red-500 mt-1">Ingresa tu nombre.</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Correo</label>
+                    <input type="email" formControlName="email" autocomplete="email" class="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-rose-300" placeholder="tucorreo@ejemplo.com" [class.border-red-400]="invalid('email')" />
+                    <p *ngIf="invalid('email')" class="text-xs text-red-500 mt-1">Correo inválido.</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">WhatsApp</label>
+                    <input type="tel" formControlName="telefono" autocomplete="tel" class="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-rose-300" placeholder="10 dígitos" [class.border-red-400]="invalid('telefono')" />
+                    <p *ngIf="invalid('telefono')" class="text-xs text-red-500 mt-1">Número de 10 dígitos.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+                        <div class="relative">
+                            <input [type]="showPass ? 'text' : 'password'" formControlName="password" autocomplete="new-password" class="w-full rounded-lg border px-3 py-2 pr-10 outline-none focus:ring-2 focus:ring-rose-300" placeholder="********" [class.border-red-400]="invalid('password')"
+                            />
+                            <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500" (click)="showPass = !showPass">
+                <span *ngIf="!showPass">👁️</span><span *ngIf="showPass">🙈</span>
+              </button>
+                        </div>
+                        <p *ngIf="invalid('password')" class="text-xs text-red-500 mt-1">Mínimo 6 caracteres.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Confirmar</label>
+                        <input [type]="showPass ? 'text' : 'password'" formControlName="confirmPassword" class="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-rose-300" placeholder="********" [class.border-red-400]="invalid('confirmPassword') || passwordMismatch"
+                        />
+                        <p *ngIf="passwordMismatch" class="text-xs text-red-500 mt-1">No coincide.</p>
+                    </div>
+                </div>
+
+                <label class="inline-flex items-center gap-2 text-sm">
+          <input type="checkbox" formControlName="aceptaTerminos" class="rounded border-gray-300" />
+          <span>Acepto términos y privacidad</span>
+        </label>
+
+                <div *ngIf="errorMsg" class="rounded-lg bg-red-50 text-red-700 px-3 py-2 text-sm">{{ errorMsg }}</div>
+
+                <button type="submit" class="w-full rounded-lg px-4 py-2 font-semibold transition disabled:opacity-50" [ngStyle]="{ backgroundColor: brandText, color: brandBg }" [disabled]="form.invalid || loading">
+          <span *ngIf="!loading">Crear cuenta</span>
+          <span *ngIf="loading">Creando…</span>
+        </button>
+
+                <p class="text-[12px] text-gray-500 text-center">
+                    ¿Ya tienes cuenta? <a routerLink="/login" class="text-rose-700 hover:underline">Inicia sesión</a>
+                </p>
+            </form>
+        </section>
+    </div>
+</main>
