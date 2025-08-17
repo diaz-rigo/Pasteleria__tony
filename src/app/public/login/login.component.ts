@@ -1,15 +1,16 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
 import { getTextColor } from '../../shared/helpers/color.helpers';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  // imports: [CommonModule,FormsModule,FormGroup],
-  imports: [CommonModule,FormsModule, ReactiveFormsModule,RouterLink],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink,HttpClientModule],
+  providers: [AuthService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -18,7 +19,7 @@ export class LoginComponent {
   private router = inject(Router);
   private auth = inject(AuthService);
 
-  // Si tienes un servicio de configuración, cámbialo por tus valores:
+  // Branding (ajusta a tu gusto / servicio de config)
   brandBg = '#fbeded';
   brandText = getTextColor(this.brandBg);
 
@@ -39,25 +40,31 @@ export class LoginComponent {
 
   submit() {
     if (this.form.invalid || this.loading) return;
+
     this.loading = true;
     this.errorMsg = null;
 
-    const { email, password, remember } = this.form.value;
+    const { email, password } = this.form.value;
 
-    // this.auth.login({ email: email!, password: password!, remember: !!remember })
-    //   .subscribe({
-    //     next: (user) => {
-    //       // Redirección por rol
-    //       const roles = user?.roles ?? [];
-    //       if (roles.includes('admin')) this.router.navigateByUrl('/admin');
-    //       else this.router.navigateByUrl('/customer');
-    //     },
-    //     error: (err) => {
-    //       this.errorMsg = err?.error?.message ?? 'Credenciales inválidas.';
-    //       this.loading = false;
-    //     },
-    //     complete: () => this.loading = false
-    //   });
+    // Llamada real al backend
+    this.auth.login({ email: email!, password: password! })
+      .subscribe({
+        next: (user) => {
+          // Redirección según rol del JWT
+          // En tu token de ejemplo viene "rol": "ADMIN"
+          if (user?.rol === 'ADMIN') {
+            this.router.navigateByUrl('/admin');
+          } else {
+            this.router.navigateByUrl('/customer'); // ajusta al landing del cliente
+          }
+        },
+        error: (err) => {
+          // Mensaje amigable si el backend no manda uno
+          this.errorMsg = err?.error?.message ?? 'Credenciales inválidas. Verifica tu correo y contraseña.';
+          this.loading = false;
+        },
+        complete: () => (this.loading = false)
+      });
   }
 
   // Botones de demo/QA (quitar en producción)

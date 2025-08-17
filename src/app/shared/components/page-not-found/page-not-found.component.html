@@ -1,0 +1,90 @@
+<!-- page-not-found.component.html -->
+<section class="relative min-h-[80vh] flex items-center overflow-hidden" [ngStyle]="{
+    'background-image': getDynamicGradient(),
+    'background-size': 'cover',
+    'background-attachment': 'fixed'
+  }">
+    <!-- Efecto de partículas decorativas -->
+    <!-- Efecto de partículas decorativas -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div *ngFor="let particle of particles" class="absolute rounded-full opacity-70 animate-float" [style.width]="particle.size" [style.height]="particle.size" [style.background]="particle.color" [style.top]="particle.top" [style.left]="particle.left" [style.animation-duration]="particle.animationDuration"
+            [style.animation-delay]="particle.animationDelay">
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 py-20 md:py-28 grid md:grid-cols-2 gap-12 items-center relative z-10">
+        <!-- Texto -->
+        <div class="text-center md:text-left md:pl-12 lg:pl-24 animate-fadeInLeft">
+            <!-- 404 grande con efecto 3D -->
+            <div class="relative inline-block">
+                <h1 class="text-[90px] md:text-[120px] font-extrabold leading-none tracking-tighter select-none relative" [style.color]="getTextColorwelcom(config()?.headerBackgroundColor || '#fbeded')" [style.textShadow]="'3px 3px 0 ' + (config()?.headerBackgroundColor || '#be2541') + ', 6px 6px 10px rgba(0,0,0,0.1)'">
+                    4<span class="inline-block transform -rotate-6 hover:rotate-0 transition-transform duration-300">0</span>4
+                </h1>
+                <div class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl -z-10"></div>
+            </div>
+
+            <h2 class="mt-4 text-3xl md:text-4xl font-bold" [style.color]="getTextColorwelcom(config()?.headerBackgroundColor || '#fbeded')">
+                ¡Ups! Te llevaste el dulce equivocado.
+            </h2>
+
+            <p class="mt-3 text-base md:text-lg max-w-md mx-auto md:mx-0 opacity-90 leading-relaxed" [style.color]="getTextColor(config()?.headerBackgroundColor || '#fbeded')">
+                La página que buscas no existe o cambió de vitrina. Pero tenemos muchos postres esperándote.
+            </p>
+
+            <!-- Acciones con microinteracciones -->
+            <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+                <a routerLink="/" class="px-6 py-3 rounded-full shadow-sm cursor-pointer transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 active:scale-95 text-center font-medium" [style.backgroundColor]="getButtonColor(config()?.headerBackgroundColor || '#be2541')"
+                    [style.color]="getTextColor(getButtonColor(config()?.headerBackgroundColor || '#be2541'))">
+                    Ir al inicio
+                </a>
+                <a routerLink="/productos" class="px-6 py-3 rounded-full shadow-sm cursor-pointer transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 text-center font-medium border-1.5" [style.color]="getButtonColor(config()?.headerBackgroundColor || '#be2541')"
+                    [style.borderColor]="getButtonColor(config()?.headerBackgroundColor || '#be2541')">
+                    Ver productos
+                </a>
+            </div>
+
+            <!-- Buscador mejorado -->
+            <div class="mt-8 max-w-md mx-auto md:mx-0">
+                <div class="flex items-stretch bg-white/90 backdrop-blur-sm rounded-full overflow-hidden border border-white/60 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <input type="text" placeholder="Busca: pastel de chocolate, cheesecake, tres leches…" class="flex-1 px-5 py-3 outline-none text-gray-700 placeholder-gray-400 bg-transparent" [(ngModel)]="busqueda" (keyup.enter)="irABusqueda()" />
+                    <button class="px-5 py-3 font-medium transition-colors duration-200 hover:brightness-110" [style.backgroundColor]="getButtonColor(config()?.headerBackgroundColor || '#be2541')" [style.color]="getTextColor(getButtonColor(config()?.headerBackgroundColor || '#be2541'))"
+                        (click)="irABusqueda()">
+                        <span class="hidden sm:inline">Buscar</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </button>
+                </div>
+                <p class="mt-2 text-xs opacity-70" [style.color]="getTextColor(config()?.headerBackgroundColor || '#fbeded')">
+                    Prueba con: "tartas", "galletas" o "postres sin azúcar"
+                </p>
+            </div>
+
+            <!-- Migas de pan mejoradas -->
+            <nav class="mt-6 text-sm" [style.color]="getTextColor(config()?.headerBackgroundColor || '#fbeded')">
+                <span class="opacity-70">Estás aquí:</span>
+                <a routerLink="/" class="underline hover:opacity-80 transition-opacity">Inicio</a>
+                <span class="opacity-70"> / </span>
+                <span class="font-medium">Página no encontrada</span>
+            </nav>
+        </div>
+
+        <!-- Ilustración mejorada -->
+        <div class="relative w-72 h-72 md:w-80 md:h-80 mx-auto animate-fadeInRight">
+            <div class="absolute inset-0 rounded-full blur-2xl opacity-70 z-0 animate-pulse" style="background: linear-gradient(135deg, #eeceb2, #d38890);"></div>
+            <img src="https://res.cloudinary.com/dvvhnrvav/image/upload/v1749934243/pasteleria-tony/pngs/wmqfdo93tutrk6f5so6n.png" alt="Pastel decorativo" class="relative rounded-full w-[140%] h-[140%] object-cover z-10 transform rotate-[-15deg] -translate-x-[20%] -translate-y-[10%] hover:rotate-0 transition-transform duration-500"
+                loading="lazy" />
+
+            <!-- Tarjeta flotante animada -->
+            <!-- <div class="absolute -bottom-4 -right-2 bg-white/95 backdrop-blur rounded-2xl shadow-lg px-4 py-3 text-sm border border-white/60 animate-bounce-slow">
+                <div class="font-semibold text-gray-800 flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd" />
+                    </svg> Recomendado del chef
+                </div>
+                <div class="text-gray-600 mt-1">Cheesecake de frutos rojos</div>
+                <div class="mt-1 text-xs text-amber-600 font-medium">20% OFF hoy</div>
+            </div> -->
+        </div>
+    </div>
+</section>

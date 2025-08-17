@@ -93,3 +93,19 @@ export function isValidHexColor(color: string): boolean {
 export function getRandomColor(): string {
     return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
 }
+/**
+ * Genera un color más fuerte para un degradado
+ */
+export function generateStrongGradientColor(baseColor: string): string {
+    // Oscurecemos un poco el color base
+    return adjustColorBrightness(baseColor, -30);
+}
+
+/**
+ * Genera un degradado dinámico desde un color base
+ * @param fromColor Color inicial
+ */
+export function getDynamicGradient(fromColor: string = '#fbeded'): string {
+    const toColor = generateStrongGradientColor(fromColor);
+    return `linear-gradient(to bottom right, ${fromColor}, ${toColor})`;
+}

@@ -4,6 +4,7 @@ import { Routes } from '@angular/router';
 import { PublicLayoutComponent } from './layouts/public-layout/public-layout.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { CustomerLayoutComponent } from './layouts/customer-layout/customer-layout.component';
+import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
   // Área Pública
@@ -165,7 +166,8 @@ export const routes: Routes = [
   { 
     path: 'no-encontrado',
     title: 'Página no encontrada',
-    loadComponent: () => import('./shared/components/not-found/not-found.component').then(m => m.NotFoundComponent) 
+    loadComponent: () => import('./shared/components/page-not-found/page-not-found.component').then(m => m.PageNotFoundComponent) 
   },
-  { path: '**', redirectTo: 'no-encontrado' }
+  { path: '**', component: PageNotFoundComponent, title: 'Página no encontrada' },
+
 ];

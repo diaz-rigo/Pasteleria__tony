@@ -11,14 +11,18 @@ import { ProductService } from '../../../shared/services/product.service';
 import { HttpClientModule } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, of, tap } from 'rxjs';
+import { Meta, Title } from '@angular/platform-browser';
+import { OrderCreatePayload, OrderItem } from '../../../shared/models/order.model';
+import { OrdersService } from '../../../shared/services/orders.service';
+import { PedidoModalComponent } from './pedido-modal/pedido-modal.component';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RatingStarsComponent, CurrencyPipe, HttpClientModule, RouterModule],
+  imports: [PedidoModalComponent,CommonModule, FormsModule, RatingStarsComponent, CurrencyPipe, HttpClientModule, RouterModule],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css'],
-  providers: [ProductService]
+  providers: [ProductService,OrdersService]
 })
 export class ProductDetailComponent implements OnInit {
   @Input() product = signal<Product | undefined>(undefined);
@@ -29,10 +33,16 @@ export class ProductDetailComponent implements OnInit {
   error = signal<string | null>(null);
   selectedImage = signal<string | null>(null);
   variants = computed(() => this.product()?.variants || []);
+  mostrarPedido = signal(false);
+
+
   constructor(
     private route: ActivatedRoute,
-    private productService: ProductService
-  ) {}
+    private productService: ProductService,
+    private orders: OrdersService,
+    private meta: Meta,
+    private title: Title
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -50,7 +60,7 @@ export class ProductDetailComponent implements OnInit {
   loadProduct(id: string): void {
     this.error.set(null);
     this.loading.set(true);
-    
+
     this.productService.getProductById(id).pipe(
       tap(product => {
         this.product.set(product);
@@ -60,6 +70,8 @@ export class ProductDetailComponent implements OnInit {
           this.selectedImage.set(product.variants[0].images?.[0] || null);
         }
         this.loading.set(false);
+        this.updateMetaTags(product);
+
       }),
       catchError(err => {
         this.error.set('Error al cargar el producto');
@@ -79,7 +91,7 @@ export class ProductDetailComponent implements OnInit {
     this.selectedVariantIndex.set(index);
     this.selectedSizeIndex.set(0);
     this.quantity.set(1);
-    
+
     const variant = this.getSelectedVariant();
     this.selectedImage.set(variant?.images?.[0] || null);
   }
@@ -115,10 +127,143 @@ export class ProductDetailComponent implements OnInit {
     this.selectedImage.set(image);
   }
   // Reemplaza hasMultipleSizes() con esta nueva función
-showSizesSection(): boolean {
-  const variant = this.getSelectedVariant();
-  return !!(variant?.sizeStock && variant.sizeStock.length > 0);
-}
+  showSizesSection(): boolean {
+    const variant = this.getSelectedVariant();
+    return !!(variant?.sizeStock && variant.sizeStock.length > 0);
+  }
 
+
+  shareOnWhatsApp(): void {
+    const product = this.product();
+    if (!product) return;
+
+    const variant = this.getSelectedVariant();
+    const size = this.getSelectedSize();
+
+    // Construye el mensaje
+    let message = `¡Producto!%0A%0A`;
+    message += `*${product.name || ''}*%0A`;
+
+    if (variant?.flavor) {
+      message += `Sabor: ${variant.flavor}%0A`;
+    }
+
+    if (size) {
+      if (size.size) {
+        message += `Tamaño: ${size.size} kg%0A`;
+      }
+      if (size.price != null) {
+        // Formatear precio como moneda
+        const precioFormateado = size.price.toLocaleString('es-MX', {
+          style: 'currency',
+          currency: 'MXN'
+        });
+        message += `Precio: ${precioFormateado}%0A`;
+      }
+    }
+
+    message += `%0A${window.location.href}`;
+
+    // Abre WhatsApp con el mensaje
+    window.open(`https://wa.me/?text=${message}`, '_blank');
+  }
+
+  updateMetaTags(product: Product): void {
+    const variant = this.getSelectedVariant();
+    const imageRaw = variant?.images?.[0];
+    const imageUrl = this.absoluteUrl(imageRaw);
+
+    this.title.setTitle(`${product.name || ''} | Tu Tienda`);
+
+    this.meta.updateTag({ property: 'og:title', content: product.name || '' });
+    this.meta.updateTag({ property: 'og:description', content: variant?.description || product.ingredientes || 'Producto de alta calidad' });
+    this.meta.updateTag({ property: 'og:image', content: imageUrl });
+    this.meta.updateTag({ property: 'og:url', content: window.location.href });
+    this.meta.updateTag({ property: 'og:type', content: 'product' });
+  }
+
+
+
+  private absoluteUrl(pathOrUrl: string | null | undefined): string {
+    if (!pathOrUrl) return '';
+    try {
+      // si ya es absoluta, retorna igual
+      return new URL(pathOrUrl).toString();
+    } catch {
+      // si es relativa, la convierto
+      return new URL(pathOrUrl, window.location.origin).toString();
+    }
+  }
+  
+  abrirPedido() {
+    // this.modoPedido.set(modo);
+    this.mostrarPedido.set(true);
+  }
+
+
+
+    cerrarPedido() {
+    this.mostrarPedido.set(false);
+  }
+    // Helpers para IDs seguros
+  private getSelectedVariantId(): string | undefined {
+    const v = this.getSelectedVariant() as any;
+    return v?._id ?? v?.id;
+  }
+
+  private getProductId(): string | undefined {
+    const p = this.product() as any;
+    return p?._id ?? p?.id;
+  }
+
+
+    // Handler del envío desde el modal
+  onEnviarPedido = (customer: any) => {
+    const p = this.product();
+    const v = this.getSelectedVariant();
+    const s = this.getSelectedSize();
+    if (!p || !s) return;
+
+    const unitPrice = Number(s.price ?? 0);
+    const qty = this.quantity();
+    const subtotal = unitPrice * qty;
+
+    const item: OrderItem = {
+      productId: this.getProductId() || '',
+      productName: p.name|| '',
+      variantId: this.getSelectedVariantId(),
+      variantFlavor: v?.flavor,
+      size: s.size,
+      unitPrice,
+      quantity: qty,
+      subtotal,
+      image: this.selectedImage() || v?.images?.[0],
+      color: (v as any)?.color,
+    };
+
+    const payload: OrderCreatePayload = {
+      items: [item],
+      customer,
+      modo: 'PEDIR',
+      currency: 'MXN',
+      source: 'WEB',
+    };
+
+    this.loading.set(true);
+    this.orders.createOrder(payload).subscribe({
+      next: (resp) => {
+        this.loading.set(false);
+        this.mostrarPedido.set(false);
+        // feedback simple
+        alert(`¡Pedido recibido!\nFolio: ${resp.folio}\nTotal: ${resp.total.toLocaleString('es-MX', {style:'currency', currency:'MXN'})}`);
+        // opcional: redirigir a un "gracias" o detalle de pedido
+        // this.router.navigate(['/pedido', resp.id]);
+      },
+      error: (err) => {
+        console.error(err);
+        this.loading.set(false);
+        alert('Ocurrió un error al crear el pedido. Intenta nuevamente.');
+      }
+    })}
 
 }
