@@ -1,16 +1,49 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="utf-8">
-  <title>Admin</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#1976d2">
+  <meta charset="utf-8" />
+  <title>Pastelería Tony · Admin</title>
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Favicon y manifest -->
+  <link rel="icon" type="image/png" href="icons/icon-192x192.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+
+  <!-- Theme color (auto claro/oscuro) -->
+  <meta name="theme-color" content="#fff7f9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b1b1f" media="(prefers-color-scheme: dark)">
+
+  <!-- iOS PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tony Admin">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+  <!-- Windows tiles (opcional) -->
+  <meta name="msapplication-TileColor" content="#fff7f9" />
+  <meta name="msapplication-starturl" content="/" />
 </head>
 <body>
   <app-root></app-root>
-  <noscript>Please enable JavaScript to continue using this application.</noscript>
+  <noscript>Activa JavaScript para usar esta aplicación.</noscript>
+
+  <!-- Ajuste dinámico de theme-color si cambias a dark-mode en runtime -->
+  <script>
+    (function () {
+      const light = '#fff7f9';
+      const dark  = '#1b1b1f';
+      const meta = document.querySelector('meta[name="theme-color"][media]') ||
+                   document.querySelector('meta[name="theme-color"]');
+      const apply = () => {
+        const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.querySelectorAll('meta[name="theme-color"]').forEach(m=>{
+          if (!m.media) m.setAttribute('content', darkMode ? dark : light);
+        });
+      };
+      apply(); // inicial
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', apply);
+    })();
+  </script>
 </body>
 </html>

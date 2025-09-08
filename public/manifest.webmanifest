@@ -1,59 +1,54 @@
 {
-  "name": "admin",
-  "short_name": "admin",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "name": "Pastelería Tony · Admin",
+  "short_name": "Tony Admin",
+  "description": "Panel de administración de Pastelería Tony: pedidos, inventario y catálogo.",
+  "lang": "es",
+  "dir": "ltr",
   "display": "standalone",
-  "scope": "./",
-  "start_url": "./",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "category": "business",
+  "theme_color": "#fff7f9",
+  "background_color": "#fff7f9",
   "icons": [
+    { "src": "icons/icon-72x72.png",  "sizes": "72x72",   "type": "image/png", "purpose": "maskable any" },
+    { "src": "icons/icon-96x96.png",  "sizes": "96x96",   "type": "image/png", "purpose": "maskable any" },
+    { "src": "icons/icon-128x128.png","sizes": "128x128", "type": "image/png", "purpose": "maskable any" },
+    { "src": "icons/icon-144x144.png","sizes": "144x144", "type": "image/png", "purpose": "maskable any" },
+    { "src": "icons/icon-152x152.png","sizes": "152x152", "type": "image/png", "purpose": "maskable any" },
+    { "src": "icons/icon-192x192.png","sizes": "192x192", "type": "image/png", "purpose": "maskable any" },
+    { "src": "icons/icon-384x384.png","sizes": "384x384", "type": "image/png", "purpose": "maskable any" },
+    { "src": "icons/icon-512x512.png","sizes": "512x512", "type": "image/png", "purpose": "maskable any" }
+  ],
+
+  "shortcuts": [
     {
-      "src": "icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "maskable any"
+      "name": "Nuevos pedidos",
+      "short_name": "Pedidos",
+      "description": "Ver pedidos entrantes",
+      "url": "/pedidos?status=nuevo",
+      "icons": [{ "src": "icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
     },
     {
-      "src": "icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable any"
+      "name": "Productos",
+      "short_name": "Productos",
+      "url": "/productos",
+      "icons": [{ "src": "icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
     }
-  ]
+  ],
+
+  
+  "share_target": {
+    "action": "/share-in",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [{ "name": "images", "accept": ["image/*"] }]
+    }
+  }
 }

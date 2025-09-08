@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component, computed, effect, signal } from '@angular/core';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { HomeComponent } from './public/home/home.component';
+import { AppUpdateService } from './shared/services/app-update.service';
 
 @Component({
   selector: 'app-root',
@@ -11,5 +12,7 @@ import { HomeComponent } from './public/home/home.component';
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-
+  constructor(private appUpdate: AppUpdateService) {
+    // al inyectarse, el servicio arranca solo
+  }
 }
