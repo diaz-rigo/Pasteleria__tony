@@ -13,6 +13,6 @@ import { AppUpdateService } from './shared/services/app-update.service';
 })
 export class AppComponent {
   constructor(private appUpdate: AppUpdateService) {
-    // al inyectarse, el servicio arranca solo
+  
   }
 }
