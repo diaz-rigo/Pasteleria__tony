@@ -131,42 +131,83 @@ export class ProductDetailComponent implements OnInit {
     const variant = this.getSelectedVariant();
     return !!(variant?.sizeStock && variant.sizeStock.length > 0);
   }
+shareOnWhatsApp(): void {
+  const product = this.product();
+  if (!product) return;
 
+  const variant = this.getSelectedVariant();
+  const size = this.getSelectedSize();
 
-  shareOnWhatsApp(): void {
-    const product = this.product();
-    if (!product) return;
+  // 1) Toma la imagen seleccionada o la primera del variant o (si aplica) del producto
+  const imageUrl =
+    this.selectedImage?.() ||
+    variant?.images?.[0] ||
+    (product as any)?.images?.[0] || // por si tu objeto product también trae images[]
+    '';
 
-    const variant = this.getSelectedVariant();
-    const size = this.getSelectedSize();
+  // Construye el mensaje (ponemos primero la imagen para forzar preview)
+  const lines: string[] = [];
+  if (imageUrl) lines.push(imageUrl); // 👈 esto ayuda a que WhatsApp muestre esa imagen en el preview
 
-    // Construye el mensaje
-    let message = `¡Producto!%0A%0A`;
-    message += `*${product.name || ''}*%0A`;
+  lines.push(`*${product.name || ''}*`);
 
-    if (variant?.flavor) {
-      message += `Sabor: ${variant.flavor}%0A`;
-    }
-
-    if (size) {
-      if (size.size) {
-        message += `Tamaño: ${size.size} kg%0A`;
-      }
-      if (size.price != null) {
-        // Formatear precio como moneda
-        const precioFormateado = size.price.toLocaleString('es-MX', {
-          style: 'currency',
-          currency: 'MXN'
-        });
-        message += `Precio: ${precioFormateado}%0A`;
-      }
-    }
-
-    message += `%0A${window.location.href}`;
-
-    // Abre WhatsApp con el mensaje
-    window.open(`https://wa.me/?text=${message}`, '_blank');
+  if (variant?.flavor) {
+    lines.push(`Sabor: ${variant.flavor}`);
   }
+
+  if (size) {
+    if (size.size) lines.push(`Tamaño: ${size.size} kg`);
+    if (size.price != null) {
+      const precioFormateado = size.price.toLocaleString('es-MX', {
+        style: 'currency',
+        currency: 'MXN',
+      });
+      lines.push(`Precio: ${precioFormateado}`);
+    }
+  }
+
+  lines.push(''); // salto de línea
+  lines.push(window.location.href);
+
+  const message = encodeURIComponent(lines.join('\n'));
+  window.open(`https://wa.me/?text=${message}`, '_blank');
+}
+
+
+  // shareOnWhatsApp(): void {
+  //   const product = this.product();
+  //   if (!product) return;
+
+  //   const variant = this.getSelectedVariant();
+  //   const size = this.getSelectedSize();
+
+  //   // Construye el mensaje
+  //   let message = `¡Producto!%0A%0A`;
+  //   message += `*${product.name || ''}*%0A`;
+
+  //   if (variant?.flavor) {
+  //     message += `Sabor: ${variant.flavor}%0A`;
+  //   }
+
+  //   if (size) {
+  //     if (size.size) {
+  //       message += `Tamaño: ${size.size} kg%0A`;
+  //     }
+  //     if (size.price != null) {
+  //       // Formatear precio como moneda
+  //       const precioFormateado = size.price.toLocaleString('es-MX', {
+  //         style: 'currency',
+  //         currency: 'MXN'
+  //       });
+  //       message += `Precio: ${precioFormateado}%0A`;
+  //     }
+  //   }
+
+  //   message += `%0A${window.location.href}`;
+
+  //   // Abre WhatsApp con el mensaje
+  //   window.open(`https://wa.me/?text=${message}`, '_blank');
+  // }
 
   updateMetaTags(product: Product): void {
     const variant = this.getSelectedVariant();
