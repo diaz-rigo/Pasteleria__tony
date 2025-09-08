@@ -1,5 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection, isDevMode, inject, APP_INITIALIZER } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http'; // ⬅️ IMPORTANTE
 
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
@@ -22,6 +23,8 @@ function initTheme() {
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),
+        provideHttpClient(), // ⬅️ SIN ESTO, DI NO ENCUENTRA HttpClient
+
   provideServiceWorker('ngsw-worker.js',
     {
       
