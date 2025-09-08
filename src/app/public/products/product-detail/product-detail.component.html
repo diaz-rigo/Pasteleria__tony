@@ -142,7 +142,9 @@
                     </button>
 
 
-                    <button (click)="shareOnWhatsApp()" class="border-2 border-gray-900 hover:bg-gray-100 text-gray-900 px-6 py-3 rounded-md font-medium transition-colors flex-1 min-w-0 h-12 flex items-center justify-center gap-2" title="Compartir">
+                    <!-- <button (click)="shareOnWhatsApp()" -->
+                    <button (click)="shareWithImage()"
+                     class="border-2 border-gray-900 hover:bg-gray-100 text-gray-900 px-6 py-3 rounded-md font-medium transition-colors flex-1 min-w-0 h-12 flex items-center justify-center gap-2" title="Compartir">
                         Compartir
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share2-icon lucide-share-2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
                     </button>
@@ -156,3 +158,11 @@
 <app-pedido-modal *ngIf="mostrarPedido() && product()" [abierto]="mostrarPedido" [modo]="'PEDIR'" [productoNombre]="product()?.name || ''" [varianteFlavor]="getSelectedVariant()?.flavor || undefined" [sizeEtiqueta]="getSelectedSize()?.size || undefined"
     [unitPrice]="getSelectedSize()?.price || 0" [quantity]="quantity()" [image]="selectedImage() || getSelectedVariant()?.images?.[0]" (cerrar)="cerrarPedido()" (enviar)="onEnviarPedido($event)">
 </app-pedido-modal>
+<!-- En el <head> de la página de detalle del producto -->
+<meta property="og:type" content="product" />
+<meta property="og:title" content="{{ product()?.name }}" />
+<meta property="og:description" content="{{ getSelectedVariant()?.description  }}" />
+<meta property="og:image" content="{{ getSelectedVariant()?.images?.[0] }}" />
+<!-- <meta property="og:url" content="{{ window.location.href }}" /> -->
+<meta property="og:site_name" content="TuTienda" />
+<meta name="twitter:card" content="summary_large_image" />
