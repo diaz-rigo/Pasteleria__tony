@@ -19,10 +19,10 @@ import { PedidoModalComponent } from './pedido-modal/pedido-modal.component';
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [PedidoModalComponent,CommonModule, FormsModule, RatingStarsComponent, CurrencyPipe, HttpClientModule, RouterModule],
+  imports: [PedidoModalComponent, CommonModule, FormsModule, RatingStarsComponent, CurrencyPipe, HttpClientModule, RouterModule],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css'],
-  providers: [ProductService,OrdersService]
+  providers: [ProductService, OrdersService]
 })
 export class ProductDetailComponent implements OnInit {
   @Input() product = signal<Product | undefined>(undefined);
@@ -131,107 +131,125 @@ export class ProductDetailComponent implements OnInit {
     const variant = this.getSelectedVariant();
     return !!(variant?.sizeStock && variant.sizeStock.length > 0);
   }
-shareOnWhatsApp(): void {
-  const product = this.product();
-  if (!product) return;
+  shareOnWhatsApp(): void {
+    const product = this.product();
+    if (!product) return;
 
-  const variant = this.getSelectedVariant();
-  const size = this.getSelectedSize();
+    const variant = this.getSelectedVariant();
+    const size = this.getSelectedSize();
 
-  // 1) Toma la imagen seleccionada o la primera del variant o (si aplica) del producto
-  const imageUrl =
-    this.selectedImage?.() ||
-    variant?.images?.[0] ||
-    (product as any)?.images?.[0] || // por si tu objeto product también trae images[]
-    '';
+    // 1) Toma la imagen seleccionada o la primera del variant o (si aplica) del producto
+    const imageUrl =
+      this.selectedImage?.() ||
+      variant?.images?.[0] ||
+      (product as any)?.images?.[0] || // por si tu objeto product también trae images[]
+      '';
 
-  // Construye el mensaje (ponemos primero la imagen para forzar preview)
-  const lines: string[] = [];
-  if (imageUrl) lines.push(imageUrl); // 👈 esto ayuda a que WhatsApp muestre esa imagen en el preview
+    // Construye el mensaje (ponemos primero la imagen para forzar preview)
+    const lines: string[] = [];
+    if (imageUrl) lines.push(imageUrl); // 👈 esto ayuda a que WhatsApp muestre esa imagen en el preview
 
-  lines.push(`*${product.name || ''}*`);
+    lines.push(`*${product.name || ''}*`);
 
-  if (variant?.flavor) {
-    lines.push(`Sabor: ${variant.flavor}`);
-  }
-
-  if (size) {
-    if (size.size) lines.push(`Tamaño: ${size.size} kg`);
-    if (size.price != null) {
-      const precioFormateado = size.price.toLocaleString('es-MX', {
-        style: 'currency',
-        currency: 'MXN',
-      });
-      lines.push(`Precio: ${precioFormateado}`);
+    if (variant?.flavor) {
+      lines.push(`Sabor: ${variant.flavor}`);
     }
-  }
 
-  lines.push(''); // salto de línea
-  lines.push(window.location.href);
-
-  const message = encodeURIComponent(lines.join('\n'));
-  window.open(`https://wa.me/?text=${message}`, '_blank');
-}
-
-async shareWithImage(): Promise<void> {
-  const product = this.product();
-  if (!product) return;
-
-  const variant = this.getSelectedVariant();
-  const size = this.getSelectedSize();
-
-  const imageUrl =
-    this.selectedImage?.() ||
-    variant?.images?.[0] ||
-    (product as any)?.images?.[0] ||
-    '';
-
-  // Texto base (sin URL de imagen porque ya irá como archivo)
-  const parts: string[] = [];
-  parts.push(`*${product.name || ''}*`);
-  if (variant?.flavor) parts.push(`Sabor: ${variant.flavor}`);
-  if (size) {
-    if (size.size) parts.push(`Tamaño: ${size.size} kg`);
-    if (size.price != null) {
-      const precioFormateado = size.price.toLocaleString('es-MX', {
-        style: 'currency',
-        currency: 'MXN',
-      });
-      parts.push(`Precio: ${precioFormateado}`);
-    }
-  }
-  parts.push('');
-  parts.push(window.location.href);
-  const text = parts.join('\n');
-
-  try {
-    if (imageUrl && 'share' in navigator) {
-      const resp = await fetch(imageUrl, { mode: 'cors' });
-      const blob = await resp.blob();
-      const fileName =
-        (imageUrl.split('/').pop() || 'producto') + (blob.type.includes('jpeg') ? '.jpg' : '');
-      const file = new File([blob], fileName || 'producto.jpg', { type: blob.type || 'image/jpeg' });
-
-      // Soporte de share con archivos
-      // (Chrome Android, Safari iOS 15.4+; requiere HTTPS)
-      if ((navigator as any).canShare?.({ files: [file] })) {
-        await (navigator as any).share({
-          files: [file],
-          title: product.name || 'Producto',
-          text,
-          url: window.location.href, // opcional
+    if (size) {
+      if (size.size) lines.push(`Tamaño: ${size.size} kg`);
+      if (size.price != null) {
+        const precioFormateado = size.price.toLocaleString('es-MX', {
+          style: 'currency',
+          currency: 'MXN',
         });
-        return;
+        lines.push(`Precio: ${precioFormateado}`);
       }
     }
-  } catch (e) {
-    // si algo falla, seguimos al fallback
-    console.warn('Web Share API con archivos no disponible o falló, usando fallback a WhatsApp', e);
+
+    lines.push(''); // salto de línea
+    lines.push(window.location.href);
+
+    const message = encodeURIComponent(lines.join('\n'));
+    window.open(`https://wa.me/?text=${message}`, '_blank');
   }
 
-  // Fallback a WhatsApp clásico
-  this.shareOnWhatsApp();
-}
+  async shareWithImage(): Promise<void> {
+    const product = this.product();
+    if (!product) return;
+
+    const variant = this.getSelectedVariant();
+    const size = this.getSelectedSize();
+
+    const imageUrl =
+      this.selectedImage?.() ||
+      variant?.images?.[0] ||
+      (product as any)?.images?.[0] ||
+      '';
+
+    // Texto/caption: incluye la URL AQUÍ, no en la propiedad `url` de share()
+    const lines: string[] = [];
+    lines.push(`*${product.name || ''}*`);
+    if (variant?.flavor) lines.push(`Sabor: ${variant.flavor}`);
+    if (size) {
+      if (size.size) lines.push(`Tamaño: ${size.size} kg`);
+      if (size.price != null) {
+        const precioFormateado = size.price.toLocaleString('es-MX', {
+          style: 'currency',
+          currency: 'MXN',
+        });
+        lines.push(`Precio: ${precioFormateado}`);
+      }
+    }
+    lines.push('');
+    lines.push(window.location.href);
+    const caption = lines.join('\n');
+
+    try {
+      if (imageUrl && 'share' in navigator) {
+        const resp = await fetch(imageUrl, { mode: 'cors' });
+        const blob = await resp.blob();
+
+        // Asegura una extensión razonable
+        const ext = blob.type?.includes('png')
+          ? '.png'
+          : blob.type?.includes('webp')
+            ? '.webp'
+            : '.jpg';
+        const base = (imageUrl.split('/').pop() || 'producto').replace(/\?.*$/, '');
+        const file = new File([blob], (base || 'producto') + ext, {
+          type: blob.type || 'image/jpeg',
+        });
+
+        // 1) Intento con files + text (sin usar `url`)
+        const canShareWithText =
+          (navigator as any).canShare?.({ files: [file], text: caption }) ?? false;
+
+        if (canShareWithText) {
+          await (navigator as any).share({
+            files: [file],
+            text: caption,   // 👈 aquí va todo el texto + link
+            // NO pongas `url`: algunos targets lo usan y omiten el caption
+          });
+          return;
+        }
+
+        // 2) Si no acepta `text` con files, prueba solo files (algunos iOS/Safari)
+        const canShareFilesOnly = (navigator as any).canShare?.({ files: [file] }) ?? false;
+        if (canShareFilesOnly) {
+          await (navigator as any).share({ files: [file], text: caption });
+          // Si el target ignora `text`, hacemos fallback al wa.me para mandar el caption
+          // (no podemos adjuntar y además forzar caption en todos los targets)
+          this.shareOnWhatsApp(); // manda el caption + preview por URL
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('Fallo Web Share con archivos; usando fallback a WhatsApp', e);
+    }
+
+    // 3) Fallback a WhatsApp clásico (con URL de imagen al inicio para preview)
+    this.shareOnWhatsApp();
+  }
 
   // shareOnWhatsApp(): void {
   //   const product = this.product();
@@ -294,7 +312,7 @@ async shareWithImage(): Promise<void> {
       return new URL(pathOrUrl, window.location.origin).toString();
     }
   }
-  
+
   abrirPedido() {
     // this.modoPedido.set(modo);
     this.mostrarPedido.set(true);
@@ -302,10 +320,10 @@ async shareWithImage(): Promise<void> {
 
 
 
-    cerrarPedido() {
+  cerrarPedido() {
     this.mostrarPedido.set(false);
   }
-    // Helpers para IDs seguros
+  // Helpers para IDs seguros
   private getSelectedVariantId(): string | undefined {
     const v = this.getSelectedVariant() as any;
     return v?._id ?? v?.id;
@@ -317,7 +335,7 @@ async shareWithImage(): Promise<void> {
   }
 
 
-    // Handler del envío desde el modal
+  // Handler del envío desde el modal
   onEnviarPedido = (customer: any) => {
     const p = this.product();
     const v = this.getSelectedVariant();
@@ -330,7 +348,7 @@ async shareWithImage(): Promise<void> {
 
     const item: OrderItem = {
       productId: this.getProductId() || '',
-      productName: p.name|| '',
+      productName: p.name || '',
       variantId: this.getSelectedVariantId(),
       variantFlavor: v?.flavor,
       size: s.size,
@@ -355,7 +373,7 @@ async shareWithImage(): Promise<void> {
         this.loading.set(false);
         this.mostrarPedido.set(false);
         // feedback simple
-        alert(`¡Pedido recibido!\nFolio: ${resp.folio}\nTotal: ${resp.total.toLocaleString('es-MX', {style:'currency', currency:'MXN'})}`);
+        alert(`¡Pedido recibido!\nFolio: ${resp.folio}\nTotal: ${resp.total.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}`);
         // opcional: redirigir a un "gracias" o detalle de pedido
         // this.router.navigate(['/pedido', resp.id]);
       },
@@ -364,6 +382,7 @@ async shareWithImage(): Promise<void> {
         this.loading.set(false);
         alert('Ocurrió un error al crear el pedido. Intenta nuevamente.');
       }
-    })}
+    })
+  }
 
 }
