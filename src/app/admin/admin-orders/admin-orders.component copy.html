@@ -1,0 +1,348 @@
+<div class="p-6 space-y-6">
+  <!-- Header -->
+  <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900">Gestión de Pedidos</h1>
+      <p class="text-sm text-slate-500">Administra pedidos de la tienda (listar, filtrar y ver detalle).</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <button (click)="load()" class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm shadow-sm hover:bg-slate-50">
+        <span class="material-symbols-rounded text-base">refresh</span><span>Refrescar</span>
+      </button>
+      <button (click)="resetFilters()" class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm shadow-sm hover:bg-slate-50">
+        <span class="material-symbols-rounded text-base">filter_alt_off</span><span>Limpiar</span>
+      </button>
+    </div>
+</header> 
+
+  <!-- Filtros -->
+  <section class="rounded-2xl border bg-white p-4">
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+      <div class="md:col-span-2">
+        <label class="block text-xs text-slate-500 mb-1">Buscar</label>
+        <input type="text" [ngModel]="search()" placeholder="Código, cliente, email, teléfono, producto..."
+               class="w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300" />
+      </div>
+
+      <div>
+        <label class="block text-xs text-slate-500 mb-1">Estado</label>
+        <select [ngModel]="status()" class="w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300">
+          <option value="">Todos</option>
+          <option>CREADO</option>
+          <option>PENDIENTE_PAGO</option>
+          <option>CONFIRMADO</option>
+          <option>PREPARACION</option>
+          <option>LISTO</option>
+          <option>EN_CAMINO</option>
+          <option>ENTREGADO</option>
+          <option>CANCELADO</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs text-slate-500 mb-1">Entrega</label>
+        <select [ngModel]="metodo()" class="w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300">
+          <option value="">Todas</option>
+          <option value="RECOGER">Recoger en tienda</option>
+          <option value="DOMICILIO">Domicilio</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs text-slate-500 mb-1">Modo</label>
+        <select [ngModel]="modo()" class="w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300">
+          <option value="">Todos</option>
+          <option>PEDIR</option>
+          <option>APARTAR</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mt-3 grid grid-cols-1 md:grid-cols-4 gap-3">
+      <div>
+        <label class="block text-xs text-slate-500 mb-1">Desde</label>
+        <input type="date" [ngModel]="startDate()" class="w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300"/>
+      </div>
+      <div>
+        <label class="block text-xs text-slate-500 mb-1">Hasta</label>
+        <input type="date" [ngModel]="endDate()" class="w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300"/>
+      </div>
+      <div>
+        <label class="block text-xs text-slate-500 mb-1">Ordenar por</label>
+        <select [ngModel]="sortBy()" class="w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300">
+          <option value="createdAt_desc">Fecha ↓</option>
+          <option value="createdAt_asc">Fecha ↑</option>
+          <option value="total_desc">Total ↓</option>
+          <option value="total_asc">Total ↑</option>
+        </select>
+      </div>
+      <div class="flex items-end">
+        <div class="text-sm text-slate-500">
+          {{ totalItems() }} resultado(s)
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Estados de carga / error -->
+  <section *ngIf="loading()" class="rounded-2xl border bg-white p-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let _ of [1,2,3,4,5,6]" class="rounded-xl border p-4 space-y-3">
+        <div class="h-40 bg-slate-100 animate-pulse rounded-lg"></div>
+        <div class="h-5 bg-slate-100 animate-pulse rounded w-3/4"></div>
+        <div class="h-4 bg-slate-100 animate-pulse rounded w-1/2"></div>
+      </div>
+    </div>
+  </section>
+
+  <section *ngIf="error()" class="rounded-2xl border bg-white p-6">
+    <div class="bg-rose-50 border-l-4 border-rose-500 p-4">
+      <p class="text-rose-700 text-sm">{{ error() }}</p>
+      <button (click)="load()" class="mt-2 text-rose-700 text-sm underline">Reintentar</button>
+    </div>
+  </section>
+
+  <!-- Lista -->
+  <section *ngIf="!loading() && !error()" class="space-y-4">
+    <div *ngIf="paginated().length === 0" class="rounded-2xl border bg-white p-10 text-center">
+      <p class="text-slate-500">No hay pedidos con los filtros actuales.</p>
+    </div>
+
+    <!-- Grid de tarjetas (mobile) / Tabla (desktop) -->
+    <div class="hidden lg:block rounded-2xl border bg-white overflow-hidden">
+      <table class="min-w-full text-sm">
+        <thead class="bg-slate-50 text-slate-700">
+          <tr>
+            <th class="py-3 px-4 text-left">Fecha</th>
+            <th class="py-3 px-4 text-left">Código</th>
+            <th class="py-3 px-4 text-left">Cliente</th>
+            <th class="py-3 px-4 text-left">Producto</th>
+            <th class="py-3 px-4 text-left">Entrega</th>
+            <th class="py-3 px-4 text-left">Estado</th>
+            <th class="py-3 px-4 text-right">Total</th>
+            <th class="py-3 px-4 text-right"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let o of paginated()" class="border-t hover:bg-slate-50">
+            <td class="py-3 px-4">{{ fmtDate(o.createdAt) }}</td>
+            <td class="py-3 px-4 font-medium">{{ o.orderCode }}</td>
+            <td class="py-3 px-4">
+              <div class="font-medium text-slate-900">{{ o.customer.nombre }}</div>
+              <div class="text-xs text-slate-500">{{ o.customer.email }}</div>
+            </td>
+            <td class="py-3 px-4">
+              <div class="font-medium text-slate-900">{{ o.items.[0].productName }}</div>
+              <div class="text-xs text-slate-500" *ngIf="o.items?.[0]?.flavor">Sabor: {{ o.items?.[0]?.flavor }}</div>
+            </td>
+            <!-- <td class="py-3 px-4">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs"
+                    [ngClass]="metodoBadgeClasses(o.delivery?.metodoEntrega)">
+                <span class="material-symbols-rounded text-[15px]">
+                  {{ o.delivery?.metodoEntrega === 'DOMICILIO' ? 'local_shipping' : 'storefront' }}
+                </span>
+                {{ o.delivery?.metodoEntrega }}
+              </span>
+              <div class="text-xs text-slate-500" *ngIf="o.delivery?.schedule?.horaStr">
+                {{ o.delivery?.schedule?.horaStr }} hrs
+              </div>
+            </td> -->
+            <!-- <td class="py-3 px-4">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs"
+                    [ngClass]="statusBadgeClasses(o.meta?.status)">
+                <span class="material-symbols-rounded text-[15px]">flag</span>
+                {{ o.meta?.status }}
+              </span>
+              <div class="text-[11px] text-slate-400 mt-0.5">Modo: {{ o.meta?.mode }}</div>
+            </td> -->
+            <!-- <td class="py-3 px-4 text-right font-semibold">{{ fmtMoney(o.payment?.total) }}</td> -->
+            <td class="py-3 px-4 text-right">
+              <button (click)="openDetail(o)" class="inline-flex items-center gap-1 rounded-lg border px-3 py-1.5 text-xs hover:bg-slate-50">
+                <span class="material-symbols-rounded text-[16px]">visibility</span> Ver
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Cards en mobile -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:hidden">
+      <div *ngFor="let o of paginated()" class="rounded-2xl border bg-white p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-xs text-slate-500">{{ fmtDate(o.createdAt) }}</div>
+            <div class="font-semibold">{{ o.orderCode }}</div>
+          </div>
+          <div>
+            <!-- <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs"
+                  [ngClass]="statusBadgeClasses(o.meta?.status)">
+              <span class="material-symbols-rounded text-[15px]">flag</span>{{ o.meta?.status }}
+            </span> -->
+          </div>
+        </div>
+<!-- 
+        <div class="text-sm">
+          <div class="font-medium text-slate-900">{{ o.customer?.nombre }}</div>
+          <div class="text-xs text-slate-500">{{ o.customer?.email }}</div>
+        </div> -->
+<!-- 
+        <div class="flex items-center gap-3">
+          <img *ngIf="o.items?.[0]?.images?.[0]" [src]="o.items?.[0]?.images?.[0]" class="w-16 h-16 rounded-lg object-cover border" />
+          <div class="text-sm">
+            <div class="font-medium">{{ o.items?.[0]?.productName }}</div>
+            <div class="text-xs text-slate-500" *ngIf="o.items?.[0]?.flavor">Sabor: {{ o.items?.[0]?.flavor }}</div>
+            <div class="text-xs text-slate-500">Cant: {{ o.items?.[0]?.quantity }} · {{ fmtMoney(o.items?.[0]?.unitPrice) }}</div>
+          </div>
+        </div> -->
+
+        <!-- <div class="flex items-center justify-between">
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs"
+                [ngClass]="metodoBadgeClasses(o.delivery?.metodoEntrega)">
+            <span class="material-symbols-rounded text-[15px]">
+              {{ o.delivery?.metodoEntrega === 'DOMICILIO' ? 'local_shipping' : 'storefront' }}
+            </span>
+            {{ o.delivery?.metodoEntrega }}
+          </span>
+          <div class="font-semibold">{{ fmtMoney(o.payment?.total) }}</div>
+        </div> -->
+
+        <div class="flex justify-end">
+          <button (click)="openDetail(o)" class="inline-flex items-center gap-1 rounded-lg border px-3 py-1.5 text-xs hover:bg-slate-50">
+            <span class="material-symbols-rounded text-[16px]">visibility</span> Ver
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paginación -->
+    <div *ngIf="totalPages() > 1" class="flex items-center justify-between mt-4">
+      <div class="text-xs text-slate-500">
+        Página {{ page() }} de {{ totalPages() }}
+      </div>
+      <div class="flex gap-2">
+        <button (click)="setPage(page()-1)" class="rounded-lg border px-3 py-1.5 text-sm hover:bg-slate-50">Anterior</button>
+        <button (click)="setPage(page()+1)" class="rounded-lg border px-3 py-1.5 text-sm hover:bg-slate-50">Siguiente</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Drawer Detalle -->
+<div *ngIf="detailOpen()" class="fixed inset-0 z-50">
+  <!-- <div class="absolute inset-0 bg-black/30" (click)="closeDetail()"></div> -->
+  <aside class="absolute right-0 top-0 h-full w-full sm:w-[480px] bg-white shadow-2xl border-l rounded-none sm:rounded-l-2xl overflow-y-auto">
+    <div class="p-4 border-b bg-slate-50 flex items-center justify-between">
+      <!-- <div>
+        <div class="text-xs text-slate-500">Pedido</div>
+        <div class="font-semibold text-slate-900">{{ selectedOrder()?.orderCode }}</div>
+      </div> -->
+      <!-- <button (click)="closeDetail()" class="rounded-full p-2 hover:bg-white/70">
+        <span class="material-symbols-rounded">close</span>
+      </button> -->
+    </div>
+
+    <div class="p-4 space-y-4">
+      <section class="rounded-xl border p-4">
+        <!-- <h3 class="text-sm font-semibold text-slate-900 mb-2">Cliente</h3>
+        <div class="text-sm">
+          <div class="font-medium">{{ selectedOrder()?.customer?.nombre }}</div>
+          <div class="text-slate-500">{{ selectedOrder()?.customer?.email }}</div>
+          <div class="text-slate-500">{{ selectedOrder()?.customer?.telefono }}</div>
+          <div class="mt-1 text-xs text-slate-400">
+            {{ selectedOrder()?.customer?.isGuest ? 'Visitante' : 'Usuario' }}
+            <span *ngIf="selectedOrder()?.customer?.guestId">· GuestID: {{ selectedOrder()?.customer?.guestId }}</span>
+          </div>
+        </div> -->
+      </section>
+
+      <section class="rounded-xl border p-4">
+        <h3 class="text-sm font-semibold text-slate-900 mb-2">Entrega</h3>
+        <div class="text-sm">
+          <!-- <div class="mb-1">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs"
+                  [ngClass]="metodoBadgeClasses(selectedOrder()?.delivery?.metodoEntrega)">
+              <span class="material-symbols-rounded text-[15px]">
+                {{ selectedOrder()?.delivery?.metodoEntrega === 'DOMICILIO' ? 'local_shipping' : 'storefront' }}
+              </span>
+              {{ selectedOrder()?.delivery?.metodoEntrega }}
+            </span>
+          </div> -->
+          <!-- <div *ngIf="selectedOrder()?.delivery?.address?.linea1" class="text-slate-600">
+            {{ selectedOrder()?.delivery?.address?.linea1 }}
+          </div> -->
+          <!-- <div class="text-slate-600">
+            {{ selectedOrder()?.delivery?.schedule?.horaStr ? (selectedOrder()?.delivery?.schedule?.horaStr + ' hrs · ') : '' }}
+            {{ selectedOrder()?.delivery?.schedule?.fecha ? (selectedOrder()?.delivery?.schedule?.fecha | date:'dd/MM/yyyy') : '' }}
+          </div> -->
+        </div>
+      </section>
+
+      <section class="rounded-xl border p-4">
+        <h3 class="text-sm font-semibold text-slate-900 mb-2">Artículos</h3>
+        <!-- <div class="space-y-3" *ngFor="let it of selectedOrder()?.items">
+          <div class="flex items-center gap-3">
+            <img *ngIf="it?.images?.[0]" [src]="it.images[0]" class="w-16 h-16 rounded-lg object-cover border" />
+            <div class="text-sm">
+              <div class="font-medium">{{ it.productName }}</div>
+              <div class="text-slate-500 text-xs">
+                <span *ngIf="it.flavor">Sabor: {{ it.flavor }} · </span>
+                <span>Tamaño: {{ it.size }} kg</span> ·
+                <span>Cantidad: {{ it.quantity }}</span>
+              </div>
+              <div class="font-semibold">{{ fmtMoney(it.unitPrice) }}</div>
+            </div>
+          </div>
+        </div> -->
+      </section>
+
+      <section class="rounded-xl border p-4">
+        <h3 class="text-sm font-semibold text-slate-900 mb-2">Personalización / Notas</h3>
+        <div class="text-sm text-slate-600 space-y-1">
+          <!-- <div *ngIf="selectedOrder()?.customization?.dedicatoria"><span class="font-medium">Dedicatoria:</span> {{ selectedOrder()?.customization?.dedicatoria }}</div> -->
+          <!-- <div *ngIf="selectedOrder()?.customization?.nota"><span class="font-medium">Notas:</span> {{ selectedOrder()?.customization?.nota }}</div> -->
+        </div>
+      </section>
+
+      <!-- <section class="rounded-xl border p-4">
+        <h3 class="text-sm font-semibold text-slate-900 mb-2">Pago</h3>
+        <div class="text-sm text-slate-700 space-y-1">
+          <div>Estado: <span class="font-medium">{{ selectedOrder()?.payment?.status }}</span></div>
+          <div>Subtotal: <span class="font-medium">{{ fmtMoney(selectedOrder()?.payment?.subtotal) }}</span></div>
+          <div>Envío: <span class="font-medium">{{ fmtMoney(selectedOrder()?.payment?.deliveryFee) }}</span></div>
+          <div>Descuento: <span class="font-medium">-{{ fmtMoney(selectedOrder()?.payment?.discount) }}</span></div>
+          <div class="text-base font-semibold mt-2">Total: {{ fmtMoney(selectedOrder()?.payment?.total) }}</div>
+        </div>
+      </section> -->
+
+      <section class="rounded-xl border p-4">
+        <h3 class="text-sm font-semibold text-slate-900 mb-2">Meta</h3>
+        <div class="text-sm text-slate-700 space-y-1">
+          <!-- <div>Modo: <span class="font-medium">{{ selectedOrder().meta.mode }}</span></div>
+          <div>Estado: <span class="font-medium">{{ selectedOrder()?.meta.status }}</span></div> -->
+          <!-- <div *ngIf="selectedOrder()?.meta?.holdUntil">Vence: 
+            <span class="font-medium">
+            {{ selectedOrder()?.meta?.holdUntil | date:'dd/MM/yyyy, HH:mm' }}</span>
+          </div> -->
+          <!-- <div class="text-xs text-slate-400">Creado: {{ fmtDate(selectedOrder().createdAt ) }}</div> -->
+        </div>
+
+        <!-- Acciones (deshabilitadas hasta tener endpoints PUT/PATCH) -->
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button disabled class="rounded-lg border px-3 py-2 text-xs opacity-60 cursor-not-allowed">
+            Marcar CONFIRMADO
+          </button>
+          <button disabled class="rounded-lg border px-3 py-2 text-xs opacity-60 cursor-not-allowed">
+            Pasar a PREPARACION
+          </button>
+          <button disabled class="rounded-lg border px-3 py-2 text-xs opacity-60 cursor-not-allowed">
+            Marcar ENTREGADO
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-1">
+          (Conecta estas acciones cuando tengas endpoint de actualización de estado)
+        </p>
+      </section>
+    </div>
+  </aside>
+</div>

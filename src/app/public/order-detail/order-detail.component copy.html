@@ -1,0 +1,49 @@
+  <div class="max-w-2xl mx-auto p-6" *ngIf="vm() as o">
+    <h1 class="text-xl font-bold mb-2">Pedido {{ o.orderCode }}</h1>
+    <div class="text-sm mb-4">
+      <span class="px-2 py-1 rounded-full border"
+  [ngClass]="{
+    'bg-emerald-50 text-emerald-700 border-emerald-200': o.meta?.status==='CONFIRMADO',
+    'bg-amber-50 text-amber-700 border-amber-200': o.meta?.status==='PENDIENTE',
+    'bg-slate-50 text-slate-700 border-slate-200': o.meta?.status==='CREADO',
+    'bg-rose-50 text-rose-700 border-rose-200': o.meta?.status==='RECHAZADO'
+  }">
+  {{ o.meta?.status }}
+</span>
+
+    </div>
+
+    <div class="rounded-xl border p-4 mb-4">
+      <div class="font-medium">Entrega: {{ o.delivery?.metodoEntrega }}</div>
+       <ng-container *ngIf="o.delivery?.schedule?.horaStr; else fechaPipe">
+    {{ (o.delivery?.schedule?.fecha | date:'EEE d MMM':'America/Mexico_City':'es-MX') }}
+    · {{ o.delivery?.schedule?.horaStr }}
+  </ng-container>
+  <ng-template #fechaPipe>
+    {{ o.delivery?.schedule?.fecha | date:'EEE d MMM, HH:mm':'America/Mexico_City':'es-MX' }}
+  </ng-template>
+      <div class="text-xs text-gray-500" *ngIf="o.delivery?.address">{{ o.delivery.address }}</div>
+    </div>
+
+    <div class="rounded-xl border p-4">
+      <h3 class="text-sm font-semibold mb-2">Artículos</h3>
+ <ul class="divide-y" *ngIf="o.items?.length">
+  <li *ngFor="let it of o.items" class="py-3 flex gap-3">
+    <img *ngIf="it.images?.[0]" [src]="it.images[0]" class="w-14 h-14 rounded object-cover" />
+    <div class="flex-1 text-sm">
+      <div class="font-medium">{{ it.productName }}</div>
+      <div class="text-xs text-gray-500">
+        {{ variantLabel(it) }} · Tamaño {{ it.size }} · x{{ it.quantity }}
+      </div>
+    </div>
+    <div class="text-sm font-semibold">{{ it.lineTotal | currency:'MXN':'symbol-narrow' }}</div>
+  </li>
+</ul>
+
+      <div class="mt-3 text-sm">
+        <div class="flex justify-between"><span>Subtotal</span><span>${{ o.payment?.subtotal }}</span></div>
+        <div class="flex justify-between"><span>Envío</span><span>${{ o.payment?.deliveryFee }}</span></div>
+        <div class="flex justify-between font-semibold border-t pt-2"><span>Total</span><span>${{ o.payment?.total }}</span></div>
+      </div>
+    </div>
+  </div>

@@ -45,6 +45,11 @@ export const routes: Routes = [
         title: 'Registro',
         loadComponent: () => import('./public/registro/registro.component').then(m => m.RegistroComponent) 
       },
+      { 
+        path: 'orden/:code', 
+        title: 'Mi pedido',
+        loadComponent: () => import('./public/order-detail/order-detail.component').then(m => m.OrderDetailComponent) 
+      },
       // { 
       //   path: 'contacto', 
       //   title: 'Contacto',
@@ -138,6 +143,12 @@ export const routes: Routes = [
       title: 'configuracion del Sistema', // Añadido prefijo "Admin" para consistencia
       
         loadComponent: () => import('./admin/settings/settings.component').then(m => m.SettingsComponent) 
+      },
+      { 
+      path: 'pedidos',  // Nota el parámetro :id
+      title: 'pedidos', // Añadido prefijo "Admin" para consistencia
+      
+        loadComponent: () => import('./admin/admin-orders/admin-orders.component').then(m => m.AdminOrdersComponent) 
       },
       // { 
       //   path: 'usuarios', 

@@ -7,19 +7,27 @@ import { HttpClientModule } from '@angular/common/http';
 @Component({
   selector: 'app-public-header',
   standalone: true,
-  imports: [CommonModule, RouterModule,HttpClientModule],
+  imports: [CommonModule, RouterModule, HttpClientModule],
   templateUrl: './public-header.component.html',
   styleUrls: ['./public-header.component.css'],
-  providers:[ConfigService]
+  providers: [ConfigService]
 })
 export class PublicHeaderComponent implements OnInit {
+  // mobileMenuOpen = false;
+
+  // enlaces a reutilizar en desktop y móvil
+  navLinks = [
+    { label: 'Inicio', path: '/' },
+    { label: 'Productos', path: '/productos' },
+    { label: 'Contacto', path: '/contacto' },
+  ];
 
   mobileMenuOpen = false;
   cartItems = 3;
 
   config = signal<SystemConfig | null>(null);
 
-  constructor(private configService: ConfigService,private router:Router) {}
+  constructor(private configService: ConfigService, private router: Router) { }
 
   ngOnInit(): void {
     this.configService.getConfig().subscribe({
@@ -28,13 +36,37 @@ export class PublicHeaderComponent implements OnInit {
     });
   }
 
-  toggleMobileMenu() {
-    this.mobileMenuOpen = !this.mobileMenuOpen;
-  }
+  // toggleMobileMenu() {
+  //   this.mobileMenuOpen = !this.mobileMenuOpen;
+  // }
 
   openLogin() {
     this.router.navigate(['/login']);
     // lógica para login
+  }
+  toggleMobileMenu() {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+    this.lockScroll(this.mobileMenuOpen);
+  }
+
+  closeMobileMenu() {
+    if (!this.mobileMenuOpen) return;
+    this.mobileMenuOpen = false;
+    this.lockScroll(false);
+  } private lockScroll(lock: boolean) {
+    try {
+      const html = document.documentElement;
+      const body = document.body;
+      if (lock) {
+        const scrollBarComp = window.innerWidth - document.documentElement.clientWidth;
+        body.style.overflow = 'hidden';
+        // Evita “salto” por barra de scroll en desktop si inspeccionas móvil
+        html.style.paddingRight = scrollBarComp > 0 ? `${scrollBarComp}px` : '';
+      } else {
+        body.style.overflow = '';
+        document.documentElement.style.paddingRight = '';
+      }
+    } catch { /* no-op en SSR */ }
   }
 
   openCart() {
@@ -44,7 +76,7 @@ export class PublicHeaderComponent implements OnInit {
   isActive(path: string): boolean {
     return window.location.pathname === path;
   }
-    getTextColor(bgColor: string): string {
+  getTextColor(bgColor: string): string {
     if (!/^#([0-9A-F]{3}){1,2}$/i.test(bgColor)) return '#000000';
 
     if (bgColor.length === 4) {

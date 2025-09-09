@@ -15,6 +15,18 @@ import { Meta, Title } from '@angular/platform-browser';
 import { OrderCreatePayload, OrderItem } from '../../../shared/models/order.model';
 import { OrdersService } from '../../../shared/services/orders.service';
 import { PedidoModalComponent } from './pedido-modal/pedido-modal.component';
+import { CreateOrderRequest } from '../../../shared/types/orders.types';
+import { ToastService } from '../../../shared/services/toast.service';
+// === MINI VM del panel
+type OrderMini = {
+  code: string;
+  metodoEntrega: 'RECOGER' | 'DOMICILIO';
+  dateISO?: string;
+  dateLabel?: string;
+  timeLabel?: string;
+  total?: number;
+  address?: string;
+};
 
 @Component({
   selector: 'app-product-detail',
@@ -41,7 +53,7 @@ export class ProductDetailComponent implements OnInit {
     private productService: ProductService,
     private orders: OrdersService,
     private meta: Meta,
-    private title: Title
+    private title: Title, private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -53,7 +65,8 @@ export class ProductDetailComponent implements OnInit {
         this.error.set('No se proporcionó ID de producto');
         this.loading.set(false);
       }
-    });
+    }); this.route.paramMap.subscribe(/* lo tuyo */);
+    window.addEventListener('keydown', this.onKeydown);
   }
 
 
@@ -131,47 +144,6 @@ export class ProductDetailComponent implements OnInit {
     const variant = this.getSelectedVariant();
     return !!(variant?.sizeStock && variant.sizeStock.length > 0);
   }
-  // shareOnWhatsApp(): void {
-  //   const product = this.product();
-  //   if (!product) return;
-
-  //   const variant = this.getSelectedVariant();
-  //   const size = this.getSelectedSize();
-
-  //   // 1) Toma la imagen seleccionada o la primera del variant o (si aplica) del producto
-  //   const imageUrl =
-  //     this.selectedImage?.() ||
-  //     variant?.images?.[0] ||
-  //     (product as any)?.images?.[0] || // por si tu objeto product también trae images[]
-  //     '';
-
-  //   // Construye el mensaje (ponemos primero la imagen para forzar preview)
-  //   const lines: string[] = [];
-  //   if (imageUrl) lines.push(imageUrl); // 👈 esto ayuda a que WhatsApp muestre esa imagen en el preview
-
-  //   lines.push(`*${product.name || ''}*`);
-
-  //   if (variant?.flavor) {
-  //     lines.push(`Sabor: ${variant.flavor}`);
-  //   }
-
-  //   if (size) {
-  //     if (size.size) lines.push(`Tamaño: ${size.size} kg`);
-  //     if (size.price != null) {
-  //       const precioFormateado = size.price.toLocaleString('es-MX', {
-  //         style: 'currency',
-  //         currency: 'MXN',
-  //       });
-  //       lines.push(`Precio: ${precioFormateado}`);
-  //     }
-  //   }
-
-  //   lines.push(''); // salto de línea
-  //   lines.push(window.location.href);
-
-  //   const message = encodeURIComponent(lines.join('\n'));
-  //   window.open(`https://wa.me/?text=${message}`, '_blank');
-  // }
 
   async shareWithImage(): Promise<void> {
     const product = this.product();
@@ -317,54 +289,171 @@ export class ProductDetailComponent implements OnInit {
   }
 
 
-  // Handler del envío desde el modal
+  // Handler del envío desde el modal (recibe 'customer' desde el hijo)
   onEnviarPedido = (customer: any) => {
     const p = this.product();
     const v = this.getSelectedVariant();
     const s = this.getSelectedSize();
-    if (!p || !s) return;
+    if (!p || !v || !s) return;
 
-    const unitPrice = Number(s.price ?? 0);
-    const qty = this.quantity();
-    const subtotal = unitPrice * qty;
-
-    const item: OrderItem = {
+    // Datos seleccionados en la vista
+    const selected = {
       productId: this.getProductId() || '',
-      productName: p.name || '',
-      variantId: this.getSelectedVariantId(),
-      variantFlavor: v?.flavor,
-      size: s.size,
-      unitPrice,
-      quantity: qty,
-      subtotal,
-      image: this.selectedImage() || v?.images?.[0],
-      color: (v as any)?.color,
+      variant: {
+        flavor: v?.flavor,
+        color: (v as any)?.color,
+        texture: (v as any)?.texture,
+        shape: (v as any)?.shape,
+      },
+      size: Number(s.size ?? 0),
+      quantity: Number(this.quantity()),
+      unitPrice: Number(s.price ?? 0),
+      images: [this.selectedImage() || v?.images?.[0]].filter(Boolean) as string[],
     };
 
-    const payload: OrderCreatePayload = {
-      items: [item],
-      customer,
-      modo: 'PEDIR',
-      currency: 'MXN',
-      source: 'WEB',
+    // Construye el formValue compatible con el helper:
+    const formValueLike = {
+      nombre: customer.nombre,
+      telefono: customer.telefono,
+      email: customer.email,
+      metodoEntrega: customer.metodoEntrega,     // 'RECOGER' | 'DOMICILIO'
+      direccion: customer.direccion,             // solo si DOMICILIO
+      fecha: customer.fecha,                     // "YYYY-MM-DD"
+      hora: customer.hora,                       // "HH:mm"
+      dedicatoria: customer.dedicatoria || '',
+      decoracion: '',                            // si quieres concatenarlo a nota, ya lo hiciste en el hijo
+      nota: customer.nota || '',
+      modo: this.modoActual()                    // 'PEDIR' o 'APARTAR' según tu UI
     };
+
+    const payload: CreateOrderRequest = OrdersService.buildPayloadFromForm(formValueLike, selected);
+
+    // Si tienes userId (logueado), colócalo. Si no, omite para invitado.
+    // Ejemplo: podrías leerlo de un AuthService o de localStorage
+    const userId = this.getUserIdOrNull(); // implementa este método si ya tienes auth
 
     this.loading.set(true);
-    this.orders.createOrder(payload).subscribe({
+    this.orders.createOrder(payload, userId || undefined).subscribe({
       next: (resp) => {
         this.loading.set(false);
-        this.mostrarPedido.set(false);
-        // feedback simple
-        alert(`¡Pedido recibido!\nFolio: ${resp.folio}\nTotal: ${resp.total.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}`);
-        // opcional: redirigir a un "gracias" o detalle de pedido
-        // this.router.navigate(['/pedido', resp.id]);
+        if (resp.ok) {
+          // Éxito: mostrar ticket/alerta y cerrar modal
+          console.log('Order creada:', resp.data);
+          this.toastService.showSuccess('Pedido creada');
+          this.cerrarPedido();
+          const mini = this.toOrderMini(resp.data);
+          this.orderMini.set(mini);
+          this.showOrderPanel.set(true);
+          // TODO: toast/redirect: this.router.navigate(['/orders', resp.data._id])
+        } else {
+          // Error validación del backend
+          this.error.set(resp.msg || 'No se pudo crear el pedido');
+          console.error(resp);
+        }
       },
       error: (err) => {
-        console.error(err);
         this.loading.set(false);
-        alert('Ocurrió un error al crear el pedido. Intenta nuevamente.');
+        this.error.set('Error de red al crear el pedido');
+        console.error(err);
       }
-    })
+    });
+  }
+  // Devuelve el modo actual; en tu template ya pasas 'PEDIR', pero lo dejo flexible:
+  private modoActual(): 'PEDIR' | 'APARTAR' {
+    return 'PEDIR'; // o lee un signal si tienes modo dinámico
+  }
+
+  // Ejemplo de cómo obtener userId si estás simulando login
+  private getUserIdOrNull(): string | null {
+    // Si usas un AuthService real, reemplaza esto.
+    const simulated = localStorage.getItem('x-user-id'); // o lo que uses
+    return simulated || null;
+  }
+
+
+
+  // === Signals del panel
+  showOrderPanel = signal(false);
+  orderMini = signal<OrderMini | null>(null);
+
+  // === Labels amigables de fecha/hora
+  private toDateLabels(iso?: string) {
+    if (!iso) return { dateLabel: '', timeLabel: '' };
+    const d = new Date(iso);
+    const dateLabel = d.toLocaleDateString('es-MX', { weekday: 'short', day: '2-digit', month: 'short' });
+    const timeLabel = d.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+    return { dateLabel, timeLabel };
+  }
+
+  // === Adaptador de la respuesta -> panel
+  private toOrderMini(respData: any): OrderMini {
+    const metodoEntrega: 'RECOGER' | 'DOMICILIO' = respData?.delivery?.metodoEntrega || 'RECOGER';
+    const dateISO = respData?.delivery?.schedule?.fecha;
+    const { dateLabel, timeLabel } = this.toDateLabels(dateISO);
+    return {
+      code: respData?.orderCode || respData?._id || 'ORD',
+      metodoEntrega,
+      dateISO,
+      dateLabel,
+      timeLabel,
+      total: respData?.payment?.total,
+      address: metodoEntrega === 'DOMICILIO' ? respData?.delivery?.address : respData?.store?.address
+    };
+  }
+
+  // === Acciones del panel
+  closeOrderPanel() {
+    this.showOrderPanel.set(false);
+    this.orderMini.set(null);
+  }
+
+  addToCalendarMini() {
+    const vm = this.orderMini();
+    if (!vm?.dateISO) return;
+
+    const dt = new Date(vm.dateISO);
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const toUTC = (d: Date) => `${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}00Z`;
+    const dtStart = toUTC(dt);
+    const dtEnd = toUTC(new Date(dt.getTime() + 60 * 60 * 1000));
+
+    const ics = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//TuTienda//Orden//ES',
+      'BEGIN:VEVENT',
+      `UID:${vm.code}@tutienda`,
+      `DTSTAMP:${toUTC(new Date())}`,
+      `DTSTART:${dtStart}`, `DTEND:${dtEnd}`,
+      `SUMMARY:Pedido ${vm.metodoEntrega === 'RECOGER' ? '(Recoger)' : '(Domicilio)'} - ${vm.code}`,
+      vm.address ? `LOCATION:${vm.address.replace(/\n/g, ' ')}` : '',
+      'END:VEVENT', 'END:VCALENDAR'
+    ].join('\r\n');
+
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `${vm.code}.ics`; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  openWhatsAppMini() {
+    const vm = this.orderMini();
+    const msg = encodeURIComponent(`Hola, sobre mi pedido ${vm?.code} (${vm?.metodoEntrega}) para ${vm?.dateLabel} ${vm?.timeLabel}.`);
+    window.open(`https://wa.me/5217710000000?text=${msg}`, '_blank'); // cambia al número de tu negocio
+  }
+
+  copyOrderCodeMini() {
+    const vm = this.orderMini();
+    if (vm?.code) navigator.clipboard.writeText(vm.code);
+  }
+
+  // === Cerrar con ESC (opcional)
+  onKeydown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' && this.showOrderPanel()) this.closeOrderPanel();
+  };
+
+
+  ngOnDestroy(): void {
+    window.removeEventListener('keydown', this.onKeydown);
   }
 
 }

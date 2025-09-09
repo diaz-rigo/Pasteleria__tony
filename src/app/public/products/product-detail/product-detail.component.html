@@ -158,6 +158,78 @@
 <app-pedido-modal *ngIf="mostrarPedido() && product()" [abierto]="mostrarPedido" [modo]="'PEDIR'" [productoNombre]="product()?.name || ''" [varianteFlavor]="getSelectedVariant()?.flavor || undefined" [sizeEtiqueta]="getSelectedSize()?.size || undefined"
     [unitPrice]="getSelectedSize()?.price || 0" [quantity]="quantity()" [image]="selectedImage() || getSelectedVariant()?.images?.[0]" (cerrar)="cerrarPedido()" (enviar)="onEnviarPedido($event)">
 </app-pedido-modal>
+
+<!-- === PANEL DESLIZANTE: Pedido creado === -->
+<div *ngIf="showOrderPanel()" class="fixed inset-0 z-50">
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-black/40 transition-opacity" (click)="closeOrderPanel()"></div>
+<aside
+  class="absolute right-0 top-0 h-full w-full max-w-sm bg-white shadow-xl
+         transform transition-transform duration-300 ease-out translate-x-0"
+  role="dialog" aria-modal="true" aria-label="Pedido creado"
+>
+  <!-- Header -->
+  <div class="flex items-center justify-between h-14 px-4 border-b border-gray-200">
+    <div class="min-w-0">
+      <h3 class="text-sm font-semibold text-gray-900 truncate">¡Pedido creado!</h3>
+      <p class="text-[11px] text-gray-500 truncate">
+        Código: <span class="font-mono">{{ orderMini()?.code }}</span>
+      </p>
+    </div>
+    <button class="p-2 rounded-lg hover:bg-gray-100" (click)="closeOrderPanel()" aria-label="Cerrar panel">
+      <!-- icono -->
+    </button>
+  </div>
+
+  <!-- Body -->
+  <div class="px-4 py-4 space-y-4 overflow-auto h-[calc(100%-3.5rem)]">
+    <div class="rounded-xl border border-gray-200 p-4">
+      <div class="text-sm">
+        <div class="font-medium text-gray-900">
+          {{ orderMini()?.metodoEntrega === 'RECOGER' ? 'Recoge tu pedido' : 'Te lo entregamos' }}
+        </div>
+        <div class="mt-1 text-gray-700">
+          {{ orderMini()?.dateLabel }} · {{ orderMini()?.timeLabel }}
+        </div>
+        <div class="mt-2 text-xs text-gray-500" *ngIf="orderMini()?.address">
+          {{ orderMini()?.address }}
+        </div>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button class="px-3 py-2 rounded-lg border text-sm hover:bg-gray-50"
+                  (click)="addToCalendarMini()">Añadir a calendario</button>
+          <button class="px-3 py-2 rounded-lg border text-sm hover:bg-gray-50"
+                  (click)="openWhatsAppMini()">WhatsApp</button>
+          <button class="px-3 py-2 rounded-lg border text-sm hover:bg-gray-50"
+                  (click)="copyOrderCodeMini()">Copiar código</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-xl border border-gray-200 p-4">
+      <div class="flex items-center justify-between text-sm">
+        <span class="text-gray-600">Total</span>
+        <span class="font-semibold text-gray-900">
+          {{ orderMini()?.total | currency:'MXN':'symbol-narrow' }}
+        </span>
+      </div>
+
+      <div class="mt-3 grid grid-cols-2 gap-2">
+        <a [routerLink]="['/orden', orderMini()?.code]"
+           class="px-3 py-2 rounded-lg border text-sm text-center hover:bg-gray-50">Ver detalle</a>
+        <a routerLink="/mis-pedidos"
+           class="px-3 py-2 rounded-lg border text-sm text-center hover:bg-gray-50">Mis pedidos</a>
+      </div>
+    </div>
+
+    <p class="text-[11px] text-gray-500">
+      Te enviaremos actualizaciones por tu medio de contacto.
+    </p>
+  </div>
+</aside>
+
+
+</div>
+
 <!-- En el <head> de la página de detalle del producto -->
 <meta property="og:type" content="product" />
 <meta property="og:title" content="{{ product()?.name }}" />
