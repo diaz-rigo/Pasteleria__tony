@@ -4,68 +4,132 @@
     <div class="w-32 h-1 bg-black mx-auto mb-4"></div>
     <p class="text-gray-600 uppercase tracking-wider">Creaciones artesanales con los mejores ingredientes</p>
   </div>
-  
+
   <div class="flex flex-col md:flex-row gap-8">
     <!-- Filters -->
-<div class="md:w-1/5">
-  <div class="bg-white p-6 rounded-sm border border-gray-200 shadow-sm sticky top-24">
-    <h3 class="font-bold text-lg text-gray-900 mb-6 tracking-widest border-b border-gray-200 pb-3">FILTROS</h3>
-    
-    <div class="mb-8">
-      <h4 class="font-semibold text-gray-900 mb-4 uppercase text-xs tracking-widest">Categorías</h4>
-      <ul class="space-y-3">
-        <li *ngFor="let category of categories">
-          <label class="flex items-center">
-            <input type="checkbox" class="rounded-sm border-gray-400 text-gray-900 focus:ring-gray-700 focus:border-gray-700">
-            <span class="ml-3 text-gray-700 text-sm tracking-wide">{{category}}</span>
-          </label>
-        </li>
-      </ul>
+    <div class="md:w-1/5">
+      <div class="bg-white p-6 rounded-sm border border-gray-200 shadow-sm sticky top-24">
+        <h3 class="font-bold text-lg text-gray-900 mb-6 tracking-widest border-b border-gray-200 pb-3">FILTROS</h3>
+
+        <!-- Buscador -->
+        <div class="mb-8">
+          <h4 class="font-semibold text-gray-900 mb-4 uppercase text-xs tracking-widest">Búsqueda</h4>
+          <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()"
+            placeholder="Buscar por nombre o descripción…"
+            class="w-full border border-gray-300 px-3 py-2 text-sm rounded-none focus:ring-black focus:border-black" />
+        </div>
+
+  
+        
+        <div class="mb-8">
+          <h4 class="font-semibold text-gray-900 mb-4 uppercase text-xs tracking-widest">Categorías</h4>
+          <ul class="space-y-3">
+            <li *ngFor="let category of categories">
+              <label class="flex items-center">
+                <input type="checkbox" [checked]="selectedCategories.includes(category)"
+                  (change)="onCategoryFilterChange(category, getCheckedState($event))"
+                  class="rounded-sm border-gray-400 text-gray-900 focus:ring-gray-700 focus:border-gray-700" />
+                <span class="ml-3 text-gray-700 text-sm tracking-wide">{{ category }}</span>
+              </label>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Sabores -->
+        <div class="mb-8" *ngIf="flavors.length">
+          <h4 class="font-semibold text-gray-900 mb-4 uppercase text-xs tracking-widest">Sabores</h4>
+          <ul class="space-y-3 max-h-44 overflow-auto pr-1">
+            <li *ngFor="let flavor of flavors">
+              <label class="flex items-center">
+
+                <input type="checkbox" [(ngModel)]="flavorSelection[flavor]"
+                  (ngModelChange)="onFlavorFilterChange(flavor, $event)"
+                  class="rounded-sm border-gray-400 text-gray-900 focus:ring-gray-700 focus:border-gray-700" />
+
+
+                <span class="ml-3 text-gray-700 text-sm tracking-wide">{{ flavor }}</span>
+              </label>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Precio -->
+        <div class="mb-2">
+          <h4 class="font-semibold text-gray-900 mb-4 uppercase text-xs tracking-widest">Precio máximo</h4>
+          <div class="flex items-center gap-3">
+            <input type="range" [min]="priceBounds.min" [max]="priceBounds.max" [(ngModel)]="maxPrice"
+              (change)="onPriceFilterChange(maxPrice)" class="w-full" />
+            <span class="text-sm text-gray-700 min-w-[80px] text-right">${{ maxPrice }}</span>
+          </div>
+          <div class="flex justify-between text-xs text-gray-500 mt-1">
+            <span>${{ priceBounds.min }}</span>
+            <span>${{ priceBounds.max }}</span>
+          </div>
+        </div>
+
+        <!-- Limpiar -->
+        <button (click)="clearFilters()"
+          class="mt-6 w-full border border-gray-300 px-3 py-2 text-sm tracking-wide hover:bg-gray-50">
+          Limpiar filtros
+        </button>
+      </div>
     </div>
 
-  </div>
-</div>
-    
     <!-- Product List -->
     <div class="md:w-4/5">
-      <div class="flex justify-between items-center mb-8 border-b border-gray-200 pb-4">
+      <div
+        class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-8 border-b border-gray-200 pb-4">
         <div class="text-gray-600 text-sm tracking-wide">
-          <span class="font-bold">{{products.length}}</span> productos disponibles
+          <span class="font-bold">{{ filteredProducts.length }}</span> productos encontrados
         </div>
         <div>
-          <select class="bg-white border border-gray-300 rounded-none shadow-sm focus:border-black focus:ring-black text-gray-700 text-sm tracking-wide px-3 py-2">
-            <option>Ordenar por: Destacados</option>
-            <option>Precio: Menor a Mayor</option>
-            <option>Precio: Mayor a Menor</option>
-            <option>Mejor calificados</option>
+          <select [(ngModel)]="sortOption" (change)="onSortChange(sortOption)"
+            class="bg-white border border-gray-300 rounded-none shadow-sm focus:border-black focus:ring-black text-gray-700 text-sm tracking-wide px-3 py-2">
+            <option value="featured">Ordenar por: Destacados</option>
+            <option value="price-asc">Precio: Menor a Mayor</option>
+            <option value="price-desc">Precio: Mayor a Menor</option>
+            <option value="rating">Mejor calificados</option>
+            <option value="newest">Más nuevos</option>
           </select>
         </div>
       </div>
-      
-      <div *ngIf="loading" class="flex justify-center py-12">
-        <app-loading></app-loading>
+
+      <!-- Skeleton mientras carga -->
+      <div *ngIf="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div *ngFor="let i of skeletonCount" class="animate-pulse">
+          <div class="h-48 bg-gray-200"></div>
+          <div class="h-4 bg-gray-200 mt-4 w-3/4"></div>
+          <div class="h-4 bg-gray-200 mt-2 w-1/2"></div>
+          <div class="h-6 bg-gray-200 mt-4 w-1/3"></div>
+        </div>
       </div>
-      
-      <div *ngIf="!loading && products.length === 0" class="text-center py-12">
+
+      <div *ngIf="!loading && filteredProducts.length === 0" class="text-center py-12">
         <p class="text-gray-500 uppercase tracking-wider">No encontramos productos con estos filtros</p>
       </div>
-      
-      <div *ngIf="!loading && products.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <app-product-card *ngFor="let product of products" [product]="product"></app-product-card>
+
+      <div *ngIf="!loading && filteredProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <app-product-card *ngFor="let product of paginatedProducts; trackBy: trackById"
+          [product]="product"></app-product-card>
       </div>
-      
-      <div *ngIf="!loading && products.length > 0" class="mt-12 flex justify-center">
+
+      <div *ngIf="!loading && filteredProducts.length > 0" class="mt-12 flex justify-center">
         <nav class="inline-flex rounded-sm shadow-sm">
-          <button class="px-4 py-2 border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 text-sm tracking-wide font-medium">
+          <button
+            class="px-4 py-2 border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 text-sm tracking-wide font-medium"
+            (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
             ← Anterior
           </button>
-          <button *ngFor="let page of [1,2,3]" 
-                  class="px-4 py-2 border-t border-b border-gray-300 bg-white text-gray-700 hover:bg-gray-100 text-sm tracking-wide font-medium"
-                  [class.bg-gray-200]="currentPage === page"
-                  [class.font-bold]="currentPage === page">
-            {{page}}
+
+          <button *ngFor="let page of [].constructor(totalPages); let idx = index" (click)="changePage(idx + 1)"
+            class="px-4 py-2 border-t border-b border-gray-300 bg-white text-gray-700 hover:bg-gray-100 text-sm tracking-wide font-medium"
+            [class.bg-gray-200]="currentPage === (idx + 1)" [class.font-bold]="currentPage === (idx + 1)">
+            {{ idx + 1 }}
           </button>
-          <button class="px-4 py-2 border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 text-sm tracking-wide font-medium">
+
+          <button
+            class="px-4 py-2 border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 text-sm tracking-wide font-medium"
+            (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
             Siguiente →
           </button>
         </nav>

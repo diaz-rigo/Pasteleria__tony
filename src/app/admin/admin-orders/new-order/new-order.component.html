@@ -1,0 +1,68 @@
+<div class="p-6 space-y-6">
+  <!-- Header -->
+  <header>
+    <h1 class="text-2xl font-bold text-slate-900">Nuevo Pedido</h1>
+    <p class="text-sm text-slate-500">Registra un pedido con datos de cliente y productos.</p>
+  </header>
+
+  <!-- Formulario cliente -->
+  <section class="rounded-2xl border bg-white p-4 space-y-3">
+    <h2 class="text-lg font-semibold text-slate-900">Datos del cliente</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div>
+        <label class="block text-xs text-slate-500 mb-1">Nombre</label>
+        <input [(ngModel)]="cliente().nombre" class="w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300"/>
+      </div>
+      <div>
+        <label class="block text-xs text-slate-500 mb-1">Email</label>
+        <input [(ngModel)]="cliente().email" class="w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300"/>
+      </div>
+      <div>
+        <label class="block text-xs text-slate-500 mb-1">Teléfono</label>
+        <input [(ngModel)]="cliente().telefono" class="w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- Productos -->
+  <section class="rounded-2xl border bg-white p-4 space-y-4">
+    <h2 class="text-lg font-semibold text-slate-900">Productos</h2>
+
+    <div *ngFor="let p of productos(); let i = index" class="flex items-center gap-4 border-b pb-3 last:border-0 last:pb-0">
+      <img [src]="p.imagen" class="w-16 h-16 rounded-lg object-cover border" />
+      <div class="flex-1">
+        <div class="font-medium text-slate-900">{{ p.nombre }}</div>
+        <div class="text-sm text-slate-500">${{ p.precio }}</div>
+      </div>
+      <div class="flex items-center gap-2">
+        <input type="number" [(ngModel)]="productos()[i].cantidad"
+          class="w-16 rounded-lg border px-2 py-1 text-sm text-center" min="1"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resumen -->
+  <section class="rounded-2xl border bg-white p-4 space-y-2">
+    <h2 class="text-lg font-semibold text-slate-900">Resumen</h2>
+    <div class="flex justify-between text-sm">
+      <span>Subtotal</span>
+      <span>${{ subtotal }}</span>
+    </div>
+    <div class="flex justify-between text-sm">
+      <span>Envío</span>
+      <span>${{ envio }}</span>
+    </div>
+    <div class="flex justify-between text-base font-semibold">
+      <span>Total</span>
+      <span>${{ total }}</span>
+    </div>
+  </section>
+
+  <!-- Botón confirmar -->
+  <div class="flex justify-end">
+    <button (click)="confirmar()"
+      class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-700">
+      <span class="material-symbols-rounded text-base">check</span> Confirmar pedido
+    </button>
+  </div>
+</div>

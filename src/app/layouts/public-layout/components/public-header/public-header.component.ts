@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Route, Router, RouterModule } from '@angular/router';
 import { ConfigService, SystemConfig } from '../../../../shared/services/config.service';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-public-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, HttpClientModule],
+  imports: [CommonModule, RouterModule, HttpClientModule,FormsModule],
   templateUrl: './public-header.component.html',
   styleUrls: ['./public-header.component.css'],
   providers: [ConfigService]
@@ -91,4 +92,29 @@ export class PublicHeaderComponent implements OnInit {
     const luminance = (0.299 * r + 0.587 * g + 0.114 * b);
     return luminance > 186 ? '#000000' : '#ffffff';
   }
+  trackOpen = signal(false);
+  trackCode = signal<string>('');  // ⬅️ asegura tipo string
+
+  openTrack() {
+    this.trackCode.set('');
+    this.trackOpen.set(true);
+  }
+  closeTrack() {
+    this.trackOpen.set(false);
+  }
+
+  goTrack() {
+    const raw = (this.trackCode() || '').trim();
+    if (!raw) return;
+
+    const code = raw.replace(/\s+/g, '').toUpperCase();
+    const ok = /^[A-Z0-9\-]{4,32}$/.test(code);
+    if (!ok) {
+      alert('Código inválido. Revisa y vuelve a intentar.');
+      return;
+    }
+    this.closeTrack();
+    this.router.navigate(['/orden', code]);
+  }
+
 }

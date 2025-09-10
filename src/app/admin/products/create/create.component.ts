@@ -13,6 +13,7 @@ import { ProductsComponentAdmin } from '../products.component';
 import { UploadService } from '../../../shared/services/upload.service';
 import { ProductService } from '../../../shared/services/product.service';
 import { ColoresService } from '../../../shared/services/colores.service';
+import { ToastService } from '../../../shared/services/toast.service';
 
 // import { ProductService } from '../../../core___/services/product.service';
 // import { ColoresService } from '../../../core___/services/colores.service';
@@ -32,6 +33,9 @@ export class CreateProductComponent {
   uploadService = inject(UploadService)
   productService = inject(ProductService)
   coloresService= inject(ColoresService)
+  toastService= inject(ToastService)
+
+  // private toastService: ToastService
   // Producto como signal
   product: WritableSignal<Product> = signal<Product>({
     name: '',
@@ -243,8 +247,11 @@ console.log("productWithUploadedImages",productWithUploadedImages)
     this.productService.createProduct(productWithUploadedImages)
       .subscribe({
         next: (createdProduct) => {
+                    this.toastService.showSuccess('Pedido creada');
+
           console.log('Producto creado exitosamente:', createdProduct);
-          this.router.navigate(['/productos']);
+          this.router.navigate(['/admin/productos']);
+          // admin/productos
           // Opcional: resetear el formulario o mostrar mensaje de éxito
         },
         error: (error) => {

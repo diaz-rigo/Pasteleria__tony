@@ -24,7 +24,7 @@ export class AuthService {
     private apiUrl = `${environment.api}/auth`; // Usa la URL base del environment
   
   
-  // private apiUrl = 'http://localhost:3000/auth'; // Ajusta si tienes proxy
+
   userSig = signal<User | null>(null);
 
   constructor(private http: HttpClient) {

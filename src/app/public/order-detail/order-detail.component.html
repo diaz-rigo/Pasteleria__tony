@@ -14,7 +14,7 @@
       <!-- Acciones rápidas -->
       <div class="flex flex-wrap items-center gap-2">
         <button
-          class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-800"
+          class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-slate-50 "
           (click)="copyText(o.orderCode, 'Código copiado')"
           aria-label="Copiar código de pedido"
           title="Copiar código"
@@ -24,7 +24,7 @@
         </button>
 
         <button
-          class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-800"
+          class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-slate-50 "
           (click)="copyAddress(o)"
           aria-label="Copiar dirección de entrega"
           title="Copiar dirección"
@@ -34,7 +34,7 @@
         </button>
 
         <button
-          class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-800"
+          class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-slate-50 "
           (click)="copySummary(o)"
           aria-label="Copiar resumen del pedido"
           title="Copiar resumen"
@@ -44,7 +44,7 @@
         </button>
 
         <button
-          class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-800"
+          class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-slate-50 "
           (click)="share(o)"
           aria-label="Compartir pedido"
           title="Compartir"
@@ -54,7 +54,7 @@
         </button>
 
         <button
-          class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-800"
+          class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-slate-50 "
           (click)="print()"
           aria-label="Imprimir pedido"
           title="Imprimir"
@@ -118,7 +118,7 @@
         </div>
         <div class="flex items-center gap-2">
           <button
-            class="rounded-md border px-2 py-1 text-xs hover:bg-slate-50 dark:hover:bg-slate-800"
+            class="rounded-md border px-2 py-1 text-xs hover:bg-slate-50 "
             (click)="copyText(it.productName, 'Artículo copiado')"
             aria-label="Copiar nombre del artículo"
             title="Copiar nombre"

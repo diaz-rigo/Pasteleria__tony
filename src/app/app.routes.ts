@@ -5,6 +5,8 @@ import { PublicLayoutComponent } from './layouts/public-layout/public-layout.com
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { CustomerLayoutComponent } from './layouts/customer-layout/customer-layout.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+import { AuthGuard } from './core/directives/auth/auth.guard';
+import { AdminGuard } from './core/directives/auth/admin.guard';
 
 export const routes: Routes = [
   // Área Pública
@@ -112,8 +114,8 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminLayoutComponent,
-    // canActivate: [AuthGuard,
-    //  AdminGuard],
+    canActivate: [AuthGuard,
+     AdminGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { 
@@ -149,6 +151,12 @@ export const routes: Routes = [
       title: 'pedidos', // Añadido prefijo "Admin" para consistencia
       
         loadComponent: () => import('./admin/admin-orders/admin-orders.component').then(m => m.AdminOrdersComponent) 
+      },
+      { 
+      path: 'crear-pedidos',  // Nota el parámetro :id
+      title: 'pedidos', // Añadido prefijo "Admin" para consistencia
+      
+        loadComponent: () => import('./admin/admin-orders/new-order/new-order.component').then(m => m.NewOrderComponent) 
       },
       // { 
       //   path: 'usuarios', 
