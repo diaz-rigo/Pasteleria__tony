@@ -245,8 +245,8 @@ removeImage(variantIndex: number, imageIndex: number): void {
             this.product.set(updatedProduct);
             this.originalProduct.set(updatedProduct);
             this.isLoading.set(false);
-    this.router.navigate(['/productos']);
-
+    // this.router.navigate(['/productos']);
+   this.router.navigate(['/admin/productos']);
     this.productlist.ngOnInit()
             },
           error: (error) => {
@@ -257,8 +257,8 @@ removeImage(variantIndex: number, imageIndex: number): void {
     } catch (error) {
       console.error('Error en el proceso de actualización:', error);
       this.isLoading.set(false);
-          this.router.navigate(['/productos']);
-
+          // this.router.navigate(['/productos']);
+   this.router.navigate(['/admin/productos']);
     this.productlist.ngOnInit()
     }
   }
@@ -299,7 +299,8 @@ removeImage(variantIndex: number, imageIndex: number): void {
 
   async cancel(): Promise<void> {
     if (!this.hasUnsavedChanges()) {
-    this.router.navigate(['/productos']);
+         this.router.navigate(['/admin/productos']);
+    // this.router.navigate(['/productos']);
 
     this.productlist.ngOnInit() 
          return;
@@ -330,7 +331,8 @@ removeImage(variantIndex: number, imageIndex: number): void {
     return await this.confirmDialog.confirmUnsavedChanges('el producto actual');
   }
     cancelar() {
-    this.router.navigate(['/productos']);
+         this.router.navigate(['/admin/productos']);
+    // this.router.navigate(['/productos']);
 
     this.productlist.ngOnInit()
   }

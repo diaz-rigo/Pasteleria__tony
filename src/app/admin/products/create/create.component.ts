@@ -53,7 +53,8 @@ export class CreateProductComponent {
   }
 
   cancelar() {
-    this.router.navigate(['/productos']);
+       this.router.navigate(['/admin/productos']);
+    // this.router.navigate(['/productos']);
 
     this.productlist.ngOnInit()
   }
