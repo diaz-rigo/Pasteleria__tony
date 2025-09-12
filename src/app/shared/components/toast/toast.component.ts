@@ -1,85 +1,192 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ToastConfig } from '../../../shared/types/toast-types';
+import { ToastConfig } from '../../types/toast-types';
 
 @Component({
   selector: 'app-toast',
-  standalone: true,  // If you're using standalone components
-  imports: [CommonModule],  // Add CommonModule here
+  standalone: true,
+  imports: [CommonModule],
+  host: {
+    class: 'block pointer-events-auto',
+    tabindex: '0',
+    role: 'alert',
+    '[attr.aria-live]': '"polite"'
+  },
   template: `
-    <div class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-lg border border-gray-200"
-         [class]="getTypeClasses()"
-         role="alert">
-      <div *ngIf="showIcon" class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg">
-        <ng-container *ngIf="config" [ngSwitch]="config.type">
-          <svg *ngSwitchCase="'success'" class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-          </svg>
-          <svg *ngSwitchCase="'error'" class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-          </svg>
-          <svg *ngSwitchCase="'warning'" class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-          </svg>
-          <svg *ngSwitchCase="'info'" class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z" clip-rule="evenodd"></path>
-          </svg>
-        </ng-container>
-      </div>
-      <div *ngIf="config?.message" class="ml-3 text-sm font-normal">{{ config?.message }}</div>
-      <button *ngIf="config?.dismissible" type="button" 
-              class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8"
-              [class]="getCloseButtonClasses()"
-              (click)="dismiss()">
-        <span class="sr-only">Close</span>
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-        </svg>
-      </button>
+  <div
+    class="relative flex w-80 max-w-full items-start gap-3 rounded-xl border bg-white p-4 shadow-xl ring-1 transition
+           motion-safe:data-[enter=true]:animate-in motion-safe:data-[enter=true]:fade-in motion-safe:data-[enter=true]:slide-in-from-right-4"
+    [ngClass]="wrapperClasses(config.type)"
+    [attr.data-enter]="true">
+
+    <!-- Acento izquierdo -->
+    <div class="absolute left-0 top-0 h-full w-1 rounded-l-xl" [ngClass]="accentBar(config.type)"></div>
+
+    <!-- Icono -->
+    <div class="mt-0.5">
+      <ng-container *ngIf="showIcon()">
+        <span class="inline-flex items-center justify-center rounded-lg p-1.5">
+          <span class="material-symbols-rounded text-[20px]" [ngClass]="iconColor(config.type)">
+            {{ resolveIcon(config.icon, config.type) }}
+          </span>
+        </span>
+      </ng-container>
     </div>
+
+    <!-- Mensaje + acciones -->
+    <div class="min-w-0 flex-1">
+      <p class="text-sm leading-5 text-neutral-800 break-words">
+        {{ config.message }}
+      </p>
+
+      
+    </div>
+
+    <!-- Cerrar -->
+    <button
+      *ngIf="config?.dismissible !== false"
+      type="button"
+      (click)="dismiss()"
+      class="ml-auto -mr-1.5 rounded-lg p-1.5 text-neutral-400 hover:text-neutral-700 hover:bg-neutral-50
+             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-300 transition"
+      aria-label="Cerrar">
+      <span class="material-symbols-rounded text-[18px]">close</span>
+    </button>
+
+    <!-- Barra de progreso -->
+    <div *ngIf="config?.progress && autoCloseMs"
+         class="absolute inset-x-0 bottom-0 h-[3px] overflow-hidden rounded-b-xl bg-neutral-100">
+      <div class="h-full transition-[width] duration-100 ease-linear" [ngClass]="progressBar(config.type)"
+           [style.width.%]="progressPercent"></div>
+    </div>
+  </div>
   `,
 })
 export class ToastComponent {
-  @Input() config?: ToastConfig;
+  @Input() config!: ToastConfig;
   @Output() dismissed = new EventEmitter<void>();
+  @Output() action = new EventEmitter<string>();
 
-  get showIcon(): boolean {
-    return this.config?.icon !== false && (!!this.config?.icon || !!this.config?.type);
+  autoCloseMs: number | null = null;
+  progressPercent = 0;
+  private startTs = 0;
+  private rafId: number | null = null;
+  private paused = false;
+  private elapsed = 0;
+
+  ngOnInit() {
+    this.autoCloseMs = (this.config?.duration ?? 5000) || null;
+    if (this.autoCloseMs) this.startTimer();
   }
 
-  getTypeClasses(): string {
-    const baseClasses = 'flex items-center w-full max-w-xs p-4 mb-4 rounded-lg shadow';
-    
-    switch (this.config?.type) {
-      case 'success':
-        return `${baseClasses} text-green-700 bg-green-100 border border-green-300`;
-      case 'error':
-        return `${baseClasses} text-red-700 bg-red-100 border border-red-300`;
-      case 'warning':
-        return `${baseClasses} text-yellow-700 bg-yellow-100 border border-yellow-300`;
-      case 'info':
-        return `${baseClasses} text-blue-700 bg-blue-100 border border-blue-300`;
-      default:
-        return `${baseClasses} text-gray-700 bg-white border border-gray-200`;
+  // ====== UI helpers (claros / profesionales) ======
+  wrapperClasses(type: ToastConfig['type']) {
+    const ring = {
+      success: 'ring-emerald-200/70 border-neutral-200',
+      error:   'ring-rose-200/70 border-neutral-200',
+      warning: 'ring-amber-200/70 border-neutral-200',
+      info:    'ring-sky-200/70 border-neutral-200',
+      neutral: 'ring-neutral-200/70 border-neutral-200'
+    }[type || 'neutral'];
+    return ring;
+  }
+
+  accentBar(type: ToastConfig['type']) {
+    return {
+      success: 'bg-emerald-500',
+      error:   'bg-rose-500',
+      warning: 'bg-amber-500',
+      info:    'bg-sky-500',
+      neutral: 'bg-neutral-300'
+    }[type || 'neutral'];
+  }
+
+  iconColor(type: ToastConfig['type']) {
+    return {
+      success: 'text-emerald-600',
+      error:   'text-rose-600',
+      warning: 'text-amber-600',
+      info:    'text-sky-600',
+      neutral: 'text-neutral-600'
+    }[type || 'neutral'];
+  }
+
+  progressBar(type: ToastConfig['type']) {
+    return {
+      success: 'bg-emerald-500',
+      error:   'bg-rose-500',
+      warning: 'bg-amber-500',
+      info:    'bg-sky-500',
+      neutral: 'bg-neutral-400'
+    }[type || 'neutral'];
+  }
+
+  // ====== Lógica ======
+  showIcon() { return this.config?.icon !== false; }
+
+  resolveIcon(icon: string | false | undefined, type: ToastConfig['type']) {
+    if (typeof icon === 'string') return icon;
+    switch (type) {
+      case 'success': return 'check_circle';
+      case 'error': return 'error';
+      case 'warning': return 'warning';
+      case 'info': return 'info';
+      default: return 'notifications';
     }
   }
 
-  getCloseButtonClasses(): string {
-    switch (this.config?.type) {
-      case 'success':
-        return 'text-green-400 hover:text-green-700 hover:bg-green-50';
-      case 'error':
-        return 'text-red-400 hover:text-red-700 hover:bg-red-50';
-      case 'warning':
-        return 'text-yellow-400 hover:text-yellow-700 hover:bg-yellow-50';
-      case 'info':
-        return 'text-blue-400 hover:text-blue-700 hover:bg-blue-50';
-      default:
-        return 'text-gray-400 hover:text-gray-700 hover:bg-gray-50';
-    }
-  }
-
-  dismiss(): void {
+  dismiss() {
+    this.stopTimer();
     this.dismissed.emit();
+  }
+
+  onAction(val: string) {
+    this.action.emit(val);
+  }
+
+  // Accesibilidad: Esc para cerrar
+  @HostListener('document:keydown.escape')
+  onEsc() { if (this.config?.dismissible !== false) this.dismiss(); }
+
+  // Pausa en hover si aplica
+  @HostListener('mouseenter') onEnter() {
+    if (this.config?.pauseOnHover && this.autoCloseMs) this.pauseTimer();
+  }
+  @HostListener('mouseleave') onLeave() {
+    if (this.config?.pauseOnHover && this.autoCloseMs) this.resumeTimer();
+  }
+
+  // Timer + progreso
+  private tick = (ts: number) => {
+    if (!this.startTs) this.startTs = ts;
+    const elapsedNow = ts - this.startTs + this.elapsed;
+    this.progressPercent = Math.min(100, (elapsedNow / (this.autoCloseMs ?? 1)) * 100);
+
+    if (this.autoCloseMs && elapsedNow >= this.autoCloseMs) {
+      this.dismiss();
+      return;
+    }
+    this.rafId = requestAnimationFrame(this.tick);
+  };
+
+  private startTimer() {
+    this.paused = false; this.startTs = 0; this.elapsed = 0;
+    this.rafId = requestAnimationFrame(this.tick);
+  }
+  private pauseTimer() {
+    if (this.paused) return;
+    this.paused = true;
+    if (this.rafId) cancelAnimationFrame(this.rafId);
+    if (this.startTs) this.elapsed += performance.now() - this.startTs;
+    this.startTs = 0; this.rafId = null;
+  }
+  private resumeTimer() {
+    if (!this.paused) return;
+    this.paused = false;
+    this.rafId = requestAnimationFrame(this.tick);
+  }
+  private stopTimer() {
+    if (this.rafId) cancelAnimationFrame(this.rafId);
+    this.rafId = null;
   }
 }

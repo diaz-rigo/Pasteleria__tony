@@ -14,6 +14,9 @@ import { ProductService } from '../../../shared/services/product.service';
 import { ConfirmDialogService } from '../../../shared/services/confirm-dialog.service';
 import { ColoresService } from '../../../shared/services/colores.service';
 import { ProductsComponentAdmin } from '../products.component';
+import { ToastService } from '../../../shared/services/toast.service';
+import { LoadingService } from '../../../shared/services/loading.service';
+import { finalize } from 'rxjs';
 // import { ConfirmDialogService } from '../../../core___/services/confirm-dialog.service';
 // import { ProductsComponent } from '../products.component';
 // import { ColoresService } from '../../../core___/services/colores.service';
@@ -24,7 +27,7 @@ import { ProductsComponentAdmin } from '../products.component';
   imports: [CommonModule, FormsModule, RouterModule, HttpClientModule],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css'],
-  providers: [UploadService,ProductService,ProductsComponentAdmin]
+  providers: [UploadService, ProductService, ProductsComponentAdmin]
 })
 export class ProductDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -33,8 +36,10 @@ export class ProductDetailComponent implements OnInit {
   private productService = inject(ProductService);
   private confirmDialog = inject(ConfirmDialogService); // Inyectar el servicio
   productlist = inject(ProductsComponentAdmin)
-  coloresService= inject(ColoresService)
-
+  coloresService = inject(ColoresService)
+  toastService = inject(ToastService)
+  loading = inject(LoadingService)
+  // private loading: LoadingService
   // Estado del componente
   product = signal<Product>({
     _id: '',
@@ -59,7 +64,7 @@ export class ProductDetailComponent implements OnInit {
   });
 
   // Computed properties
-  hasUnsavedChanges = computed(() => 
+  hasUnsavedChanges = computed(() =>
     JSON.stringify(this.product()) !== JSON.stringify(this.originalProduct())
   );
 
@@ -89,21 +94,21 @@ export class ProductDetailComponent implements OnInit {
     };
   }
 
-updateVariantColor(event: Event, index: number) {
-  this.product.update(currentProduct => {
-    // Ensure variants exists (though it should always exist based on your model)
-    const variants = currentProduct.variants || [];
-    
-    return {
-      ...currentProduct,
-      variants: variants.map((v, i) => 
-        i === index 
-          ? { ...v, color: (event.target as HTMLInputElement).value } 
-          : v
-      )
-    };
-  });
-}
+  updateVariantColor(event: Event, index: number) {
+    this.product.update(currentProduct => {
+      // Ensure variants exists (though it should always exist based on your model)
+      const variants = currentProduct.variants || [];
+
+      return {
+        ...currentProduct,
+        variants: variants.map((v, i) =>
+          i === index
+            ? { ...v, color: (event.target as HTMLInputElement).value }
+            : v
+        )
+      };
+    });
+  }
 
   addVariant(): void {
     this.product.update(p => ({
@@ -136,7 +141,7 @@ updateVariantColor(event: Event, index: number) {
     this.product.update(p => {
       const variants = [...(p.variants ?? [])];
       const variant = { ...variants[variantIndex] };
-     variant.sizeStock = [...(variant.sizeStock ?? []), this.createEmptySize()];
+      variant.sizeStock = [...(variant.sizeStock ?? []), this.createEmptySize()];
       variants[variantIndex] = variant;
       return { ...p, variants };
     });
@@ -176,7 +181,7 @@ updateVariantColor(event: Event, index: number) {
     if (!files || files.length === 0) return;
 
     this.product.update(p => {
-const variants = [...(p.variants ?? [])];
+      const variants = [...(p.variants ?? [])];
       const variant = { ...variants[variantIndex] };
       variant.images = [...variant.images];
 
@@ -193,32 +198,32 @@ const variants = [...(p.variants ?? [])];
       return { ...p, variants };
     });
   }
-removeImage(variantIndex: number, imageIndex: number): void {
-  this.product.update(p => {
-    // Garantiza que variants sea un array
-    const variants = [...(p.variants ?? [])];
+  removeImage(variantIndex: number, imageIndex: number): void {
+    this.product.update(p => {
+      // Garantiza que variants sea un array
+      const variants = [...(p.variants ?? [])];
 
-    // Validación de índice válido
-    if (!variants[variantIndex]) return p;
+      // Validación de índice válido
+      if (!variants[variantIndex]) return p;
 
-    const variant = { ...variants[variantIndex] };
+      const variant = { ...variants[variantIndex] };
 
-    // Garantiza que images sea un array
-    variant.images = [...(variant.images ?? [])];
+      // Garantiza que images sea un array
+      variant.images = [...(variant.images ?? [])];
 
-    // Validación del índice de imagen
-    if (imageIndex < 0 || imageIndex >= variant.images.length) return p;
+      // Validación del índice de imagen
+      if (imageIndex < 0 || imageIndex >= variant.images.length) return p;
 
-    // Remover imagen por índice
-    variant.images = variant.images.filter((_, i) => i !== imageIndex);
+      // Remover imagen por índice
+      variant.images = variant.images.filter((_, i) => i !== imageIndex);
 
-    // Actualizar la variante en la lista de variantes
-    variants[variantIndex] = variant;
+      // Actualizar la variante en la lista de variantes
+      variants[variantIndex] = variant;
 
-    // Retornar el nuevo estado
-    return { ...p, variants };
-  });
-}
+      // Retornar el nuevo estado
+      return { ...p, variants };
+    });
+  }
 
 
   // ======= MÉTODOS PARA MANEJAR PRODUCTO DESTACADO =======
@@ -231,57 +236,108 @@ removeImage(variantIndex: number, imageIndex: number): void {
     this.product.update(p => ({ ...p, isFeatured: value }));
   }
   // ======= MÉTODOS PARA GUARDAR/CANCELAR =======
-  async onSubmit(): Promise<void> {
-    try {
-      this.isLoading.set(true);
-      
-      // 1. Subir imágenes nuevas primero
-      const productWithUploadedImages = await this.uploadNewImages();
-      
-      // 2. Actualizar el producto en el backend
-      this.productService.updateProduct(productWithUploadedImages._id!, productWithUploadedImages)
-        .subscribe({
-          next: (updatedProduct) => {
-            this.product.set(updatedProduct);
-            this.originalProduct.set(updatedProduct);
-            this.isLoading.set(false);
-    // this.router.navigate(['/productos']);
-   this.router.navigate(['/admin/productos']);
-    this.productlist.ngOnInit()
-            },
-          error: (error) => {
-            console.error('Error al actualizar el producto:', error);
-            this.isLoading.set(false);
-          }
-        });
-    } catch (error) {
-      console.error('Error en el proceso de actualización:', error);
-      this.isLoading.set(false);
-          // this.router.navigate(['/productos']);
-   this.router.navigate(['/admin/productos']);
-    this.productlist.ngOnInit()
-    }
-  }
+  // async onSubmit(): Promise<void> {
+  //   try {
+  //     this.isLoading.set(true);
 
+  //     // 1. Subir imágenes nuevas primero
+  //     const productWithUploadedImages = await this.uploadNewImages();
+
+  //     // 2. Actualizar el producto en el backend
+  //     this.productService.updateProduct(productWithUploadedImages._id!, productWithUploadedImages)
+  //       .subscribe({
+  //         next: (updatedProduct) => {
+  //           this.product.set(updatedProduct);
+  //           this.originalProduct.set(updatedProduct);
+  //           this.isLoading.set(false);
+  //           // this.router.navigate(['/productos']);
+  //           // this.toastService.showSuccess('Producto Actualizado');
+  //           this.loading.show({
+  //             title: 'Actualizando ..',
+  //             // subtitle: 'Preparando la vista',
+  //             // message: 'Obteniendo información del servidor',
+  //             variant: 'dots',
+  //             icon: 'sync'
+  //           });
+
+
+  //           this.toastService.showSuccess('Producto actualizado correctamente 🎉', {
+  //             actions: [{ label: 'Ver detalle', value: 'detalle', ariaLabel: 'Ir al detalle del producto' }],
+  //             position: 'top-right'
+  //           });
+  //           this.router.navigate(['/admin/productos']);
+  //           this.productlist.ngOnInit()
+  //         },
+  //         error: (error) => {
+  //           this.loading.hide();
+  //           console.error('Error al actualizar el producto:', error);
+  //           this.isLoading.set(false);
+  //         }
+  //       }); this.loading.hide();
+  //   } catch (error) {
+  //     console.error('Error en el proceso de actualización:', error);
+  //     this.isLoading.set(false);
+  //     // this.router.navigate(['/productos']);
+  //     this.router.navigate(['/admin/productos']);
+  //     this.productlist.ngOnInit()
+  //   }
+
+
+  // }
+onSubmit(): void {
+  this.loading.show({
+    title: 'Actualizando…',
+    subtitle: 'Guardando cambios',
+    message: 'Un momento, por favor',
+    variant: 'dots',
+    icon: 'sync'
+  });
+
+  this.uploadNewImages()
+    .then(product => this.productService.updateProduct(product._id!, product))
+    .then(obs => obs.pipe(
+      finalize(() => this.loading.hide()) // siempre oculta
+    ).subscribe({
+      next: updatedProduct => {
+        this.product.set(updatedProduct);
+        this.originalProduct.set(updatedProduct);
+
+        this.toastService.showSuccess('Producto actualizado correctamente 🎉', {
+          actions: [{ label: 'Ver detalle', value: 'detalle', ariaLabel: 'Ir al detalle del producto' }],
+          position: 'top-right'
+        });
+
+        this.router.navigate(['/admin/productos']);
+        this.productlist.ngOnInit();
+      },
+      error: err => {
+        console.error('Error al actualizar el producto:', err);
+      }
+    }))
+    .catch(err => {
+      console.error('Error subiendo imágenes:', err);
+      this.loading.hide(); // por si el error ocurre antes del pipe
+    });
+}
   private async uploadNewImages(): Promise<Product> {
     const productCopy = JSON.parse(JSON.stringify(this.product()));
-    
+
     for (let variantIndex = 0; variantIndex < productCopy.variants.length; variantIndex++) {
       const variant = productCopy.variants[variantIndex];
       const newImages = variant.images.filter((img: string) => img.startsWith('data:'));
-      
+
       if (newImages.length > 0) {
         const files = await this.dataUrlsToFiles(newImages, variantIndex);
         const uploadResponse = await this.uploadService.uploadImages(files).toPromise();
-        
+
         // Reemplazar data URLs por las URLs de Cloudinary
         let uploadedIndex = 0;
-        variant.images = variant.images.map((img: string) => 
+        variant.images = variant.images.map((img: string) =>
           img.startsWith('data:') ? (uploadResponse?.images[uploadedIndex++] || img) : img
         );
       }
     }
-    
+
     return productCopy;
   }
 
@@ -299,11 +355,11 @@ removeImage(variantIndex: number, imageIndex: number): void {
 
   async cancel(): Promise<void> {
     if (!this.hasUnsavedChanges()) {
-         this.router.navigate(['/admin/productos']);
-    // this.router.navigate(['/productos']);
+      this.router.navigate(['/admin/productos']);
+      // this.router.navigate(['/productos']);
 
-    this.productlist.ngOnInit() 
-         return;
+      this.productlist.ngOnInit()
+      return;
     }
 
     const confirmed = await this.confirmDialog.confirm({
@@ -330,32 +386,32 @@ removeImage(variantIndex: number, imageIndex: number): void {
 
     return await this.confirmDialog.confirmUnsavedChanges('el producto actual');
   }
-    cancelar() {
-         this.router.navigate(['/admin/productos']);
+  cancelar() {
+    this.router.navigate(['/admin/productos']);
     // this.router.navigate(['/productos']);
 
     this.productlist.ngOnInit()
   }
 
-  
+
 
   // Función para aclarar el color (para el fondo del contenido)
-lightenColor(color: string, percent: number): string {
-return this.coloresService.lightenColor(color,percent);
-}
+  lightenColor(color: string, percent: number): string {
+    return this.coloresService.lightenColor(color, percent);
+  }
 
-// Función para oscurecer el color (para bordes)
-darkenColor(color: string, percent: number): string {
-  // Implementación de la función para oscurecer colores
-  return this.coloresService.darkenColor(color,percent);
-  // return this.coloresService.darkenColor(color,percent);
-  // ...
-}
+  // Función para oscurecer el color (para bordes)
+  darkenColor(color: string, percent: number): string {
+    // Implementación de la función para oscurecer colores
+    return this.coloresService.darkenColor(color, percent);
+    // return this.coloresService.darkenColor(color,percent);
+    // ...
+  }
 
-// Función para obtener color de contraste adecuado (para texto)
-getContrastColor(hexColor: string): string {
-  return this.coloresService.getContrastColor(hexColor);
-  // Implementación para determinar si usar texto blanco o negro
-  // ...
-}
+  // Función para obtener color de contraste adecuado (para texto)
+  getContrastColor(hexColor: string): string {
+    return this.coloresService.getContrastColor(hexColor);
+    // Implementación para determinar si usar texto blanco o negro
+    // ...
+  }
 }

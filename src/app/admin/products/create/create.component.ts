@@ -14,6 +14,8 @@ import { UploadService } from '../../../shared/services/upload.service';
 import { ProductService } from '../../../shared/services/product.service';
 import { ColoresService } from '../../../shared/services/colores.service';
 import { ToastService } from '../../../shared/services/toast.service';
+import { LoadingService } from '../../../shared/services/loading.service';
+import { firstValueFrom } from 'rxjs';
 
 // import { ProductService } from '../../../core___/services/product.service';
 // import { ColoresService } from '../../../core___/services/colores.service';
@@ -24,7 +26,7 @@ import { ToastService } from '../../../shared/services/toast.service';
   imports: [CommonModule, FormsModule, RouterModule, ProductsComponentAdmin, HttpClientModule],
   templateUrl: './create.component.html',
   styleUrl: './create.component.css',
-  providers: [UploadService,ProductsComponentAdmin,ProductService]
+  providers: [UploadService, ProductsComponentAdmin, ProductService]
 })
 export class CreateProductComponent {
 
@@ -32,9 +34,9 @@ export class CreateProductComponent {
   router = inject(Router)
   uploadService = inject(UploadService)
   productService = inject(ProductService)
-  coloresService= inject(ColoresService)
-  toastService= inject(ToastService)
-
+  coloresService = inject(ColoresService)
+  toastService = inject(ToastService)
+  loading = inject(LoadingService)
   // private toastService: ToastService
   // Producto como signal
   product: WritableSignal<Product> = signal<Product>({
@@ -53,7 +55,7 @@ export class CreateProductComponent {
   }
 
   cancelar() {
-       this.router.navigate(['/admin/productos']);
+    this.router.navigate(['/admin/productos']);
     // this.router.navigate(['/productos']);
 
     this.productlist.ngOnInit()
@@ -75,21 +77,21 @@ export class CreateProductComponent {
       images: []
     };
   }
-updateVariantColor(event: Event, index: number) {
-  this.product.update(currentProduct => {
-    // Ensure variants exists (though it should always exist based on your model)
-    const variants = currentProduct.variants || [];
-    
-    return {
-      ...currentProduct,
-      variants: variants.map((v, i) => 
-        i === index 
-          ? { ...v, color: (event.target as HTMLInputElement).value } 
-          : v
-      )
-    };
-  });
-}
+  updateVariantColor(event: Event, index: number) {
+    this.product.update(currentProduct => {
+      // Ensure variants exists (though it should always exist based on your model)
+      const variants = currentProduct.variants || [];
+
+      return {
+        ...currentProduct,
+        variants: variants.map((v, i) =>
+          i === index
+            ? { ...v, color: (event.target as HTMLInputElement).value }
+            : v
+        )
+      };
+    });
+  }
 
 
 
@@ -237,65 +239,105 @@ updateVariantColor(event: Event, index: number) {
   }
 
   // ======= SUBMIT =======
-
 async onSubmit(): Promise<void> {
+  this.loading.show({
+    title: 'Creando producto…',
+    subtitle: 'Guardando en el servidor',
+    message: 'Aplicando cambios y subiendo imágenes',
+    variant: 'dots',
+    icon: 'sync'
+  });
+
   try {
-
-    // 1. Subir imágenes primero
+    // 1) Subir imágenes
     const productWithUploadedImages = await this.uploadAllImages();
-console.log("productWithUploadedImages",productWithUploadedImages)
-    // 2. Enviar el producto completo al backend
-    this.productService.createProduct(productWithUploadedImages)
-      .subscribe({
-        next: (createdProduct) => {
-                    this.toastService.showSuccess('Pedido creada');
+    console.log("productWithUploadedImages", productWithUploadedImages);
 
-          console.log('Producto creado exitosamente:', createdProduct);
-          this.router.navigate(['/admin/productos']);
-          // admin/productos
-          // Opcional: resetear el formulario o mostrar mensaje de éxito
-        },
-        error: (error) => {
-          console.error('Error al crear el producto:', error);
-          // Manejar el error (mostrar mensaje al usuario)
-        }
-      });
+    // 2) Crear producto (esperar la respuesta)
+    const createdProduct = await firstValueFrom(
+      this.productService.createProduct(productWithUploadedImages)
+    );
 
+    // 3) Estado/UI
+    this.product.set(createdProduct);
+    this.toastService.showSuccess('Producto creado correctamente 🎉');
+
+    // Oculta antes de navegar para evitar que el overlay “viaje” a la otra vista
+    this.loading.hide();
+    await this.router.navigate(['/admin/productos']);
+    this.productlist?.ngOnInit?.();
   } catch (error) {
     console.error('Error en el proceso de submit:', error);
-    // Manejar el error (mostrar mensaje al usuario)
+    this.toastService.showError?.('No se pudo crear el producto');
+    this.loading.hide(); // asegúrate de cerrarlo también en error
   }
 }
+  // async onSubmit(): Promise<void> {
+  //   try {
 
-private async uploadAllImages(): Promise<Product> {
-  const productCopy = JSON.parse(JSON.stringify(this.product()));
-  
-  for (let variantIndex = 0; variantIndex < productCopy.variants.length; variantIndex++) {
-    const variant = productCopy.variants[variantIndex];
-    
-    if (variant.images && variant.images.length > 0) {
-      const imagesToUpload = variant.images.filter((img: string) => img.startsWith('data:'));
-      
-      if (imagesToUpload.length > 0) {
-        try {
-          const files = await this.dataUrlsToFiles(imagesToUpload, variantIndex);
-          const uploadResponse = await this.uploadService.uploadImages(files).toPromise();
-          
-          // Reemplazar data URLs por las URLs de Cloudinary
-          let uploadedIndex = 0;
-          variant.images = variant.images.map((img: string) => 
-            img.startsWith('data:') ? (uploadResponse?.images[uploadedIndex++] || img) : img
-          );
-        } catch (error) {
-          console.error(`Error subiendo imágenes para variante ${variantIndex}:`, error);
-          throw error;
+  //     // 1. Subir imágenes primero
+  //     const productWithUploadedImages = await this.uploadAllImages();
+  //     console.log("productWithUploadedImages", productWithUploadedImages)
+  //     // 2. Enviar el producto completo al backend
+  //     this.productService.createProduct(productWithUploadedImages)
+  //       .subscribe({
+  //         next: (createdProduct) => {
+  //           this.loading.show({
+  //             title: 'Creando producto ..',
+  //             subtitle: 'Guardando en el servidor',
+  //             message: 'Aplicando cambios y subiendo imágenes',
+  //             variant: 'dots',
+  //             icon: 'sync'
+  //           });
+  //           this.toastService.showSuccess('Producto creada');
+
+  //           console.log('Producto creado exitosamente:', createdProduct);
+  //           this.router.navigate(['/admin/productos']);
+  //           // admin/productos
+  //           // Opcional: resetear el formulario o mostrar mensaje de éxito
+  //         },
+  //         error: (error) => {
+  //           console.error('Error al crear el producto:', error);
+  //           // Manejar el error (mostrar mensaje al usuario)
+  //         }
+  //       });
+
+  //   } catch (error) {
+  //     console.error('Error en el proceso de submit:', error);
+  //     // Manejar el error (mostrar mensaje al usuario)
+  //   }
+  //   this.loading.hide();
+  // }
+
+  private async uploadAllImages(): Promise<Product> {
+    const productCopy = JSON.parse(JSON.stringify(this.product()));
+
+    for (let variantIndex = 0; variantIndex < productCopy.variants.length; variantIndex++) {
+      const variant = productCopy.variants[variantIndex];
+
+      if (variant.images && variant.images.length > 0) {
+        const imagesToUpload = variant.images.filter((img: string) => img.startsWith('data:'));
+
+        if (imagesToUpload.length > 0) {
+          try {
+            const files = await this.dataUrlsToFiles(imagesToUpload, variantIndex);
+            const uploadResponse = await this.uploadService.uploadImages(files).toPromise();
+
+            // Reemplazar data URLs por las URLs de Cloudinary
+            let uploadedIndex = 0;
+            variant.images = variant.images.map((img: string) =>
+              img.startsWith('data:') ? (uploadResponse?.images[uploadedIndex++] || img) : img
+            );
+          } catch (error) {
+            console.error(`Error subiendo imágenes para variante ${variantIndex}:`, error);
+            throw error;
+          }
         }
       }
     }
+
+    return productCopy;
   }
-  
-  return productCopy;
-}
 
   // Método para convertir data URLs a archivos (Files)
   private async dataUrlsToFiles(dataUrls: string[], variantIndex: number): Promise<File[]> {
@@ -318,24 +360,24 @@ private async uploadAllImages(): Promise<Product> {
 
 
   // Función para aclarar el color (para el fondo del contenido)
-lightenColor(color: string, percent: number): string {
-return this.coloresService.lightenColor(color,percent);
-}
+  lightenColor(color: string, percent: number): string {
+    return this.coloresService.lightenColor(color, percent);
+  }
 
-// Función para oscurecer el color (para bordes)
-darkenColor(color: string, percent: number): string {
-  // Implementación de la función para oscurecer colores
-  return this.coloresService.darkenColor(color,percent);
-  // return this.coloresService.darkenColor(color,percent);
-  // ...
-}
+  // Función para oscurecer el color (para bordes)
+  darkenColor(color: string, percent: number): string {
+    // Implementación de la función para oscurecer colores
+    return this.coloresService.darkenColor(color, percent);
+    // return this.coloresService.darkenColor(color,percent);
+    // ...
+  }
 
-// Función para obtener color de contraste adecuado (para texto)
-getContrastColor(hexColor: string): string {
-  return this.coloresService.getContrastColor(hexColor);
-  // Implementación para determinar si usar texto blanco o negro
-  // ...
-}
+  // Función para obtener color de contraste adecuado (para texto)
+  getContrastColor(hexColor: string): string {
+    return this.coloresService.getContrastColor(hexColor);
+    // Implementación para determinar si usar texto blanco o negro
+    // ...
+  }
 
 
 }

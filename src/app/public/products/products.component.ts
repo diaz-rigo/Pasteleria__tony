@@ -4,14 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { ProductCardComponent } from './product-card/product-card.component';
-import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { ProductService } from '../../shared/services/product.service';
 import { Product } from '../../shared/models/product.model';
+import { LoadingOverlayComponent } from '../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, FormsModule, ProductCardComponent, LoadingComponent, HttpClientModule],
+  imports: [CommonModule, FormsModule, ProductCardComponent, LoadingOverlayComponent, HttpClientModule],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
   providers: [ProductService]
