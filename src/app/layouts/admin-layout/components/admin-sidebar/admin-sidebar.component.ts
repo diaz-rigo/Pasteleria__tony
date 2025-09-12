@@ -8,10 +8,10 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-admin-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule,HttpClientModule],
+  imports: [CommonModule, RouterModule, HttpClientModule],
   templateUrl: './admin-sidebar.component.html',
   styleUrl: './admin-sidebar.component.css'
-  ,providers:[ProductsComponentAdmin,ProductService]
+  , providers: [ProductsComponentAdmin, ProductService]
 })
 export class AdminSidebarComponent {
   // @Input() open = false;
@@ -51,9 +51,11 @@ export class AdminSidebarComponent {
     }
   }
   onLogout() {
-    // if (this.isMobile) {
-    //   this.close.emit();
-    // }
+    if (this.isMobile) {
+      this.close.emit();
+    }
+    this.router.navigateByUrl('/');
+
   }
 
 

@@ -55,7 +55,7 @@ export class SettingsComponent {
   restablecerPorDefecto(): void {
     this.editableConfig = {
       headerBackgroundColor: '#fbeded',
-      footerBackgroundColor: '#212121',
+      footerBackgroundColor: '#f6efef',
       primaryColor: '#e4b500',
       logoUrl: 'https://res.cloudinary.com/dvvhnrvav/image/upload/v1749933866/pasteleria-tony/pngs/htl76bq1jvkr20sn1e9b.png',
       faviconUrl: 'https://res.cloudinary.com/dvvhnrvav/image/upload/v1749934243/pasteleria-tony/pngs/wmqfdo93tutrk6f5so6n.png',
@@ -137,6 +137,7 @@ export class SettingsComponent {
 
   guardar(): void {
     this.loading.set(true);
+    console.log("this.editableConfig0",this.editableConfig)
     this.configService.updateConfig(this.configId, this.editableConfig).subscribe({
       next: (res) => {
         this.config.set(res);

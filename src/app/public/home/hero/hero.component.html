@@ -19,8 +19,8 @@
       </span>
 
       <p class="text-lg mb-6 max-w-md" [style.color]="getTextColor(config()?.headerBackgroundColor || '#fbeded')">
-        Elaboramos pasteles y postres con ingredientes de alta calidad y pasión por la tradición. Cada creación está
-        pensada para deleitar los sentidos.
+
+         {{config()?.heroSubtitle}}
       </p>
       <a routerLink="/productos" class="px-6 py-3 rounded-full shadow-sm cursor-pointer transition duration-300"
         [style.backgroundColor]="getButtonColor(config()?.headerBackgroundColor || '#be2541')"

@@ -1,28 +1,37 @@
 <div class="p-4 md:p-6 bg-white rounded-lg shadow">
   <!-- Encabezado principal -->
-  <div class="flex items-center justify-between mb-6">
-    <div class="flex items-center gap-3">
-      <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-      <h1 class="text-xl md:text-2xl font-bold text-gray-800">Configuración del Sitio</h1>
-    </div>
-    <button (click)="guardar()"
-      class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-      </svg>
-      Guardar cambios
-    </button>
-    <button (click)="restablecerPorDefecto()"
-  class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors flex items-center gap-2">
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582A2.5 2.5 0 007 11.5h10a2.5 2.5 0 002.418-2.5H20V4h-2v5h-1V4h-2v5h-1V4h-2v5h-1V4h-2v5h-1V4H6v5H5V4H4z" />
-  </svg>
-  Restablecer por defecto
-</button>
+  <div class="xcon-taiwild-container">
+    <div class="flex flex-wrap items-center justify-between mb-6 gap-4">
+      <div class="flex items-center gap-3">
+        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <h1 class="text-xl md:text-2xl font-bold text-gray-800">Configuración del Sitio</h1>
+      </div>
 
+      <div class="flex flex-wrap gap-3">
+        <button (click)="guardar()"
+          class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2 whitespace-nowrap">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+          </svg>
+          Guardar cambios
+        </button>
+
+        <button (click)="restablecerPorDefecto()"
+          class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors flex items-center gap-2 whitespace-nowrap">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 4v5h.582A2.5 2.5 0 007 11.5h10a2.5 2.5 0 002.418-2.5H20V4h-2v5h-1V4h-2v5h-1V4h-2v5h-1V4h-2v5h-1V4H6v5H5V4H4z" />
+          </svg>
+          Restablecer por defecto
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Mensaje de estado -->
@@ -42,27 +51,29 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Logo -->
       <div class="space-y-2">
-         <label class="flex items-center gap-2 text-sm text-gray-700">
-          <input type="checkbox" [(ngModel)]="editableConfig.showheaderImage" 
-                 class="rounded text-blue-600 focus:ring-blue-500" />
+        <label class="flex items-center gap-2 text-sm text-gray-700">
+          <input type="checkbox" [(ngModel)]="editableConfig.showheaderImage"
+            class="rounded text-blue-600 focus:ring-blue-500" />
           Mostrar imagen
         </label>
         <label class="block text-sm font-medium text-gray-700 flex items-center gap-2">
           <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
           Logo del Sitio
         </label>
         <!-- <input type="text" [(ngModel)]="editableConfig.logoUrl" placeholder="https://..."
           class="w-full px-3 py-2 border border-gray-300 rounded text-sm" /> -->
-        
+
         <!-- Previsualización del Logo -->
         <div class="mt-2 p-3 border border-dashed border-gray-300 rounded-lg bg-white">
           <label class="block mb-1 text-xs font-medium text-gray-500">Previsualización del Logo</label>
           <div class="flex justify-center">
-            <img *ngIf="editableConfig.logoUrl" [src]="editableConfig.logoUrl" alt="Logo" 
-                 class="h-16 object-contain max-w-full" />
-            <div *ngIf="!editableConfig.logoUrl" class="h-16 w-full bg-gray-100 rounded flex items-center justify-center text-gray-400">
+            <img *ngIf="editableConfig.logoUrl" [src]="editableConfig.logoUrl" alt="Logo"
+              class="h-16 object-contain max-w-full" />
+            <div *ngIf="!editableConfig.logoUrl"
+              class="h-16 w-full bg-gray-100 rounded flex items-center justify-center text-gray-400">
               Logo no seleccionado
             </div>
           </div>
@@ -73,7 +84,8 @@
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
           <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
           </svg>
           Color del Header
         </label>
@@ -87,119 +99,93 @@
   </div>
 
   <!-- Sección de Hero -->
+  <!-- Sección de Hero - Mejorada -->
   <div class="mb-8 border border-gray-200 rounded-lg p-4 md:p-6 bg-gray-50">
-    <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-      <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+    <!-- Encabezado de sección -->
+    <div class="flex items-center gap-2 mb-4">
+      <svg class="w-5 h-5 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
       </svg>
-      Sección Hero
-    </h2>
+      <h2 class="text-lg font-semibold text-gray-800">Sección Hero</h2>
+    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
+    <!-- Campos de configuración -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+      <!-- Título -->
+      <div class="space-y-1">
+        <label class="block text-sm font-medium text-gray-700">Título</label>
         <input type="text" [(ngModel)]="editableConfig.heroTitle"
-          class="w-full px-3 py-2 border border-gray-300 rounded text-sm" />
+          class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500">
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Subtítulo</label>
-        <input type="text" [(ngModel)]="editableConfig.heroSubtitle"
-          class="w-full px-3 py-2 border border-gray-300 rounded text-sm" />
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Texto del botón</label>
+      <!-- Botón -->
+      <div class="space-y-1">
+        <label class="block text-sm font-medium text-gray-700">Texto del botón</label>
         <input type="text" [(ngModel)]="editableConfig.heroButtonText"
-          class="w-full px-3 py-2 border border-gray-300 rounded text-sm" />
+          class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500">
       </div>
-   <!-- Favicon -->
-      <div class="md:col-span-2">
+
+      <!-- Subtítulo (ocupa 2 columnas en desktop) -->
+      <div class="md:col-span-2 space-y-1">
+        <label class="block text-sm font-medium text-gray-700">Subtítulo</label>
+        <textarea [(ngModel)]="editableConfig.heroSubtitle" rows="2"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Escribe un subtítulo descriptivo"></textarea>
+        <p class="text-xs text-gray-500">Máximo recomendado: 120 caracteres</p>
+      </div>
+
+      <!-- Imagen del Hero -->
+      <div class="md:col-span-2 space-y-2">
         <label class="block text-sm font-medium text-gray-700 flex items-center gap-2">
-          <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          <svg class="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
           </svg>
           Imagen del Hero
-
         </label>
-        <!-- <input type="text" [(ngModel)]="editableConfig.faviconUrl" placeholder="https://..."
-          class="w-full px-3 py-2 border border-gray-300 rounded text-sm" /> -->
-        
-        <!-- Previsualización del Favicon -->
-        <div class="mt-2 p-3 border border-dashed border-gray-300 rounded-lg bg-white">
-          <label class="block mb-1 text-xs font-medium text-gray-500">Previsualización del Hero</label>
-          <div class="flex justify-center">
-            <img *ngIf="editableConfig.faviconUrl" [src]="editableConfig.faviconUrl" alt="Favicon" 
-                 class="h-10 w-10 object-contain" />
-            <div *ngIf="!editableConfig.faviconUrl" class="h-10 w-10 bg-gray-100 rounded flex items-center justify-center text-gray-400">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-              </svg>
+
+        <div class="p-3 border border-dashed border-gray-300 rounded-lg bg-white">
+          <div class="flex flex-col sm:flex-row items-center gap-4">
+            <!-- Previsualización -->
+            <div class="flex-shrink-0">
+              <p class="block mb-2 text-xs font-medium text-gray-500">Previsualización</p>
+              <div class="h-20 w-20 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                <img *ngIf="editableConfig.faviconUrl" [src]="editableConfig.faviconUrl" alt="Hero Image"
+                  class="h-full w-full object-cover">
+                <div *ngIf="!editableConfig.faviconUrl" class="text-gray-400">
+                  <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botón de carga -->
+            <div class="flex-grow">
+              <div class="text-sm text-gray-600 mb-2">
+                <p>Recomendado: 1200x630px (relación 1.91:1)</p>
+                <p>Formatos: JPG, PNG o SVG. Máx. 2MB</p>
+              </div>
+              <button type="button"
+                class="px-3 py-1.5 text-sm border border-gray-300 rounded-md bg-white hover:bg-gray-50">
+                Cambiar imagen
+              </button>
             </div>
           </div>
         </div>
       </div>
-      
     </div>
-
-    <!-- Mostrar/Ocultar opciones -->
-    <div class="mt-4">
-      <h3 class="text-sm font-medium text-gray-700 mb-2">Opciones de visualización</h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <label class="flex items-center gap-2 text-sm text-gray-700">
-          <input type="checkbox" [(ngModel)]="editableConfig.showHeroTitle" 
-                 class="rounded text-blue-600 focus:ring-blue-500" />
-          Mostrar título
-        </label>
-        <label class="flex items-center gap-2 text-sm text-gray-700">
-          <input type="checkbox" [(ngModel)]="editableConfig.showHeroSubtitle" 
-                 class="rounded text-blue-600 focus:ring-blue-500" />
-          Mostrar subtítulo
-        </label>
-        <label class="flex items-center gap-2 text-sm text-gray-700">
-          <input type="checkbox" [(ngModel)]="editableConfig.showHeroButton" 
-                 class="rounded text-blue-600 focus:ring-blue-500" />
-          Mostrar botón
-        </label>
-        <label class="flex items-center gap-2 text-sm text-gray-700">
-          <input type="checkbox" [(ngModel)]="editableConfig.showHeroImage" 
-                 class="rounded text-blue-600 focus:ring-blue-500" />
-          Mostrar imagen
-        </label>
-      </div>
-    </div>
-
-    <!-- Previsualización completa del Hero -->
-    <!-- <div class="mt-6 border rounded-lg p-4 bg-white">
-      <h3 class="text-sm font-medium text-gray-700 mb-2">Previsualización del Hero</h3>
-      <div class="relative rounded-lg overflow-hidden" [style.background]="editableConfig.primaryColor + '20'">
-        <div class="p-8 md:p-12 flex flex-col md:flex-row items-center gap-8">
-          <div class="flex-1 space-y-4">
-            <h1 *ngIf="editableConfig.showHeroTitle" class="text-3xl font-bold text-gray-800">
-              {{editableConfig.heroTitle || 'Título del hero'}}
-            </h1>
-            <p *ngIf="editableConfig.showHeroSubtitle" class="text-lg text-gray-600">
-              {{editableConfig.heroSubtitle || 'Subtítulo del hero'}}
-            </p>
-            <button *ngIf="editableConfig.showHeroButton" 
-                    class="px-6 py-2 rounded-md text-white font-medium"
-                    [style.background]="editableConfig.primaryColor">
-              {{editableConfig.heroButtonText || 'Botón'}}
-            </button>
-          </div>
-          <div *ngIf="editableConfig.showHeroImage && editableConfig.heroImageUrl" class="flex-1">
-            <img [src]="editableConfig.heroImageUrl" alt="Hero Preview" class="w-full h-auto max-h-64 object-contain" />
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
 
   <!-- Sección de Footer -->
   <div class="mb-8 border border-gray-200 rounded-lg p-4 md:p-6 bg-gray-50">
     <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
       <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
       </svg>
       Configuración del Footer
     </h2>
@@ -209,7 +195,8 @@
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
           <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
           </svg>
           Color del Footer
         </label>
@@ -224,7 +211,8 @@
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
           <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
           Texto del Footer
         </label>
@@ -232,21 +220,22 @@
           class="w-full px-3 py-2 border border-gray-300 rounded text-sm" />
       </div>
 
-   
+
     </div>
 
-    <!-- Enlaces del Footer -->
-    <div class="mt-6">
+    <!--  Footer -->
+    <!-- <div class="mt-6">
       <h3 class="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
         </svg>
         Enlaces del Footer
       </h3>
 
       <div class="space-y-3">
-        <div *ngFor="let link of editableConfig.footerLinks ?? []; let i = index" 
-             class="grid grid-cols-1 md:grid-cols-5 gap-3 items-center">
+        <div *ngFor="let link of editableConfig.footerLinks ?? []; let i = index"
+          class="grid grid-cols-1 md:grid-cols-5 gap-3 items-center">
           <input type="text" [(ngModel)]="link.text" placeholder="Texto del enlace"
             class="md:col-span-2 px-3 py-2 border border-gray-300 rounded text-sm" />
           <input type="text" [(ngModel)]="link.url" placeholder="URL"
@@ -254,7 +243,8 @@
           <button type="button" (click)="editableConfig.footerLinks?.splice(i, 1)"
             class="text-red-600 hover:text-red-800 text-sm flex items-center gap-1 justify-end md:justify-start">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
             Eliminar
           </button>
@@ -269,29 +259,289 @@
         </button>
       </div>
     </div>
-  </div>
+  -->
 
-  <!-- Sección de Color Primario -->
-  <div class="mb-8 border border-gray-200 rounded-lg p-4 md:p-6 bg-gray-50">
-    <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-      <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-      </svg>
-      Color Primario
-    </h2>
 
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-        </svg>
-        Color Primario
-      </label>
-      <div class="flex items-center gap-3">
-        <input type="color" [(ngModel)]="editableConfig.primaryColor"
-          class="w-10 h-10 p-1 border border-gray-300 rounded cursor-pointer" />
-        <span class="text-sm text-gray-600">{{editableConfig.primaryColor}}</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+      <!-- Sección de Footer -->
+      <div class="p-6 bg-white rounded-lg shadow">
+        <h2 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">Configuración del Footer</h2>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Texto del Footer</label>
+          <input type="text" [(ngModel)]="editableConfig.footerText"
+            class="w-full px-3 py-2 border border-gray-300 rounded text-sm">
+        </div>
+
+        <div class="mt-6">
+          <h3 class="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+            Enlaces del Footer
+          </h3>
+
+          <div class="space-y-3">
+            <div *ngFor="let link of editableConfig.footerLinks ?? []; let i = index"
+              class="grid grid-cols-1 md:grid-cols-5 gap-3 items-center">
+              <input type="text" [(ngModel)]="link.text" placeholder="Texto del enlace"
+                class="md:col-span-2 px-3 py-2 border border-gray-300 rounded text-sm" />
+              <input type="text" [(ngModel)]="link.url" placeholder="URL"
+                class="md:col-span-2 px-3 py-2 border border-gray-300 rounded text-sm" />
+              <button type="button" (click)="editableConfig.footerLinks?.splice(i, 1)"
+                class="text-red-600 hover:text-red-800 text-sm flex items-center gap-1 justify-end md:justify-start">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Eliminar
+              </button>
+            </div>
+
+            <button type="button" (click)="editableConfig.footerLinks?.push({ text: '', url: '' })"
+              class="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Añadir enlace
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de Contacto -->
+      <div class="p-6 bg-white rounded-lg shadow">
+        <h2 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">Información de Contacto</h2>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del Negocio</label>
+          <input type="text" [ngModel]="editableConfig.contactInfo?.businessName"
+            class="w-full px-3 py-2 border border-gray-300 rounded text-sm">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Calle</label>
+            <input type="text" [ngModel]="editableConfig.contactInfo?.address?.street"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Ciudad</label>
+            <input type="text" [ngModel]="editableConfig.contactInfo?.address?.city"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+            <input type="text" [ngModel]="editableConfig.contactInfo?.address?.state"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Código Postal</label>
+            <input type="text" [ngModel]="editableConfig.contactInfo?.address?.zipCode"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">País</label>
+            <input type="text" [ngModel]="editableConfig.contactInfo?.address?.country"
+              class="w-full px-3 py-2 border border-gray-300 rounded text-sm">
+          </div>
+        </div>
+
+        <!-- Teléfonos -->
+        <div class="mb-4">
+          <h3 class="text-sm font-medium text-gray-700 mb-2">Teléfonos de Contacto</h3>
+          <div class="space-y-3">
+            <div *ngFor="let phone of editableConfig.contactInfo?.phones ?? []; let i = index"
+              class="grid grid-cols-1 md:grid-cols-6 gap-2 items-center">
+              <select [(ngModel)]="phone.type" class="md:col-span-2 px-3 py-2 border border-gray-300 rounded text-sm">
+                <option value="mobile">Móvil</option>
+                <option value="office">Oficina</option>
+                <option value="whatsapp">WhatsApp</option>
+              </select>
+              <input type="text" [(ngModel)]="phone.number" placeholder="Número"
+                class="md:col-span-3 px-3 py-2 border border-gray-300 rounded text-sm">
+              <div class="flex items-center justify-end gap-2">
+                <input type="checkbox" [(ngModel)]="phone.isPrimary" id="primary-phone-{{i}}" class="h-4 w-4">
+                <label for="primary-phone-{{i}}" class="text-xs text-gray-600">Principal</label>
+                <button type="button" (click)="eliminarTelefono(i)" class="text-red-500 hover:text-red-700">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <button type="button" (click)="agregarTelefono()"
+              class="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Añadir Teléfono
+            </button>
+          </div>
+        </div>
+
+        <!-- Correos Electrónicos -->
+        <div class="mb-4">
+          <h3 class="text-sm font-medium text-gray-700 mb-2">Correos Electrónicos</h3>
+          <div class="space-y-3">
+            <div *ngFor="let email of editableConfig.contactInfo?.emails ?? []; let i = index"
+              class="grid grid-cols-1 md:grid-cols-6 gap-2 items-center">
+              <input type="email" [(ngModel)]="email.address" placeholder="Correo electrónico"
+                class="md:col-span-5 px-3 py-2 border border-gray-300 rounded text-sm">
+              <div class="flex items-center justify-end gap-2">
+                <input type="checkbox" [(ngModel)]="email.isPrimary" id="primary-email-{{i}}" class="h-4 w-4">
+                <label for="primary-email-{{i}}" class="text-xs text-gray-600">Principal</label>
+                <button type="button" (click)="eliminarEmail(i)" class="text-red-500 hover:text-red-700">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <button type="button" (click)="agregarEmail()"
+              class="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Añadir Email
+            </button>
+          </div>
+        </div>
+
+        <!-- Horario de Atención -->
+        <div class="mb-4">
+          <h3 class="text-sm font-medium text-gray-700 mb-2">Horario de Atención</h3>
+          <div class="space-y-3">
+            <div *ngFor="let schedule of editableConfig.contactInfo?.businessHours ?? []; let i = index"
+              class="grid grid-cols-1 md:grid-cols-6 gap-2 items-center">
+              <input type="text" [(ngModel)]="schedule.days" placeholder="Días (ej: Lunes a Viernes)"
+                class="md:col-span-2 px-3 py-2 border border-gray-300 rounded text-sm">
+              <input type="text" [(ngModel)]="schedule.hours" placeholder="Horario (ej: 9:00 AM - 6:00 PM)"
+                class="md:col-span-2 px-3 py-2 border border-gray-300 rounded text-sm">
+              <div class="flex items-center gap-2">
+                <input type="checkbox" [(ngModel)]="schedule.isOpen" id="open-{{i}}" class="h-4 w-4">
+                <label for="open-{{i}}" class="text-xs text-gray-600">Abierto</label>
+              </div>
+              <button type="button" (click)="eliminarHorario(i)" class="text-red-500 hover:text-red-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <button type="button" (click)="agregarHorario()"
+              class="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Añadir Horario
+            </button>
+          </div>
+        </div>
+
+        <!-- Redes Sociales -->
+        <div class="mb-4">
+          <h3 class="text-sm font-medium text-gray-700 mb-2">Redes Sociales</h3>
+          <div class="space-y-3">
+            <div *ngFor="let social of editableConfig.contactInfo?.socialMedia ?? []; let i = index"
+              class="grid grid-cols-1 md:grid-cols-6 gap-2 items-center">
+              <select [(ngModel)]="social.platform"
+                class="md:col-span-2 px-3 py-2 border border-gray-300 rounded text-sm">
+                <option value="facebook">Facebook</option>
+                <option value="instagram">Instagram</option>
+                <option value="twitter">Twitter</option>
+                <option value="tiktok">TikTok</option>
+                <option value="youtube">YouTube</option>
+                <option value="pinterest">Pinterest</option>
+              </select>
+              <input type="url" [(ngModel)]="social.url" placeholder="URL"
+                class="md:col-span-3 px-3 py-2 border border-gray-300 rounded text-sm">
+              <div class="flex items-center justify-end gap-2">
+                <input type="checkbox" [(ngModel)]="social.isActive" id="active-{{i}}" class="h-4 w-4">
+                <label for="active-{{i}}" class="text-xs text-gray-600">Activo</label>
+                <button type="button" (click)="eliminarRedSocial(i)" class="text-red-500 hover:text-red-700">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <button type="button" (click)="agregarRedSocial()"
+              class="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Añadir Red Social
+            </button>
+          </div>
+        </div>
+
+        <!-- Mapa y Formulario -->
+        <div class="grid grid-cols-1 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">URL de Mapa Embebido</label>
+            <!-- <input type="url" [(ngModel)]="editableConfig.contactInfo?.mapEmbedUrl" 
+               class="w-full px-3 py-2 border border-gray-300 rounded text-sm"> -->
+          </div>
+          <div class="flex items-center">
+            <!-- <input type="checkbox" [(ngModel)]="editableConfig.contactInfo?.contactFormEnabled" id="contactFormEnabled" class="h-4 w-4"> -->
+            <label for="contactFormEnabled" class="ml-2 block text-sm text-gray-700">Habilitar formulario de
+              contacto</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de SEO y Metadata -->
+      <div class="p-6 bg-white rounded-lg shadow">
+        <h2 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">Configuración SEO</h2>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Meta Título</label>
+          <input type="text" [(ngModel)]="editableConfig.metaTitle"
+            class="w-full px-3 py-2 border border-gray-300 rounded text-sm">
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Meta Descripción</label>
+          <textarea [(ngModel)]="editableConfig.metaDescription" rows="3"
+            class="w-full px-3 py-2 border border-gray-300 rounded text-sm"></textarea>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Palabras Clave (separadas por comas)</label>
+          <textarea [ngModel]="editableConfig.metaKeywords?.join(', ')" (change)="updateKeywords($event)" rows="2"
+            class="w-full px-3 py-2 border border-gray-300 rounded text-sm"></textarea>
+          <p class="text-xs text-gray-500 mt-1">Ejemplo: repostería, pasteles, postres, dulces</p>
+        </div>
       </div>
     </div>
+
+
+
+
+
+
+
+
+
   </div>
+
+
 </div>

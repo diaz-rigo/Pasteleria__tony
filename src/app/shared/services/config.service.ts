@@ -3,29 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.prod';
 
-// export interface SystemConfig {
-//   _id?: string;
-//   headerBackgroundColor?: string;
-//   footerBackgroundColor?: string;
-//   primaryColor?: string;
-//   logoUrl?: string;
-//   faviconUrl?: string;
-//   footerText?: string;
-//   footerLinks?: { text: string; url: string }[];
 
-//   // Hero section
-//   heroTitle?: string;
-//   heroSubtitle?: string;
-//   heroImageUrl?: string;
-//   heroButtonText?: string;
-//   heroButtonUrl?: string;
-
-//   showHeroTitle?: boolean;
-//   showHeroSubtitle?: boolean;
-//   showHeroImage?: boolean;
-//   showheaderImage?: boolean;
-//   showHeroButton?: boolean;
-// }
 
 export interface SystemConfig {
   _id?: string;

@@ -6,7 +6,7 @@ import { Product } from '../../../shared/models/product.model';
 import { Variant } from '../../../shared/models/variant.model';
 import { SizeStock } from '../../../shared/models/size-stock.model';
 import { RatingStarsComponent } from '../../../shared/components/rating-stars/rating-stars.component';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductService } from '../../../shared/services/product.service';
 import { HttpClientModule } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -17,6 +17,7 @@ import { OrdersService } from '../../../shared/services/orders.service';
 import { PedidoModalComponent } from './pedido-modal/pedido-modal.component';
 import { CreateOrderRequest } from '../../../shared/types/orders.types';
 import { ToastService } from '../../../shared/services/toast.service';
+import { SeoService } from '../../../shared/services/seo.service';
 // === MINI VM del panel
 type OrderMini = {
   code: string;
@@ -47,13 +48,17 @@ export class ProductDetailComponent implements OnInit {
   variants = computed(() => this.product()?.variants || []);
   mostrarPedido = signal(false);
 
+  private readonly baseUrl = 'https://pasteleria-tony.vercel.app'; // <-- cámbialo a tu dominio real (HTTPS)
 
   constructor(
+    private router: Router,
+
     private route: ActivatedRoute,
     private productService: ProductService,
     private orders: OrdersService,
     private meta: Meta,
-    private title: Title, private toastService: ToastService
+    private title: Title, private toastService: ToastService,    private seo: SeoService
+
   ) { }
 
   ngOnInit(): void {
@@ -65,7 +70,7 @@ export class ProductDetailComponent implements OnInit {
         this.error.set('No se proporcionó ID de producto');
         this.loading.set(false);
       }
-    }); this.route.paramMap.subscribe(/* lo tuyo */);
+    });
     window.addEventListener('keydown', this.onKeydown);
   }
 
@@ -83,7 +88,7 @@ export class ProductDetailComponent implements OnInit {
           this.selectedImage.set(product.variants[0].images?.[0] || null);
         }
         this.loading.set(false);
-        this.updateMetaTags(product);
+        this.updateMetaTags(); // <-- aplica meta al cargar
 
       }),
       catchError(err => {
@@ -240,20 +245,43 @@ export class ProductDetailComponent implements OnInit {
     window.open(`https://wa.me/?text=${message}`, '_blank');
   }
 
-  updateMetaTags(product: Product): void {
-    const variant = this.getSelectedVariant();
-    const imageRaw = variant?.images?.[0];
-    const imageUrl = this.absoluteUrl(imageRaw);
-
-    this.title.setTitle(`${product.name || ''} | Tu Tienda`);
-
-    this.meta.updateTag({ property: 'og:title', content: product.name || '' });
-    this.meta.updateTag({ property: 'og:description', content: variant?.description || product.ingredientes || 'Producto de alta calidad' });
-    this.meta.updateTag({ property: 'og:image', content: imageUrl });
-    this.meta.updateTag({ property: 'og:url', content: window.location.href });
-    this.meta.updateTag({ property: 'og:type', content: 'product' });
+  // -----------------------
+  // SEO / Open Graph
+  // -----------------------
+  private absUrl(pathOrUrl: string | null | undefined): string {
+    if (!pathOrUrl) return `${this.baseUrl}/assets/og-default.jpg`;
+    return pathOrUrl.startsWith('http') ? pathOrUrl : `${this.baseUrl}${pathOrUrl}`;
   }
 
+  private updateMetaTags(): void {
+    const p = this.product();
+    const v = this.getSelectedVariant();
+    const s = this.getSelectedSize();
+    if (!p || !v) return;
+
+    const url = `${this.baseUrl}${this.router.url}`;
+    const img = this.selectedImage() || v.images?.[0] || `${this.baseUrl}/assets/og-default.jpg`;
+    const imageUrl = this.absUrl(img);
+    const price = s?.price;
+
+    const title = `${p.name} – ${v.flavor || 'Clásico'}${s?.size ? ` (${s.size} kg)` : ''}`.trim();
+    const description = (v.description && v.description.length > 0)
+      ? v.description.slice(0, 155)
+      : 'Pasteles frescos y personalizados. Haz tu pedido en línea y recógelo o recibe a domicilio.';
+
+    this.seo.setProductTags({
+      siteName: 'Pastelería Tony',
+      url,
+      title,
+      description,
+      imageUrl,
+      imageAlt: `${p.name} ${v.flavor || ''}`.trim(),
+      priceMXN: price
+    });
+
+    // (Opcional) JSON-LD si quieres:
+    // this.insertProductJsonLd(p, v, s, imageUrl, url);
+  }
 
 
   private absoluteUrl(pathOrUrl: string | null | undefined): string {

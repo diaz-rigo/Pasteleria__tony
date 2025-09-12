@@ -7,6 +7,7 @@ import { provideServiceWorker } from '@angular/service-worker';
 import { ConfigService } from './shared/services/config.service';
 import { firstValueFrom } from 'rxjs';
 import { Meta } from '@angular/platform-browser';
+import { ConfigStore } from './shared/config/config.store';
 function initTheme() {
   const configService = inject(ConfigService);
   const meta = inject(Meta);
@@ -21,6 +22,11 @@ function initTheme() {
   });
 }
 
+function initConfig() {
+  const store = inject(ConfigStore);
+  return () => store.loadOnce();
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),
         provideHttpClient(), // ⬅️ SIN ESTO, DI NO ENCUENTRA HttpClient
@@ -30,6 +36,9 @@ export const appConfig: ApplicationConfig = {
       
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000'
-    }),    { provide: APP_INITIALIZER, useFactory: initTheme, multi: true }
+    }),  
+      { provide: APP_INITIALIZER, useFactory: initTheme, multi: true },
+          { provide: APP_INITIALIZER, useFactory: initConfig, multi: true },
+
 ]
 };
