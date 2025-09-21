@@ -18,6 +18,7 @@ import { PedidoModalComponent } from './pedido-modal/pedido-modal.component';
 import { CreateOrderRequest } from '../../../shared/types/orders.types';
 import { ToastService } from '../../../shared/services/toast.service';
 import { SeoService } from '../../../shared/services/seo.service';
+import { ShareService } from '../../../shared/services/share.service';
 // === MINI VM del panel
 type OrderMini = {
   code: string;
@@ -49,10 +50,12 @@ export class ProductDetailComponent implements OnInit {
   mostrarPedido = signal(false);
 
   private readonly baseUrl = 'https://pasteleria-tony.vercel.app'; // <-- cámbialo a tu dominio real (HTTPS)
+ 
+//  constructor(private share: ShareService) {}
 
   constructor(
     private router: Router,
-
+private share: ShareService,
     private route: ActivatedRoute,
     private productService: ProductService,
     private orders: OrdersService,
@@ -149,101 +152,125 @@ export class ProductDetailComponent implements OnInit {
     const variant = this.getSelectedVariant();
     return !!(variant?.sizeStock && variant.sizeStock.length > 0);
   }
-
   async shareWithImage(): Promise<void> {
-    const product = this.product();
-    if (!product) return;
+  const product = this.product();
+  if (!product) return;
+  const variant = this.getSelectedVariant();
+  const size = this.getSelectedSize();
+  const imageUrl = this.selectedImage?.() || variant?.images?.[0] || (product as any)?.images?.[0];
 
-    const variant = this.getSelectedVariant();
-    const size = this.getSelectedSize();
+  await this.share.shareProductWithImage({
+    product,
+    variant,
+    size,
+    selectedImage: imageUrl,
+    url: window.location.href,
+    baseUrl: 'https://pasteleria-tony.vercel.app'
+  });
+}
 
-    const imageUrl =
-      this.selectedImage?.() ||
-      variant?.images?.[0] ||
-      (product as any)?.images?.[0] ||
-      '';
+shareOnWhatsApp(): void {
+  const product = this.product();
+  if (!product) return;
+  const variant = this.getSelectedVariant();
+  const size = this.getSelectedSize();
+  this.share.shareOnWhatsApp({ product, variant, size, url: window.location.href });
+}
 
-    // Texto base (sin URL de imagen porque ya irá como archivo)
-    const parts: string[] = [];
-    parts.push(`*${product.name || ''}*`);
-    if (variant?.flavor) parts.push(`Sabor: ${variant.flavor}`);
-    if (size) {
-      if (size.size) parts.push(`Tamaño: ${size.size} kg`);
-      if (size.price != null) {
-        const precioFormateado = size.price.toLocaleString('es-MX', {
-          style: 'currency',
-          currency: 'MXN',
-        });
-        parts.push(`Precio: ${precioFormateado}`);
-      }
-    }
-    parts.push('');
-    parts.push(window.location.href);
-    const text = parts.join('\n');
+  // async shareWithImage(): Promise<void> {
+  //   const product = this.product();
+  //   if (!product) return;
 
-    try {
-      if (imageUrl && 'share' in navigator) {
-        const resp = await fetch(imageUrl, { mode: 'cors' });
-        const blob = await resp.blob();
-        const fileName =
-          (imageUrl.split('/').pop() || 'producto') + (blob.type.includes('jpeg') ? '.jpg' : '');
-        const file = new File([blob], fileName || 'producto.jpg', { type: blob.type || 'image/jpeg' });
+  //   const variant = this.getSelectedVariant();
+  //   const size = this.getSelectedSize();
 
-        // Soporte de share con archivos
-        // (Chrome Android, Safari iOS 15.4+; requiere HTTPS)
-        if ((navigator as any).canShare?.({ files: [file] })) {
-          await (navigator as any).share({
-            files: [file],
-            title: product.name || 'Producto',
-            text,
-            url: window.location.href, // opcional
-          });
-          return;
-        }
-      }
-    } catch (e) {
-      // si algo falla, seguimos al fallback
-      console.warn('Web Share API con archivos no disponible o falló, usando fallback a WhatsApp', e);
-    }
+  //   const imageUrl =
+  //     this.selectedImage?.() ||
+  //     variant?.images?.[0] ||
+  //     (product as any)?.images?.[0] ||
+  //     '';
 
-    // Fallback a WhatsApp clásico
-    this.shareOnWhatsApp();
-  }
+  //   // Texto base (sin URL de imagen porque ya irá como archivo)
+  //   const parts: string[] = [];
+  //   parts.push(`*${product.name || ''}*`);
+  //   if (variant?.flavor) parts.push(`Sabor: ${variant.flavor}`);
+  //   if (size) {
+  //     if (size.size) parts.push(`Tamaño: ${size.size} kg`);
+  //     if (size.price != null) {
+  //       const precioFormateado = size.price.toLocaleString('es-MX', {
+  //         style: 'currency',
+  //         currency: 'MXN',
+  //       });
+  //       parts.push(`Precio: ${precioFormateado}`);
+  //     }
+  //   }
+  //   parts.push('');
+  //   parts.push(window.location.href);
+  //   const text = parts.join('\n');
 
-  shareOnWhatsApp(): void {
-    const product = this.product();
-    if (!product) return;
+  //   try {
+  //     if (imageUrl && 'share' in navigator) {
+  //       const resp = await fetch(imageUrl, { mode: 'cors' });
+  //       const blob = await resp.blob();
+  //       const fileName =
+  //         (imageUrl.split('/').pop() || 'producto') + (blob.type.includes('jpeg') ? '.jpg' : '');
+  //       const file = new File([blob], fileName || 'producto.jpg', { type: blob.type || 'image/jpeg' });
 
-    const variant = this.getSelectedVariant();
-    const size = this.getSelectedSize();
+  //       // Soporte de share con archivos
+  //       // (Chrome Android, Safari iOS 15.4+; requiere HTTPS)
+  //       if ((navigator as any).canShare?.({ files: [file] })) {
+  //         await (navigator as any).share({
+  //           files: [file],
+  //           title: product.name || 'Producto',
+  //           text,
+  //           url: window.location.href, // opcional
+  //         });
+  //         return;
+  //       }
+  //     }
+  //   } catch (e) {
+  //     // si algo falla, seguimos al fallback
+  //     console.warn('Web Share API con archivos no disponible o falló, usando fallback a WhatsApp', e);
+  //   }
 
-    // Construye el mensaje
-    let message = `¡Producto!%0A%0A`;
-    message += `*${product.name || ''}*%0A`;
+  //   // Fallback a WhatsApp clásico
+  //   this.shareOnWhatsApp();
+  // }
 
-    if (variant?.flavor) {
-      message += `Sabor: ${variant.flavor}%0A`;
-    }
+  // shareOnWhatsApp(): void {
+  //   const product = this.product();
+  //   if (!product) return;
 
-    if (size) {
-      if (size.size) {
-        message += `Tamaño: ${size.size} kg%0A`;
-      }
-      if (size.price != null) {
-        // Formatear precio como moneda
-        const precioFormateado = size.price.toLocaleString('es-MX', {
-          style: 'currency',
-          currency: 'MXN'
-        });
-        message += `Precio: ${precioFormateado}%0A`;
-      }
-    }
+  //   const variant = this.getSelectedVariant();
+  //   const size = this.getSelectedSize();
 
-    message += `%0A${window.location.href}`;
+  //   // Construye el mensaje
+  //   let message = `¡Producto!%0A%0A`;
+  //   message += `*${product.name || ''}*%0A`;
 
-    // Abre WhatsApp con el mensaje
-    window.open(`https://wa.me/?text=${message}`, '_blank');
-  }
+  //   if (variant?.flavor) {
+  //     message += `Sabor: ${variant.flavor}%0A`;
+  //   }
+
+  //   if (size) {
+  //     if (size.size) {
+  //       message += `Tamaño: ${size.size} kg%0A`;
+  //     }
+  //     if (size.price != null) {
+  //       // Formatear precio como moneda
+  //       const precioFormateado = size.price.toLocaleString('es-MX', {
+  //         style: 'currency',
+  //         currency: 'MXN'
+  //       });
+  //       message += `Precio: ${precioFormateado}%0A`;
+  //     }
+  //   }
+
+  //   message += `%0A${window.location.href}`;
+
+  //   // Abre WhatsApp con el mensaje
+  //   window.open(`https://wa.me/?text=${message}`, '_blank');
+  // }
 
   // -----------------------
   // SEO / Open Graph

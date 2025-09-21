@@ -1,80 +1,88 @@
-<div
-  class="product-card bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl border border-gray-100 max-w-sm mx-auto">
-  <!-- Imagen principal -->
-  <div class="relative h-48 overflow-hidden">
-    <img [src]="product.variants?.[0]?.images?.[0] || 'https://via.placeholder.com/400x300'" [alt]="product.name"
-      class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
-    <!-- Badge destacado -->
-    <span *ngIf="product.isFeatured"
-      class="absolute top-2 left-2 bg-black text-white text-xs font-bold px-2 py-1 rounded-full">
+<div class="product-card bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl border border-gray-100 max-w-sm mx-auto">
+    <!-- Imagen principal -->
+    <div class="relative h-48 overflow-hidden">
+        <img [src]="product.variants?.[0]?.images?.[0] || 'https://via.placeholder.com/400x300'" [alt]="product.name" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+        <!-- Badge destacado -->
+        <span *ngIf="product.isFeatured" class="absolute top-2 left-2 bg-black text-white text-xs font-bold px-2 py-1 rounded-full">
       DESTACADO
     </span>
-  </div>
+    </div>
 
-  <!-- Contenido de la tarjeta -->
-  <div class="p-4">
-    <!-- Encabezado -->
-    <div class="flex justify-between items-start mb-2">
-      <h3 class="text-xl font-serif font-bold text-gray-900">{{ product.name }}</h3>
-      <span class="text-xs font-medium bg-gray-100 px-2 py-1 rounded-full">
+    <!-- Contenido de la tarjeta -->
+    <div class="p-4">
+        <!-- Encabezado -->
+        <div class="flex justify-between items-start mb-2">
+            <h3 class="text-xl font-serif font-bold text-gray-900">{{ product.name }}</h3>
+            <span class="text-xs font-medium bg-gray-100 px-2 py-1 rounded-full">
         {{ product.category }}
       </span>
-    </div>
+        </div>
 
-    <!-- Rating -->
-    <div class="flex items-center mb-3">
-      <app-rating-stars [rating]="product.ratings?.average || 0" class="text-black"></app-rating-stars>
-      <span class="text-xs text-gray-500 ml-1">
+        <!-- Rating -->
+        <div class="flex items-center mb-3">
+            <app-rating-stars [rating]="product.ratings?.average || 0" class="text-black"></app-rating-stars>
+            <span class="text-xs text-gray-500 ml-1">
         ({{ product.ratings?.reviews?.length || 0 }})
       </span>
-    </div>
-
-    <!-- Descripción -->
-    <p class="text-gray-600 text-sm mb-4 font-light">
-      {{ (product.description || '') | truncate:120 }}
-    </p>
-
-    <!-- Variantes -->
-    <div class="mb-4">
-      <h4 class="text-sm font-semibold text-gray-900 mb-2">SABORES:</h4>
-      <div class="flex flex-wrap gap-2">
-        <div *ngFor="let variant of product.variants" class="flex items-center">
-          <span class="w-3 h-3 rounded-full mr-1 border border-gray-300" [style.backgroundColor]="variant.color"></span>
-          <span class="text-xs font-medium">{{ variant.flavor }}</span>
         </div>
-      </div>
-    </div>
 
+        <!-- Descripción -->
+        <p class="text-gray-600 text-sm mb-4 font-light">
+            {{ (product.description || '') | truncate:120 }}
+        </p>
 
-    <!-- Sección de Precios -->
-<div class="border-t border-gray-200 pt-4 mt-4">
-  <h4 class="text-base font-semibold text-gray-800 uppercase tracking-wide mb-3">Precios</h4>
-  
-  <div class="space-y-3">
-    <div *ngFor="let variant of product.variants" class="bg-gray-50 rounded-lg p-3">
-      <h5 class="text-sm font-medium text-gray-700 mb-2">{{ variant.flavor}}</h5>
-      
-      <div class="divide-y divide-gray-200">
-        <div *ngFor="let size of variant.sizeStock" class="py-2 flex justify-between items-center">
-          <span class="text-sm font-normal text-gray-600">{{ size.size }} kg</span>
-          <span class="text-sm font-semibold text-gray-900">{{ size.price | currency:'USD':'symbol':'1.2-2' }}</span>
+        <!-- Variantes -->
+        <div class="mb-4">
+            <h4 class="text-sm font-semibold text-gray-900 mb-2">SABORES:</h4>
+            <div class="flex flex-wrap gap-2">
+                <div *ngFor="let variant of product.variants" class="flex items-center">
+                    <span class="w-3 h-3 rounded-full mr-1 border border-gray-300" [style.backgroundColor]="variant.color"></span>
+                    <span class="text-xs font-medium">{{ variant.flavor }}</span>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-    <!-- Botones -->
-    <div class="mt-4 flex space-x-2">
-          <button
-           [routerLink]="['/productos-detail/', product._id]" [state]="{ product: product }"
-        class="flex-1 bg-black text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors">
-        Ver detalles
-      </button>
-      <button
-        class="flex-1 bg-white text-black py-2 px-4 rounded-md text-sm font-medium border border-black hover:bg-gray-50 transition-colors">
-        Añadir al carrito
-      </button>
+
+        <!-- Sección de Precios -->
+        <div class="border-t border-gray-200 pt-4 mt-4">
+            <h4 class="text-base font-semibold text-gray-800 uppercase tracking-wide mb-3">Precios</h4>
+
+            <div class="space-y-3">
+                <div *ngFor="let variant of product.variants" class="bg-gray-50 rounded-lg p-3">
+                    <h5 class="text-sm font-medium text-gray-700 mb-2">{{ variant.flavor}}</h5>
+
+                    <div class="divide-y divide-gray-200">
+                        <div *ngFor="let size of variant.sizeStock" class="py-2 flex justify-between items-center">
+                            <span class="text-sm font-normal text-gray-600">{{ size.size }} kg</span>
+                            <span class="text-sm font-semibold text-gray-900">{{ size.price | currency:'USD':'symbol':'1.2-2'
+                }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones -->
+        <!-- Botones -->
+        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+            <!-- Ver detalles -->
+            <button [routerLink]="['/productos-detail/', product._id]" [state]="{ product: product }" class="inline-flex items-center justify-center gap-2 rounded-lg h-11 sm:h-12 px-4 sm:px-5
+           bg-black text-white hover:bg-black/90 active:bg-black/85
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2
+           transition-colors" aria-label="Ver detalles del producto">
+    <span class="material-symbols-rounded text-[18px] leading-none">visibility</span>
+    <span class="truncate">Ver detalles</span>
+  </button>
+
+            <!-- Compartir -->
+            <button (click)="shareWithImage()" class="inline-flex items-center justify-center gap-2 rounded-lg h-11 sm:h-12 px-4 sm:px-5
+           border-2 border-slate-900 text-slate-900 hover:bg-slate-50 active:bg-slate-100
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2
+           transition-colors" title="Compartir" aria-label="Compartir producto">
+    <span class="material-symbols-rounded text-[18px] leading-none">share</span>
+    <span class="truncate">Compartir</span>
+  </button>
+        </div>
+
     </div>
-  </div>
 </div>

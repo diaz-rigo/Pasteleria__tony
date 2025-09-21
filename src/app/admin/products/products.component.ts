@@ -6,6 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { Product } from '../../shared/models/product.model';
 import { ProductService } from '../../shared/services/product.service';
 import { ToastService } from '../../shared/services/toast.service';
+import { Variant } from '../../shared/models/variant.model';
+import { SizeStock } from '../../shared/models/size-stock.model';
+import { ShareService } from '../../shared/services/share.service';
 
 @Component({
   selector: 'app-admin-products',
@@ -35,7 +38,8 @@ export class ProductsComponentAdmin  implements OnInit{
   iscrear = signal(false);
   productToDelete = signal<Product | null>(null);
 
-  constructor(private productService: ProductService,private router: Router,private toastService: ToastService) {
+  constructor(  private share: ShareService,
+private productService: ProductService,private router: Router,private toastService: ToastService) {
     // Reaplicar filtros automáticamente si los productos, categoría o búsqueda cambian
     effect(() => {
       this.applyFilters();
@@ -183,4 +187,40 @@ export class ProductsComponentAdmin  implements OnInit{
     if (length <= 15) return id;
     return `${id.substring(0, 8)}...${id.substring(length - 7)}`;
   }
+
+
+
+
+  private firstVariant(p: Product): Variant | undefined {
+  return p?.variants?.[0];
+}
+private firstSize(p: Product): SizeStock | undefined {
+  return this.firstVariant(p)?.sizeStock?.[0];
+}
+private firstImage(p: Product): string | undefined {
+  return this.firstVariant(p)?.images?.[0] || this.getAllProductImages(p)?.[0];
+}
+private productDetailUrl(p: Product): string {
+  const id = (p as any)?._id ?? (p as any)?.id;
+  return `${window.location.origin}/productos-detail/${id}`;
+}
+
+// Acción de compartir
+async onShareProduct(product: Product) {
+  if (!product) return;
+  const variant = this.firstVariant(product);
+  const size    = this.firstSize(product);
+  const img     = this.firstImage(product);
+
+  await this.share.shareProductWithImage({
+    product,
+    variant,
+    size,
+    selectedImage: img,
+    url: this.productDetailUrl(product),
+    baseUrl: 'https://pasteleria-tony.vercel.app' // ajusta a tu dominio público si cambia
+  });
+}
+
+
 }

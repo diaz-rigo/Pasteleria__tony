@@ -10,17 +10,24 @@ import {
   Order
 } from '../types/orders.types';
 import { Observable } from 'rxjs';
+export interface AdminSummaryResponse {
+  ok: boolean;
+  data: {
+    byStatus: { _id: string; count: number }[];
+    byMetodo: { _id: 'RECOGER' | 'DOMICILIO' | null; count: number }[];
+    byModo: { _id: 'PEDIR' | 'APARTAR' | null; count: number }[];
+    totals: { subtotal: number; deliveryFee: number; discount: number; total: number };
+  };
+}
 
 @Injectable({ providedIn: 'root' })
 export class OrdersService {
   private http = inject(HttpClient);
-// src/app/shared/services/orders.service.ts
-
 
   private resource = `${environment.api}/orders`;
   getByCode(orderCode: string) {
-  return this.http.get<{ok: boolean; data: any}>(`${this.resource}/code/${encodeURIComponent(orderCode)}`);
-}
+    return this.http.get<{ ok: boolean; data: any }>(`${this.resource}/code/${encodeURIComponent(orderCode)}`);
+  }
   listOrdersAdmin(params: {
     q?: string; status?: string;
     metodo?: 'RECOGER' | 'DOMICILIO' | '';
@@ -33,11 +40,33 @@ export class OrdersService {
     Object.entries(params).forEach(([k, v]) => {
       if (v !== undefined && v !== null && v !== '') hp = hp.set(k, String(v));
     });
-    return this.http.get<{ ok: boolean; data: {
-      page: number; pageSize: number; total: number; totalPages: number; items: Order[];
-    } }>(`${this.resource}/admin`, { params: hp });
+    return this.http.get<{
+      ok: boolean; data: {
+        page: number; pageSize: number; total: number; totalPages: number; items: Order[];
+      }
+    }>(`${this.resource}/admin`, { params: hp });
+  }
+  // orders.service.ts
+  adminTopProducts(limit = 5) {
+    return this.http.get<{ ok: boolean; data: { name: string; ventas: number; precio: number; img?: string }[] }>(
+      `${this.resource}/admin/top-products`,
+      { params: new HttpParams().set('limit', limit) }
+    );
   }
 
+  /** NUEVO: KPIs/Resumen para dashboard */
+  adminSummary(params: {
+    q?: string; status?: string;
+    metodo?: 'RECOGER' | 'DOMICILIO' | '';
+    modo?: 'PEDIR' | 'APARTAR' | '';
+    startDate?: string; endDate?: string;
+  } = {}): Observable<AdminSummaryResponse> {
+    let hp = new HttpParams();
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== '') hp = hp.set(k, String(v));
+    });
+    return this.http.get<AdminSummaryResponse>(`${this.resource}/admin/summary`, { params: hp });
+  }
   markStatus(id: string, nextStatus: string) {
     return this.http.patch<{ ok: boolean; data: Order }>(`${this.resource}/${id}/status`, { nextStatus });
   }
