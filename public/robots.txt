@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pasteleria-tony.vercel.app/sitemap.xml
+Host: https://pasteleria-tony.vercel.app

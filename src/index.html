@@ -2,53 +2,104 @@
 <html lang="es">
 
 <head>
-  <meta charset="utf-8" />
-  <title>Pastelería Tony · Admin</title>
-  <base href="/" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <!-- <title>Pastelería Tony · Admin</title> -->
+    <title>Pastelería Tony · Jaltocan</title>
+    <meta name="description" content="Pastelería Tony — repostería artesanal: pasteles, panes y postres. Pedidos para eventos. Dirección, horario y contacto. ¡Endulza tu día!" />
+    <link rel="canonical" href="https://pasteleria-tony.vercel.app/" />
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Favicon y manifest -->
-  <link rel="icon" type="image/png" href="icons/icon-192x192.png" />
-  <link rel="manifest" href="manifest.webmanifest" />
+    <!-- Favicon y manifest -->
+    <link rel="icon" type="image/png" href="icons/icon-192x192.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
 
-  <!-- Theme color (auto claro/oscuro) -->
-  <meta name="theme-color" content="#fff7f9" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#1b1b1f" media="(prefers-color-scheme: dark)">
+    <!-- Theme color (auto claro/oscuro) -->
+    <meta name="theme-color" content="#fff7f9" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1b1b1f" media="(prefers-color-scheme: dark)">
 
-  <!-- iOS PWA -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Tony Admin">
-  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Pastelería Tony · Repostería artesanal" />
+    <meta property="og:description" content="Pastelería Tony — pasteles y postres artesanales. Pedidos para eventos. Visítanos o haz tu pedido en línea." />
+    <meta property="og:url" content="https://pasteleria-tony.vercel.app/" />
+    <meta property="og:image" content="https://res.cloudinary.com/dvvhnrvav/image/upload/v1749933866/pasteleria-tony/pngs/htl76bq1jvkr20sn1e9b.png" />
 
-  <!-- Windows tiles (opcional) -->
-  <meta name="msapplication-TileColor" content="#fff7f9" />
-  <meta name="msapplication-starturl" content="/" />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0,0" />
+    <!-- iOS PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Tony Admin">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+    <!-- Windows tiles (opcional) -->
+    <meta name="msapplication-TileColor" content="#fff7f9" />
+    <meta name="msapplication-starturl" content="/" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0,0" />
+    <meta name="robots" content="index, follow" />
+
 </head>
 
-<body>
-  <app-root></app-root>
-  <noscript>Activa JavaScript para usar esta aplicación.</noscript>
 
-  <!-- Ajuste dinámico de theme-color si cambias a dark-mode en runtime -->
-  <script>
-    (function () {
-      const light = '#fff7f9';
-      const dark = '#1b1b1f';
-      const meta = document.querySelector('meta[name="theme-color"][media]') ||
-        document.querySelector('meta[name="theme-color"]');
-      const apply = () => {
-        const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.querySelectorAll('meta[name="theme-color"]').forEach(m => {
-          if (!m.media) m.setAttribute('content', darkMode ? dark : light);
-        });
-      };
-      apply(); // inicial
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', apply);
-    })();
-  </script>
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Bakery",
+        "name": "Pastelería Tony Jaltocan",
+        "url": "https://pasteleria-tony.vercel.app/",
+        "logo": "https://res.cloudinary.com/dvvhnrvav/image/upload/v1749933866/pasteleria-tony/pngs/htl76bq1jvkr20sn1e9b.png",
+        "image": ["https://res.cloudinary.com/deoqcgh3e/image/upload/v1760483897/productos/oyfoiyefzcsituj5qog1.png",
+            "https://res.cloudinary.com/deoqcgh3e/image/upload/v1760485239/productos/db8lgi7qy4grt9gjuu7l.png"
+        ],
+        "description": "Pastelería Tony: repostería artesanal, pasteles para eventos y opciones especiales sin conservantes.",
+        "telephone": "+52 1 771 183 6689",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Av. Luis Amador 43040, Pahuatitla, 43040 Jaltocán, Hgo.",
+            "addressLocality": "Jaltocan",
+            "addressRegion": "Hgo",
+            "postalCode": "43040",
+            "addressCountry": "MX"
+        },
+        "priceRange": "$$",
+        "openingHoursSpecification": [{
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+            ],
+            "opens": "08:00",
+            "closes": "19:00"
+        }, {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": "Sunday",
+            "opens": "09:00",
+            "closes": "15:00"
+        }],
+
+    }
+</script>
+
+
+
+<body>
+    <app-root></app-root>
+    <noscript>Activa JavaScript para usar esta aplicación.</noscript>
+
+    <!-- Ajuste dinámico de theme-color si cambias a dark-mode en runtime -->
+    <script>
+        (function() {
+            const light = '#fff7f9';
+            const dark = '#1b1b1f';
+            const meta = document.querySelector('meta[name="theme-color"][media]') ||
+                document.querySelector('meta[name="theme-color"]');
+            const apply = () => {
+                const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.querySelectorAll('meta[name="theme-color"]').forEach(m => {
+                    if (!m.media) m.setAttribute('content', darkMode ? dark : light);
+                });
+            };
+            apply(); // inicial
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', apply);
+        })();
+    </script>
 </body>
 
 </html>
